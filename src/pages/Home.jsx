@@ -8,7 +8,14 @@ import Carousel from "../components/Carousel"; // Update the path based on your 
 import PopularStores from "../components/PopularStores";
 import MarqueeHome from "../components/MarqueeHome";
 import Cards from "../components/Cards";
+import Testimoials from "../components/Testimoials";
+
 import Finance from "../components/Finance";
+import Subscribe from "../components/Subscribe";
+import FaQ from "../components/FaQ";
+import Coupons from "../components/Coupons";
+
+
 
 
 
@@ -24,7 +31,11 @@ const App = () => {
     <PopularStores/>
     <MarqueeHome/>
     <Cards/>
+    <Coupons/>
     <Finance/>
+    <Testimoials/>
+    <Subscribe/>
+    <FaQ/>
   </div>
   );
 };

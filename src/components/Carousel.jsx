@@ -18,7 +18,7 @@ const Carousel = () => {
   };
 
   return (
-    <div className="w-full max-w-[1440px] mx-auto py-8 overflow-hidden">
+    <div className="w-full max-w-[1440px] mx-auto  overflow-hidden">
       {/* Desktop Slider */}
       <div className="hidden sm:block">
         <Slider {...settings}>
@@ -47,7 +47,7 @@ const Carousel = () => {
           {/* Slide 1 */}
           <div>
             <img
-              src="/img/bannermob2.jpg"
+              src="/img/mob.jpg"
               alt="Mobile Banner 1"
               className="w-full h-auto shadow-md"
             />
@@ -55,7 +55,7 @@ const Carousel = () => {
           {/* Slide 2 */}
           <div>
             <img
-              src="/img/bannermob2.jpg"
+              src="/img/mob.jpg"
               alt="Mobile Banner 2"
               className="w-full h-auto shadow-md"
             />

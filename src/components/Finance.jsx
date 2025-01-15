@@ -11,6 +11,8 @@ const FinanceOffers = () => {
     { id: 6, name: "ICICI Bank", logo: "/img/finance5.png" },
     { id: 7, name: "Razorpay", logo: "/img/finance6.png" },
     { id: 8, name: "Paytm", logo: "/img/finance7.png" },
+    { id: 9, name: "Kotak Bank", logo: "/img/finance1.png" },
+    { id: 10, name: "Union Bank", logo: "/img/finance2.png" },
 
   ];
 

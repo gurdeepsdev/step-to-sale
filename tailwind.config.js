@@ -14,6 +14,9 @@ module.exports = {
           "0%": { transform: "translateX(0%)" },
           "100%": { transform: "translateX(-100%)" },
         },
+      }, 
+       fontFamily: {
+        mulish: ['Mulish', 'sans-serif'], // Define "Mulish" font family
       },
       animation: {
         marquee: "marquee 10s linear infinite", // Adjust duration as needed

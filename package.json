@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/mulish": "^5.1.1",
     "autoprefixer": "^10.4.20",
     "embla-carousel-react": "^8.5.2",
     "postcss": "^8.4.49",
