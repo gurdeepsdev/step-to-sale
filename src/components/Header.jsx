@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoIosClose,IoIosSearch } from "react-icons/io";
 
-import { FaRegBell,FaBars } from "react-icons/fa";
+import { FaRegBell,FaBars,FaRegShareSquare } from "react-icons/fa";
 import { LuCircleUserRound } from "react-icons/lu";
 const Header = () => {
   const [showCountryToggle, setShowCountryToggle] = useState(false);
@@ -19,6 +19,7 @@ const Header = () => {
     setShowProfileToggle(false);
     setShowNotificationsSidebar(false);
     setShowMobileSearch(false);
+    console.log("logo")
   };
 
   const toggleProfileMenu = () => {
@@ -33,6 +34,8 @@ const Header = () => {
     setShowCountryToggle(false);
     setShowProfileToggle(false);
     setShowMobileSearch(false);
+    setShowSidebar(false);
+    console.log("hh")
   };
 
   const toggleMobileSearch = () => {
@@ -96,18 +99,92 @@ const Header = () => {
                   <IoIosClose className="text-4xl" />
                 </button>
                 <div className="space-y-4 mt-4">
-                  <button onClick={toggleCountryMenu} className="w-full flex items-center space-x-2">
-                    <span>🇮🇳</span>
-                    <span>Country</span>
+                <button
+                    onClick={toggleCountryMenu}
+                   className="w-full flex items-center space-x-2"
+                  >
+                    <span className="text-sm"><img src={selectedCountry.flag} className="h-7 w-7"></img></span>
+                    <span className="ml-2 text-sm font-medium">{selectedCountry.code}</span>
+                    <span className="ml-1 text-gray-500"><RiArrowDropDownLine className="text-5xl" /></span>
                   </button>
-                  <button onClick={() => console.log("Notifications clicked")} className="w-full flex items-center space-x-2">
+
+                 
+                   {/* Dropdown Menu */}
+                   {showCountryToggle && (
+                    <div className="absolute  mt-2 w-32 bg-white shadow rounded-md py-2 z-10">
+                      {countries.map((country) => (
+                        <button
+                          key={country.code}
+                          className="flex items-center px-4 py-2 w-full hover:bg-gray-100"
+                          onClick={() => handleCountrySelect(country)}
+                        >
+                          <span className="text-xl"><img src={country.flag} className="h-5 w-7"></img></span>
+                          <span className="ml-2 text-sm font-medium">{country.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  <button                     onClick={toggleNotificationsSidebar}
+ className="w-full flex items-center space-x-2">
                     <FaRegBell />
                     <span>Notifications</span>
                   </button>
+                    {/* Notifications Sidebar */}
+        {showNotificationsSidebar && (
+          <div className="fixed top-0 right-0 w-64 h-full bg-white shadow-lg z-20  ">
+            <div className="p-4 border-b flex justify-between items-center">
+              <h2 className="font-medium">Notifications</h2>
+              <button
+                onClick={toggleNotificationsSidebar}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ✖️
+              </button>
+            </div>
+            <div className="p-4 space-y-2">
+              <div className="bg-gray-100 p-3 rounded-lg">Notification 1</div>
+              <div className="bg-gray-100 p-3 rounded-lg">Notification 2</div>
+              <div className="bg-gray-100 p-3 rounded-lg">Notification 3</div>
+            </div>
+          </div>
+        )}
                   <button onClick={toggleProfileMenu} className="w-full flex items-center space-x-2">
                     <LuCircleUserRound />
                     <span>Profile</span>
                   </button>
+                  {showProfileToggle && (
+  <div className="absolute mt-40 w-60 bg-white shadow-lg rounded-md py-4 z-10 flex flex-col items-center space-y-4">
+    {/* Title */}
+    <div className="text-center">
+      <h1 className="text-sm font-semibold">Lorem Ipsum is amet, standard</h1>
+      <p className="text-xs text-gray-500">Lorem Ipsum is amet, standard</p>
+    </div>
+
+    {/* Buttons */}
+    <div className="flex justify-center space-x-4">
+      <button
+        className="bg-[#E74833] hover:bg-white text-white hover:text-black font-medium px-4 text-sm md:text-base lg:text-base py-1 rounded-full transition duration-300 border"
+        onClick={() => console.log("Login clicked")}
+      >
+        Login
+      </button>
+      <button
+        className="bg-[#E74833] hover:bg-white text-white hover:text-black font-medium px-4 text-sm md:text-base lg:text-base py-1 rounded-full transition duration-300 border"
+        onClick={() => console.log("Signup clicked")}
+      >
+        Sign Up
+      </button>
+    </div>
+
+    {/* Redeem */}
+    <button
+      className="text-gray-700 font-medium underline hover:text-black transition duration-300"
+      onClick={() => console.log("Redeem clicked")}
+    >
+      Redeem
+    </button>
+  </div>
+)}
                 </div>
               </div>
 
@@ -181,32 +258,53 @@ const Header = () => {
                 </div>
 
                 {/* Profile Icon with Balance */}
-                <div className="relative flex items-center ">
-                  <button
-                    onClick={toggleProfileMenu}
-                    className="w-10 h-10 rounded-full  flex items-center justify-center text-3xl focus:outline-none"
-                  >
-                    <LuCircleUserRound />
-                  </button>
-                  <span className="ml-0 text-sm font-medium text-red-600">₹0</span>
+             {/* Profile Icon with Balance */}
+<div className="relative flex items-center">
+  <button
+    onClick={toggleProfileMenu}
+    className="w-10 h-10 rounded-full flex items-center justify-center text-3xl focus:outline-none"
+  >
+    <LuCircleUserRound />
+  </button>
+  
+  <span className="ml-2 text-sm font-medium text-red-600">₹0</span>
+  {showProfileToggle && (
+    <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-md py-6 z-10">
+      {/* Title Section */}
+      <div className="text-center mb-6">
+        <h1 className="text-lg font-semibold text-gray-800">Lorem Ipsum is amet, standard</h1>
+        <p className="text-sm text-gray-500">Lorem Ipsum is amet, standard</p>
+      </div>
 
-                  {showProfileToggle && (
-                    <div className="absolute right-0 mt-40 w-40 bg-white shadow rounded-md py-2 z-10">
-                      <button
-                        className="block px-4 py-2 text-left w-full hover:bg-gray-100"
-                        onClick={() => console.log("Login clicked")}
-                      >
-                        Login
-                      </button>
-                      <button
-                        className="block px-4 py-2 text-left w-full hover:bg-gray-100"
-                        onClick={() => console.log("Signup clicked")}
-                      >
-                        Signup
-                      </button>
-                    </div>
-                  )}
-                </div>
+      {/* Buttons Section */}
+      <div className="flex justify-around items-center mb-6">
+        <button
+          className="px-6 py-2 bg-red-500 text-white font-medium rounded-full shadow hover:bg-red-600 transition duration-300"
+          onClick={() => console.log("Login clicked")}
+        >
+          Login
+        </button>
+        <button
+          className="px-6 py-2 border border-gray-500 text-gray-700 font-medium rounded-full shadow hover:bg-gray-100 transition duration-300"
+          onClick={() => console.log("Signup clicked")}
+        >
+          Sign
+        </button>
+      </div>
+
+      {/* Redeem Section */}
+      <div className="text-center">
+        <button
+          className="text-gray-700 font-medium underline hover:text-black transition duration-300"
+          onClick={() => console.log("Redeem clicked")}
+        >
+          Redeem
+        </button>
+      </div>
+    </div>
+  )}
+</div>
+
               </div>
             </div>
           </div>
@@ -229,22 +327,24 @@ const Header = () => {
         )}
 
         {/* Bottom Navbar */}
-        <div className="flex justify-center py-1 bg-[#244856] text-center">
-  <a href="#" className="text-white hover:text-red-500 px-1 text-[12px] sm:px-2 sm:text-sm md:px-3 md:text-lg lg:text-lg">
+        <div className="flex justify-center py-2 bg-[#244856] text-center">
+  <a href="#" className="text-white hover:text-red-500 px-1 text-[10px] sm:px-2 lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg">
     Popular Categories
   </a>
-  <a href="#" className="text-white hover:text-red-500 px-1 text-[12px] sm:px-2 sm:text-sm md:px-3 md:text-lg lg:text-lg">
+  <a href="#" className="text-white hover:text-red-500 px-1 text-[10px] sm:px-2 lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg">
     Top Stores
   </a>
-  <a href="#" className="text-white hover:text-red-500 px-1 text-[12px] sm:px-2 sm:text-sm md:px-3 md:text-lg lg:text-lg">
+  <a href="#" className="text-white hover:text-red-500 px-1 text-[10px] sm:px-2  lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg">
     Coupon Codes
   </a>
-  {/* <a href="#" className="text-white hover:text-red-500 px-1 text-[10px] sm:px-2 sm:text-sm md:px-3 md:text-lg lg:text-lg">
+   <a href="#" className="text-white hover:text-red-500 px-1 text-[10px] sm:px-2 lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg">
     Deal Zone
-  </a> */}
-  <a href="#" className="text-white hover:text-red-500 px-1 text-[12px] sm:px-2 sm:text-sm md:px-3 md:text-lg lg:text-lg">
-    Share and Earn
-  </a>
+  </a> 
+  <a href="#" className="text-white hover:text-red-500 px-1 text-[10px] sm:px-2 lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg flex items-center space-x-2">
+  <span className=" hidden sm:block"> Share and Earn</span>
+  <span><FaRegShareSquare /></span>
+</a>
+
 </div>
 
 

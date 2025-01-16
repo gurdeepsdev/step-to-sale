@@ -1,5 +1,6 @@
+
 body {
-  @apply max-w-container mx-auto; /* Apply the custom container width globally */
+  font-family: 'Mulish', sans-serif !important;
 }
 /* index.css or App.css */
 @import "~slick-carousel/slick/slick.css";

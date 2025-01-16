@@ -51,7 +51,7 @@ const FAQ = () => {
       </h1>
       <div className="space-y-4">
         {initialQuestions.map((item, index) => (
-          <div key={index} className="border-b border-gray-300 pb-2">
+          <div key={index} className="border-b border-gray-700 pb-2">
             <div
               className="flex justify-between items-center cursor-pointer"
               onClick={() => toggleQuestion(index)}
@@ -73,7 +73,7 @@ const FAQ = () => {
           additionalQuestions.map((item, index) => (
             <div
               key={initialQuestions.length + index}
-              className="border-b border-gray-300 pb-2"
+              className="border-b border-gray-700 pb-2"
             >
               <div
                 className="flex justify-between items-center cursor-pointer"
@@ -97,14 +97,14 @@ const FAQ = () => {
       <div className="text-center mt-6">
         {showMore ? (
           <button
-            className="text-blue-600 underline"
+            className="text-black underline"
             onClick={() => setShowMore(false)}
           >
             Hide
           </button>
         ) : (
           <button
-            className="text-blue-600 underline"
+            className="text-black underline"
             onClick={() => setShowMore(true)}
           >
             See More

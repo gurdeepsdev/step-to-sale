@@ -14,6 +14,8 @@ import Finance from "../components/Finance";
 import Subscribe from "../components/Subscribe";
 import FaQ from "../components/FaQ";
 import Coupons from "../components/Coupons";
+import Footer from "../components/Footer";
+
 
 
 
@@ -36,6 +38,7 @@ const App = () => {
     <Testimoials/>
     <Subscribe/>
     <FaQ/>
+    <Footer/>
   </div>
   );
 };

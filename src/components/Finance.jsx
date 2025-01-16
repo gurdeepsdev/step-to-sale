@@ -38,12 +38,12 @@ const FinanceOffers = () => {
           {offers.map((offer) => (
             <div
               key={offer.id}
-              className="flex-shrink-0  p-4  flex items-center justify-center hover:shadow-lg "
+              className="flex-shrink-0  p-4  flex items-center justify-center hover:shadow-lg  transition"
             >
               <img
                 src={offer.logo}
                 alt={offer.name}
-                className="h-12 object-contain"
+                className="h-14 object-contain"
               />
             </div>
           ))}
@@ -55,7 +55,7 @@ const FinanceOffers = () => {
         {offers.map((offer) => (
           <div
             key={offer.id}
-            className="flex items-center justify-center p-2  hover:shadow-lg transition"
+            className="flex items-center justify-center p-2  shadow-lg transition"
           >
             <img
               src={offer.logo}
@@ -68,7 +68,7 @@ const FinanceOffers = () => {
 
       {/* Button */}
       <div className="mt-8 text-center">
-        <button className="px-6 py-2 border border-gray-800 text-gray-800 rounded-full hover:bg-[#E74833] hover:border-[#E74833]  hover:text-white transition">
+        <button className="px-3 md:px-6 lg:px-6 py-1 md:py-2 lg:py-2 text-sm md:text-base lg:text-base border border-gray-800 text-gray-800 rounded-full hover:bg-[#E74833] hover:border-[#E74833]  hover:text-white transition">
           See More
         </button>
       </div>

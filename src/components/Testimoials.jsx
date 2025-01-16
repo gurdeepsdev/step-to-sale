@@ -7,7 +7,7 @@ const Testimonials = () => {
   return (
     <section className="py-12 px-6 md:px-12 lg:px-20 bg-white">
       <div className="text-center mb-10">
-        <h2 className="text-2xl md:text-4xl font-bold mb-2">Hear It From Our Customer</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-2">Hear It From Our Customer</h2>
         <p className="text-gray-600 text-sm md:text-base">
           Lorem ipsum dolor sit amet consectetur. Sed sed eu sit consectetur.
         </p>

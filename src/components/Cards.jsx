@@ -78,7 +78,7 @@ const TrendingCategories = () => {
         <div className="flex-grow"></div>
 <br/>
         {/* Button */}
-        <button className="px-4 py-2 border border-gray-800 text-gray-800 bg-white rounded-full hover:bg-[#E74833] hover:border-[#E74833] hover:text-white transition mt-auto">
+        <button className="px-3 md:px-6 lg:px-6 py-1 md:py-2 lg:py-2 text-sm md:text-base lg:text-base border border-gray-800 text-gray-800 bg-white rounded-full hover:bg-[#E74833] hover:border-[#E74833] hover:text-white transition mt-auto">
           {category.button}
         </button>
       </div>
@@ -112,7 +112,7 @@ const TrendingCategories = () => {
             {/* Discount */}
             <p className="text-white mt-2 mb-4 text-xl font-semibold">{category.discount}</p>
             {/* Button */}
-            <button className="px-4 py-2 border border-gray-800 bg-white text-gray-800 rounded-full hover:bg-[#E74833] hover:border-[#E74833] hover:text-white transition">
+            <button className="px-3 md:px-6 lg:px-6 py-1 md:py-2 lg:py-2 text-sm md:text-base lg:text-base border border-gray-800 bg-white text-gray-800 rounded-full hover:bg-[#E74833] hover:border-[#E74833] hover:text-white transition">
               {category.button}
             </button>
           </div>
@@ -121,7 +121,7 @@ const TrendingCategories = () => {
 
       {/* Button Section */}
       <div className="mt-8 text-center">
-        <button className="px-6 py-2 border border-gray-800 text-gray-800 rounded-full hover:bg-[#E74833] hover:border-[#E74833] hover:text-white transition">
+        <button className="px-3 md:px-6 lg:px-6 py-1 md:py-2 lg:py-2 border border-gray-800 text-sm md:text-base lg:text-base text-gray-800 rounded-full hover:bg-[#E74833] hover:border-[#E74833] hover:text-white transition">
           See More
         </button>
       </div>

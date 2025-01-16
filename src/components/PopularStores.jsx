@@ -83,7 +83,7 @@ const PopularStores = () => {
 
       {/* Button */}
       <div className="mt-8 text-center">
-        <button className="px-6 py-2 border border-gray-800 text-gray-800 rounded-full hover:bg-[#E74833] hover:border-[#E74833] hover:text-white transition">
+        <button className="px-3 md:px-6 lg:px-6 py-1 md:py-2 lg:py-2 border border-gray-800 text-gray-800 text-sm md:text-base lg:text-base rounded-full hover:bg-[#E74833] hover:border-[#E74833] hover:text-white transition">
           See All Stores
         </button>
       </div>

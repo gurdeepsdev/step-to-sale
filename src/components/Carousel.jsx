@@ -18,7 +18,7 @@ const Carousel = () => {
   };
 
   return (
-    <div className="w-full max-w-[1440px] mx-auto  overflow-hidden">
+    <div className="mt-6 md:mt-10 lg:mt-10 w-full max-w-[1440px] mx-auto  overflow-hidden">
       {/* Desktop Slider */}
       <div className="hidden sm:block">
         <Slider {...settings}>

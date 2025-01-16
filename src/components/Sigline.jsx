@@ -16,7 +16,7 @@ const SignupBanner = () => {
         </p>
 
         {/* Button */}
-        <button className="mt-2 bg-[#E74833] hover:bg-orange-600 text-white text-sm md:text-base font-semibold py-1 px-6 rounded-full transition duration-300">
+        <button className="mt-2 bg-[#E74833] hover:bg-white text-white hover:text-black  text-sm md:text-base lg:text-base font-semibold py-1 px-6 rounded-full transition duration-300">
           Sign up
         </button>
       </div>
