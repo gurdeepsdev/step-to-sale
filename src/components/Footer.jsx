@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -16,8 +17,10 @@ const Footer = () => {
           </div>
           <div className="pr-0 md:pr-20 lg:pr-20">
               <p className="pr-0 md:pr-20 lg:pr-20 text-sm leading-relaxed">
-            Lorem ipsum dolor sit amet consectetur. Turpis ac pretium justo enim Lorem ipsum dolor sit amet consectetur.
-          </p>
+              Step to Sale: Your ultimate destination for unbeatable deals and exclusive coupons. 
+              Start saving today and make every purchase count! For more information you can visit our corporate site:  <a href="https://www.ClickOrbits.com" target="_blank"
+    rel="noopener noreferrer">ClickOrbits.com</a>
+                </p>
           </div>
 
         </div>
@@ -37,7 +40,8 @@ const Footer = () => {
 
           {/* Lorem Ipsum */}
           <div className="col-span-1">
-            <h3 className="text-lg font-semibold mb-4">Lorem Ipsum</h3>
+            <h3 className="text-lg font-semibold mb-4">Our Guidelines
+            </h3>
             <ul className="space-y-2">
               <li><a href="#" className="hover:underline">About Us</a></li>
               <li><a href="#" className="hover:underline">Terms and Conditions</a></li>

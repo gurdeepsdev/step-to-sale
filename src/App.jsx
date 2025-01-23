@@ -7,8 +7,8 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import './index.css'; // Ensure Tailwind CSS is included here
 
 
-import Home from "./pages/Home";
-
+import Home from "./pages/Home"; 
+import CouponsDetails from "./pages/CouponsDetails";
 
 const App = () => {
   return (
@@ -19,6 +19,8 @@ const App = () => {
         {/* Define Routes */}
         <Routes>
           <Route path="/" element={<Home />} />
+              <Route path="/CouponsDetails" element={<CouponsDetails/>} />
+
      
         </Routes>
       </div>

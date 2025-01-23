@@ -28,7 +28,7 @@ const PopularStores = () => {
       <div className="text-center mb-8">
         <h2 className="text-2xl md:text-3xl lg:text-3xl font-bold text-gray-900">Popular Stores</h2>
         <p className="text-gray-600 text-sm md:text-lg lg:text-lg">
-          Lorem ipsum dolor sit amet consectetur. Sed sed eu sit consectetur.
+        Explore Top Deals from Your Favorite Stores—Your Savings Start Here!
         </p>
       </div>
 

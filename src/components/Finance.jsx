@@ -28,7 +28,7 @@ const FinanceOffers = () => {
       <div className="text-center mb-8">
         <h2 className="text-2xl md:text-3xl lg:text-3xl font-bold text-gray-900">Finance Offers</h2>
         <p className="text-gray-600 text-sm md:text-lg lg:text-lg">
-          Lorem ipsum dolor sit amet consectetur. Sed sed eu sit consectetur.
+        Top Offers for Every Wallet. Unlock finance deals crafted to maximize savings and achieve financial goals."
         </p>
       </div>
 
@@ -51,11 +51,11 @@ const FinanceOffers = () => {
       </div>
 
       {/* Grid Section for larger screens */}
-      <div className="hidden lg:grid grid-cols-5 gap-2">
+      <div className="hidden lg:grid grid-cols-5 gap-4">
         {offers.map((offer) => (
           <div
             key={offer.id}
-            className="flex items-center justify-center p-2  shadow-lg transition"
+            className="flex items-center justify-center p-2 hover:shadow-none hover:border-none  shadow-md border transition rounded"
           >
             <img
               src={offer.logo}

@@ -21,25 +21,56 @@ const Testimonials = () => {
                 <span className="text-white text-lg">★★★★★</span>
               </div>
               <p className="text-sm md:text-xl lg:text-xl font-normal	 mb-6 text-center">
-                Lorem ipsum dolor sit amet consectetur. Turpis ac pretium justo enim.
-                Tellus at at cras aliquam ac volutpat in hac. Tellus at at cras aliquam
-                ac volutpat in hac.
+             
+The Step to Sale website has an incredibly user-friendly interface. Everything is easy to find and fast.
+ Navigation is simple, and I can quickly grab the deals I need without any hassle. It’s definitely one of the 
+ best-designed coupon sites I’ve used!
+
               </p>
-              <p className="text-sm font-semibold text-center">By Daniel Robert, Bangalore</p>
+              <p className="text-sm font-semibold text-center"> -Smooth and Easy to Use!</p>
             </div>
           </div>
           {/* Slide 2 */}
           <div className="min-w-[100%] md:min-w-[50%] ">
             <div className="bg-white  p-8">
               <div className="flex justify-center mb-4">
-                <span className="text-black text-lg">★★★★★</span>
+                <span className="text-black text-lg">★★★★</span>
               </div>
               <p className="text-sm md:text-xl lg:text-xl font-normal mb-6 text-center">
-                Lorem ipsum dolor sit amet consectetur. Turpis ac pretium justo enim.
-                Tellus at at cras aliquam ac volutpat in hac. Tellus at at cras aliquam
-                ac volutpat in hac.
+              I absolutely love the design of Step to Sale! It’s so clean, organized, and visually appealing. 
+              I can easily browse through categories and find deals without feeling overwhelmed. 
+              The website makes saving money fun and effortless. Truly a fantastic shopping experience!
               </p>
-              <p className="text-sm font-semibold text-center">By Daniel Robert, Bangalore</p>
+              <p className="text-sm font-semibold text-center">-Great Design and Experience!
+              </p>
+            </div>
+          </div>
+
+     {/* Slide 1 */}
+     <div className="min-w-[100%] md:min-w-[50%] ">
+            <div className="bg-black text-white p-8">
+              <div className="flex justify-center mb-4">
+                <span className="text-white text-lg">★★★</span>
+              </div>
+              <p className="text-sm md:text-xl lg:text-xl font-normal	 mb-6 text-center">
+             
+              I was expecting more variety in deals. The website could definitely use more high-value offers.
+
+              </p>
+              <p className="text-sm font-semibold text-center"> -Smooth and Easy to Use!</p>
+            </div>
+          </div>
+              {/* Slide 2 */}
+              <div className="min-w-[100%] md:min-w-[50%] ">
+            <div className="bg-white  p-8">
+              <div className="flex justify-center mb-4">
+                <span className="text-black text-lg">★★★★</span>
+              </div>
+              <p className="text-sm md:text-xl lg:text-xl font-normal mb-6 text-center">
+              I’ve found some really solid deals on Step to Sale. Nothing extravagant, but definitely worth the visit for everyday savings!
+              </p>
+              <p className="text-sm font-semibold text-center">-Good Deals, Worth the Visit!
+              </p>
             </div>
           </div>
           

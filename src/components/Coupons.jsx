@@ -65,7 +65,7 @@ const Coupons = () => {
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold">Top Coupons</h2>
         <p className="text-gray-700">
-          Lorem ipsum dolor sit amet consectetur. Sed sed eu sit consectetur.
+        Find the best discounts, limited-time offers, and more — all in one place!
         </p>
       </div>
 

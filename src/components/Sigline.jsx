@@ -7,13 +7,14 @@ const SignupBanner = () => {
       <div className="max-w-4xl mx-auto text-center">
         {/* Title */}
         <h2 className="text-white text-sm md:text-xl lg:text-xl  font-semibold">
-          Signup to earn CD Cashback every time you shop
+        Join us for instant cashback!
         </h2>
 
         {/* Subtitle */}
         <p className="text-white mt-1 text-xs md:text-base lg:text-base">
-          Lorem ipsum dolor sit amet consectetur. Sed sed eu sit consectetur.
-        </p>
+        Discover discounts, deals, and more—sign up to start your savings journey instantly!
+
+</p>
 
         {/* Button */}
         <button className="mt-2 bg-[#E74833] hover:bg-white text-white hover:text-black  text-sm md:text-base lg:text-base font-semibold py-1 px-6 rounded-full transition duration-300">
