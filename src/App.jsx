@@ -9,6 +9,10 @@ import './index.css'; // Ensure Tailwind CSS is included here
 
 import Home from "./pages/Home"; 
 import CouponsDetails from "./pages/CouponsDetails";
+import CouponFilters from "./pages/CouponFilters";
+
+import Singup from "./auth/Singup";
+
 
 const App = () => {
   return (
@@ -19,7 +23,9 @@ const App = () => {
         {/* Define Routes */}
         <Routes>
           <Route path="/" element={<Home />} />
-              <Route path="/CouponsDetails" element={<CouponsDetails/>} />
+              <Route path="/CouponsDetails" element={<CouponsDetails/>} /> 
+              <Route path="/Singup" element={<Singup/>} /> 
+              <Route path="/CouponFilters" element={<CouponFilters/>} /> 
 
      
         </Routes>

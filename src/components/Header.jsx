@@ -1,6 +1,13 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoIosClose,IoIosSearch } from "react-icons/io";
+import Signup from "../auth/Singup";
+import Sigline from "../components/Sigline";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+
+
+
 
 import { FaRegBell,FaBars,FaRegShareSquare } from "react-icons/fa";
 import { LuCircleUserRound } from "react-icons/lu";
@@ -10,9 +17,30 @@ const Header = () => {
   const [showNotificationsSidebar, setShowNotificationsSidebar] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false); // State for mobile search toggle
   const [showSidebar, setShowSidebar] = useState(false);  // To toggle the sidebar on mobile
+  const [balance, setBalance] = useState("0");
+  const navigate = useNavigate();
+
 
   const toggleSidebar = () => setShowSidebar(!showSidebar);
 
+   const [isSignUp, setIsSignUp] = useState(true); // State to toggle between SignUp and SignIn forms
+
+  // const [activeForm, setActiveForm] = useState(null); // "signin" or "signup"
+  const [showModal, setShowModal] = useState(false); // Modal visibility state
+
+  const handleButtonClick = (formType) => {
+    setIsSignUp(formType); // Set the form type ("signin" or "signup")
+    setShowModal(true); // Show the modal
+  };
+  useEffect(() => {
+    const wallet = Cookies.get("wallet");
+    if (wallet) {
+      const walletData = JSON.parse(wallet);
+      console.log("walletData",walletData)
+      setBalance(walletData[0].balance || "0.00");
+    }
+  }, []);
+  console.log("balance",balance)
 
   const toggleCountryMenu = () => {
     setShowCountryToggle(!showCountryToggle);
@@ -23,10 +51,17 @@ const Header = () => {
   };
 
   const toggleProfileMenu = () => {
-    setShowProfileToggle(!showProfileToggle);
-    setShowCountryToggle(false);
-    setShowNotificationsSidebar(false);
-    setShowMobileSearch(false);
+    const token = Cookies.get("token");
+    if (token) {
+      // Redirect to My Account page
+      navigate("/my-account");
+    } else {
+      setShowProfileToggle(!showProfileToggle);
+      setShowCountryToggle(false);
+      setShowNotificationsSidebar(false);
+      setShowMobileSearch(false);
+    }
+   
   };
 
   const toggleNotificationsSidebar = () => {
@@ -164,14 +199,14 @@ const Header = () => {
     <div className="flex justify-center space-x-4">
       <button
         className="bg-[#E74833] hover:bg-white text-white hover:text-black font-medium px-4 text-sm md:text-base lg:text-base py-1 rounded-full transition duration-300 border"
-        onClick={() => console.log("Login clicked")}
-      >
+        onClick={() => handleButtonClick(false)}
+        >
         Login
       </button>
       <button
         className="bg-[#E74833] hover:bg-white text-white hover:text-black font-medium px-4 text-sm md:text-base lg:text-base py-1 rounded-full transition duration-300 border"
-        onClick={() => console.log("Signup clicked")}
-      >
+        onClick={() => handleButtonClick(true)}
+        >
         Sign Up
       </button>
     </div>
@@ -273,7 +308,8 @@ const Header = () => {
     <LuCircleUserRound />
   </button>
   
-  <span className="ml-2 text-sm font-medium text-red-600">₹0</span>
+
+   <span className="ml-2 text-sm font-medium text-red-600">₹{balance}</span> 
   <div
   className={`absolute right-0 mt-[280px] w-80 bg-white shadow-lg rounded-md py-6 z-10 transform transition-all duration-500 ${
     showProfileToggle ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
@@ -291,14 +327,16 @@ const Header = () => {
   <div className="flex justify-center items-center  space-x-4">
   <button
     className="bg-[#E74833] hover:bg-white text-white hover:text-black px-6  border py-2 bg-red-500 text-white font-medium rounded-full  transition duration-300"
-    onClick={() => console.log("Login clicked")}
-  >
+    // onClick={() => setIsSignUp(false)} 
+    onClick={() => handleButtonClick(false)}
+
+    >
     Login
   </button>
   <button
     className="hover:bg-[#E74833] bg-white hover:text-white text-black px-6  border py-2 rounded-full shadow  transition duration-300"
-    onClick={() => console.log("Signup clicked")}
-  >
+    onClick={() => handleButtonClick(true)}
+    >
     Sign up
   </button>
 </div>
@@ -414,6 +452,18 @@ const Header = () => {
 </>
 
       </div>
+      {/* <Signup isSignUp={isSignUp}  setIsSignUp={setIsSignUp}/> */}
+      <Signup
+        isSignUp={isSignUp}
+        setIsSignUp={setIsSignUp}
+        showModal={showModal}
+        setShowModal={setShowModal} // Ensure this is passed correctly
+
+
+/>
+
+
+{/* {showModal && <Sigline setShowModal={setShowModal} />} */}
 
     </>
 
