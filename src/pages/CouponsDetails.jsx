@@ -20,7 +20,8 @@ const OfferCard = () => {
       ← Go Back
     </button>
     <button className="text-white text-sm md:text-lg lg:text-lg font-medium flex items-center hover:underline gap-1">
-    <span>Share</span><span><IoMdShare size={24}/></span>
+    <span>Share</span>  <IoMdShare className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
+
     </button>
   </div>
   {/* Outer Container */}
@@ -47,11 +48,11 @@ const OfferCard = () => {
         <div className="flex items-center justify-center mt-6">
           <div className="flex items-center rounded-full">
             {/* Left Section: Button */}
-            <button className="bg-blue-500 text-white px-6 py-3 rounded-l-full text-lg font-medium hover:bg-blue-600 transition">
+            <button className="bg-[#5396AF] text-white px-4 py-1 md:px-6 lg:px-6 md:py-2 lg:py-2 rounded-l-full text-lg font-medium hover:bg-blue-600 transition">
               Show Coupon
             </button>
             {/* Right Section: Code */}
-            <span className="bg-white text-blue-500 px-1 py-3 text-lg font-semibold border-t border-b border-r border-dotted border-blue-500 rounded-r-full">
+            <span className="bg-white text-black px-2 py-1 md:py-1 lg:py-1 text-lg font-semibold border-t border-b border-r border-dotted border-[#5396AF] rounded-r-full">
               D8GH
             </span>
           </div>

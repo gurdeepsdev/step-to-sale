@@ -1,24 +1,37 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect,useContext } from "react";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoIosClose,IoIosSearch } from "react-icons/io";
 import Signup from "../auth/Singup";
-import Sigline from "../components/Sigline";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import CryptoJS from "crypto-js"; // Import crypto-js
+import axiosInstance from "../axiosInstance";
+import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
+import { io } from "socket.io-client";
+
 
 
 
 
 import { FaRegBell,FaBars,FaRegShareSquare } from "react-icons/fa";
 import { LuCircleUserRound } from "react-icons/lu";
+
+const socket = io("http://localhost:5000"); // Adjust to match your backend URL
+
+
 const Header = () => {
+  const { token, userId, balance, username, email, referralCode } = useContext(AuthContext);
+
   const [showCountryToggle, setShowCountryToggle] = useState(false);
   const [showProfileToggle, setShowProfileToggle] = useState(false);
   const [showNotificationsSidebar, setShowNotificationsSidebar] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false); // State for mobile search toggle
   const [showSidebar, setShowSidebar] = useState(false);  // To toggle the sidebar on mobile
-  const [balance, setBalance] = useState("0");
+  // const [balance, setBalance] = useState("0"); 
+  // const [userId, setUserid] = useState("0");
   const navigate = useNavigate();
+  console.log("allin",token, userId, balance, username, email, referralCode )
 
 
   const toggleSidebar = () => setShowSidebar(!showSidebar);
@@ -31,17 +44,11 @@ const Header = () => {
   const handleButtonClick = (formType) => {
     setIsSignUp(formType); // Set the form type ("signin" or "signup")
     setShowModal(true); // Show the modal
+    setShowProfileToggle(false)
   };
-  useEffect(() => {
-    const wallet = Cookies.get("wallet");
-    if (wallet) {
-      const walletData = JSON.parse(wallet);
-      console.log("walletData",walletData)
-      setBalance(walletData[0].balance || "0.00");
-    }
-  }, []);
-  console.log("balance",balance)
 
+
+   
   const toggleCountryMenu = () => {
     setShowCountryToggle(!showCountryToggle);
     setShowProfileToggle(false);
@@ -70,7 +77,7 @@ const Header = () => {
     setShowProfileToggle(false);
     setShowMobileSearch(false);
     setShowSidebar(false);
-    console.log("hh")
+    getUserData()
   };
 
   const toggleMobileSearch = () => {
@@ -101,6 +108,39 @@ const Header = () => {
     { code: "Ca", flag: "/img/can.webp", name: "Canada" },
   ];
 
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+      if (userId) {
+          socket.emit("join", userId); // Join the room for this user
+
+          // Listen for notifications for this user
+          socket.on("newNotification", (notification) => {
+              setNotifications((prev) => [notification, ...prev]); // Add new notification to the list
+          });
+
+          // Clean up the socket listener on component unmount
+          return () => {
+              socket.off("newNotification");
+          };
+      }
+  }, [userId]);
+
+  // // Fetch notifications on initial load
+  // useEffect(() => {
+  //     const fetchNotifications = async () => {
+  //         try {
+  //             const response = await axiosInstance.get(`/api/notification?userId=${userId}`);
+  //             setNotifications(response.data.notifications);
+  //         } catch (error) {
+  //             console.error("Error fetching notifications:", error);
+  //         }
+  //     };
+
+  //     fetchNotifications();
+  // }, [userId]);
+
+console.log("notifications",notifications)
   return (
     <>
       <div className=" bg-white shadow sticky top-0 bg-white z-50 ">
@@ -128,7 +168,9 @@ const Header = () => {
 
           <div>
             {/* Mobile Sidebar */}
-            <div className={`sm:hidden fixed inset-0 bg-gray-800 bg-opacity-50 z-50 ${showSidebar ? 'block' : 'hidden'}`}>
+            <div className={`sm:hidden fixed inset-0 bg-gray-800 bg-opacity-50 z-50 ttransform transition-transform duration-500 ${
+  showSidebar ? "translate-x-0" : "-translate-x-full"
+} `}>
               <div className="bg-white p-4 w-64 h-full">
                 <button className="w-full text-right" onClick={toggleSidebar}>
                   <IoIosClose className="text-4xl" />
@@ -160,7 +202,7 @@ const Header = () => {
                     </div>
                   )}
                   <button                     onClick={toggleNotificationsSidebar}
- className="w-full flex items-center space-x-2">
+ className="w-full flex items-center space-x-2 ">
                     <FaRegBell />
                     <span>Notifications</span>
                   </button>

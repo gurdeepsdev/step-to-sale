@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SignupBanner = ({  setShowModal } ) => {
+const SignupBanner = ({ callFunction } ) => {
 
   return (
     <div className="max-w-container mx-auto bg-[#244856] py-4 px-2">
@@ -20,7 +20,7 @@ const SignupBanner = ({  setShowModal } ) => {
         {/* Button */}
         <button 
         // onClick={() => setShowModal(true)}
-        onClick={() => setShowModal(false)}         className="mt-2 bg-[#E74833] hover:bg-white text-white hover:text-black  text-sm md:text-base lg:text-base font-semibold py-1 px-6 rounded-full transition duration-300">
+        onClick={callFunction}       className="mt-2 bg-[#E74833] hover:bg-white text-white hover:text-black  text-sm md:text-base lg:text-base font-semibold py-1 px-6 rounded-full transition duration-300">
           Sign up
         </button>
       </div>
