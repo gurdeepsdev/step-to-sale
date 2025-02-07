@@ -4,6 +4,7 @@ import { Eye, EyeOff } from "lucide-react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import CryptoJS from "crypto-js"; // Import crypto-js
+import Swal from 'sweetalert2'
 
 
 
@@ -154,7 +155,12 @@ const handleSubmit = async (e) => {
        Cookies.set("email", encryptData(email), { expires: 7 });
  
       // Success alert
-      alert("Signup successful!");
+      Swal.fire({
+        title: "Signup Successful!",
+        icon: "success",
+        draggable: true
+      });
+      // alert("Signup successful!");
       setShowModal(false)
       console.log(response.data);
     } catch (err) {
@@ -217,7 +223,12 @@ const handleSubmit = async (e) => {
      Cookies.set("email", encryptData(email), { expires: 7 });
   
       // Success alert
-      alert("Login Successful!");
+      Swal.fire({
+        title: "Login Successful!",
+        icon: "success",
+        draggable: true
+      });
+      // alert("Login Successful!");
       setShowModal(false)
 
     } catch (err) {
@@ -364,6 +375,7 @@ const handleSubmit = async (e) => {
             className="w-full px-4 py-2 bg-gray-100 rounded-md focus:outline-none focus:ring focus:ring-gray-300 border"
             value={formData1.email}
             onChange={handleChange}
+            required
             
           />
         </div>

@@ -8,7 +8,7 @@ import CryptoJS from "crypto-js"; // Import crypto-js
 import axiosInstance from "../axiosInstance";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 
 
 
@@ -17,7 +17,7 @@ import { io } from "socket.io-client";
 import { FaRegBell,FaBars,FaRegShareSquare } from "react-icons/fa";
 import { LuCircleUserRound } from "react-icons/lu";
 
-const socket = io("http://localhost:5000"); // Adjust to match your backend URL
+// const socket = io("http://localhost:5000"); // Adjust to match your backend URL
 
 
 const Header = () => {
@@ -59,9 +59,11 @@ const Header = () => {
 
   const toggleProfileMenu = () => {
     const token = Cookies.get("token");
+    console.log("token",token)
+
     if (token) {
-      // Redirect to My Account page
-      navigate("/my-account");
+      console.log("token",token)
+      navigate("/Account");
     } else {
       setShowProfileToggle(!showProfileToggle);
       setShowCountryToggle(false);
@@ -110,21 +112,21 @@ const Header = () => {
 
   const [notifications, setNotifications] = useState([]);
 
-  useEffect(() => {
-      if (userId) {
-          socket.emit("join", userId); // Join the room for this user
+  // useEffect(() => {
+  //     if (userId) {
+  //         socket.emit("join", userId); // Join the room for this user
 
-          // Listen for notifications for this user
-          socket.on("newNotification", (notification) => {
-              setNotifications((prev) => [notification, ...prev]); // Add new notification to the list
-          });
+  //         // Listen for notifications for this user
+  //         socket.on("newNotification", (notification) => {
+  //             setNotifications((prev) => [notification, ...prev]); // Add new notification to the list
+  //         });
 
-          // Clean up the socket listener on component unmount
-          return () => {
-              socket.off("newNotification");
-          };
-      }
-  }, [userId]);
+  //         // Clean up the socket listener on component unmount
+  //         return () => {
+  //             socket.off("newNotification");
+  //         };
+  //     }
+  // }, [userId]);
 
   // // Fetch notifications on initial load
   // useEffect(() => {
