@@ -8,12 +8,18 @@ import Swal from 'sweetalert2'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Cookies from "js-cookie";
+import InstantWithdrawal from "../components/Withdraw"; // Import your component
+
 
 
 const Account = () => {
   const [activeSection, setActiveSection] = useState("profile");
   const [copied, setCopied] = useState(false);
   const referralCode = "ICRTSHU45JFI";
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  
+
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referralCode);
@@ -304,6 +310,14 @@ const Account = () => {
                <div className="bg-blue-200 text-center py-6 rounded-lg mb-6">
                  <h2 className="text-3xl font-bold">50Rs</h2>
                  <p className="text-lg font-medium">Available Balance</p>
+                 <button
+              type="submit"
+              className=" bg-[#244856] text-white mt-2 py-1 px-8 rounded-md hover:bg-[#244856] focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onClick={() => setIsModalOpen(true)}
+
+            >
+              Redeem
+            </button>
                </div>
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2  gap-4">
                <div>
@@ -352,9 +366,9 @@ const Account = () => {
              </div>
              <button
               type="submit"
-              className="w-full bg-[#244856] text-white mt-4 py-2 px-4 rounded-md hover:bg-[#244856] focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-[#244856] text-white mt-4 py-1 px-4 rounded-md hover:bg-[#244856] focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              Submit
+              Save
             </button>
             <div className="flex flex-col items-center justify-center p-4">
   <div className="flex items-center w-full ">
@@ -380,8 +394,9 @@ const Account = () => {
       className="flex-1 px-6 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
     />
     {/* Withdraw Button */}
-    <button className="w-full md:w-auto bg-[#1b4c5b] text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-[#153c48] transition">
-      Withdraw
+    <button className="w-full md:w-auto bg-[#1b4c5b] text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-[#153c48] transition" 
+>
+Save
     </button>
   </div>
 </div>
@@ -448,6 +463,9 @@ const Account = () => {
           </main>
         </div>
       </div>
+
+      {/* Popup Modal */}
+      <InstantWithdrawal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <Footer />
     </>
   );

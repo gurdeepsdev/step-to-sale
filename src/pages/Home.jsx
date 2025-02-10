@@ -15,6 +15,7 @@ import Subscribe from "../components/Subscribe";
 import FaQ from "../components/FaQ";
 import Coupons from "../components/Coupons";
 import Footer from "../components/Footer";
+import Withdraw from "../components/Withdraw";
 
 
 
@@ -39,6 +40,8 @@ const App = () => {
     <Header/>
      <Carousel/>  
     <Steps/>
+    <Withdraw/>
+
     <Sigline callFunction={handleButtonClick} />
     <PopularStores/>
     <MarqueeHome/>

@@ -12,9 +12,10 @@ const SignUpForm = ({isSignUp , setIsSignUp, showModal, setShowModal} ) => {
 
     if (!showModal) return null; // Don't render the modal if showModal is false
     const apiUrl = import.meta.env.VITE_API_URL;
-    console.log("Backend API URL:", apiUrl);
     // Secret key for encryption and decryption (should be kept safe)
-const SECRET_KEY = "gurdeep@12";
+    console.log("apiUrl:", apiUrl);
+
+const SECRET_KEY = import.meta.env.VITE_API_SECRET_KEY;
 
 const [useOtp, setUseOtp] = useState(false);
 const [step, setStep] = useState("phone");
@@ -195,7 +196,7 @@ const handleSubmit = async (e) => {
     setError(""); // Clear previous errors
   
     try {
-      const response = await axios.post("http://localhost:5000/api/login", {
+      const response = await axios.post(`${apiUrl}/api/login`, {
         phone_number: formData.phone_number,
         password: formData.password,
       });
