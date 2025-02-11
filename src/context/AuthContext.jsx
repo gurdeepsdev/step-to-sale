@@ -27,6 +27,8 @@ export const AuthProvider = ({ children }) => {
   const [username, setUsername] = useState(() => decryptData(Cookies.get("username")));
   const [email, setEmail] = useState(() => decryptData(Cookies.get("email")));
   const [referralCode, setReferralCode] = useState(() => decryptData(Cookies.get("referral_code")));
+  const [phone_number, setPhonenumber] = useState(() => decryptData(Cookies.get("phone_number")));
+
 
   // Function to refresh cookies manually after login or changes
   const refreshAuth = () => {
@@ -36,12 +38,16 @@ export const AuthProvider = ({ children }) => {
     setUsername(decryptData(Cookies.get("username")));
     setEmail(decryptData(Cookies.get("email")));
     setReferralCode(decryptData(Cookies.get("referral_code")));
+    setReferralCode(decryptData(Cookies.get("referral_code")));
+    setPhonenumber(decryptData(Cookies.get("phone_number")));
+
+    
   };
 
 
   return (
     <AuthContext.Provider
-      value={{ token, userId, balance, username, email, referralCode, refreshAuth }}
+      value={{ token, userId, balance, username, email, referralCode,phone_number, refreshAuth }}
     >
       {children}
     </AuthContext.Provider>

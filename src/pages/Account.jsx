@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect,useContext } from "react";
 import { MdAccountCircle, MdHistoryEdu } from "react-icons/md";
 import { IoMdWallet } from "react-icons/io";
 import { RiLockPasswordFill } from "react-icons/ri";
@@ -9,17 +9,151 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Cookies from "js-cookie";
 import InstantWithdrawal from "../components/Withdraw"; // Import your component
+import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
 
 
 
 const Account = () => {
+    const { token, userId, balance, username, email, referralCode, phone_number } = useContext(AuthContext);
+    const apiUrl = import.meta.env.VITE_API_URL;
+
   const [activeSection, setActiveSection] = useState("profile");
   const [copied, setCopied] = useState(false);
-  const referralCode = "ICRTSHU45JFI";
+  // const referralCode = "ICRTSHU45JFI";
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [message, setMessage] = useState("");
 
+
+
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [accountDetails, setAccountDetails] = useState(null);
+  const [inputs, setInputs] = useState({
+    acc_number: "",
+    acc_holder_name: "",
+    ifsc_code: "",
+    bank_name: "",
+  });
+
+
+  // Fetch user bank details on component mount
+  useEffect(() => {
+    axios.get(`${apiUrl}/api/bank-details/${userId}`)
+      .then((res) => {
+        setInputs(res.data || {} ); // Ensure it's always an object
+      })
+      .catch((err) => {
+        console.error("Error fetching bank details:", err);
+        setInputs(res.data); // Fallback to empty object
+      });
+  }, []);
+
+  // Handle input change
+  // const handleInputChange = (e) => {
+  //   setInputs({ ...inputs, [e.target.name]: e.target.value });
+  // };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setInputs((prev) => ({
+      ...prev,
+      [name]: value, // Directly update the input state
+    }));
+  };
+
+
+  // Save or Update Bank Details
+  const handleSaveOrEdit = () => {
+    if (isEditMode) {
+      if (inputs && Object.keys(inputs).length > 0) {
+        // If bank details already exist, update (PUT API)
+        axios
+          .put(`${apiUrl}/api/bank-details/${userId}`, inputs)
+          .then((res) => {
+            setAccountDetails(res.data); // Update state with latest details
+            setIsEditMode(false);
+             Swal.fire({
+                    title: "updated Successful!",
+                    icon: "success",
+                    draggable: true
+                  });
+          })
+          .catch((err) => console.error("Error updating bank details:", err));
+          Swal.fire({
+            title: "Error updating bank details!",
+            icon: "warning",
+            draggable: true
+          });
+      } else {
+        // If no bank details exist, add new (POST API)
+        axios
+          .post(`${apiUrl}/api/bank-details`, { userId, ...inputs })
+          .then((res) => {
+            setAccountDetails(res.data);
+            setIsEditMode(false);
+             Swal.fire({
+                    title: "Added Successful!",
+                    icon: "success",
+                    draggable: true
+                  });
+          })
+          .catch((err) => console.error("Error adding bank details:", err));
+           Swal.fire({
+                  title: "Error adding bank details",
+                  icon: "warning",
+                  draggable: true
+                });
+      }
+    } else {
+      setIsEditMode(true);
+    }
+  };
   
 
+  
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    setMessage(""); // Reset message
+  
+    // Validation Checks
+    if (!currentPassword || !newPassword || !confirmNewPassword) {
+      setMessage("All fields are required");
+      return;
+    }
+  
+    if (newPassword !== confirmNewPassword) {
+      setMessage("New password and confirm password do not match");
+      return;
+    }
+  
+    try {
+      if (!userId) {
+        setMessage("User ID is missing");
+        return;
+      }
+  
+      if (!token) {
+        setMessage("Authentication token is missing");
+        return;
+      }
+  
+      // Send API request to update password
+      const response = await axios.post(
+        `${apiUrl}/api/users-change/${userId}`, // Include user ID in URL
+        { currentPassword, newPassword, confirmNewPassword },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
+      setMessage(response.data.message); // Show success message
+    } catch (error) {
+      setMessage(error.response?.data?.message || "Something went wrong");
+    }
+  };
+  
+  
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referralCode);
@@ -200,7 +334,7 @@ const Account = () => {
             type="text"
             className="w-full p-2 border rounded-lg mt-1 text-gray-700 bg-gray-100"
             disabled
-            value="James"
+            value={username}
           />
         </div>
         <div>
@@ -209,7 +343,7 @@ const Account = () => {
             type="text"
             className="w-full p-2 border rounded-lg mt-1 text-gray-700 bg-gray-100"
             disabled
-            value="81998*****"
+            value={phone_number}
 
           />
         </div>
@@ -220,7 +354,7 @@ const Account = () => {
               type="text"
               className="w-full p-2 border rounded-lg mt-1 text-gray-700 bg-gray-100"
               disabled
-              value="James@gmail.com"
+              value={email}
 
             />
             {/* <button className="ml-2 bg-red-500 text-white px-3 py-2 rounded-lg text-sm mt-1">Add</button> */}
@@ -308,7 +442,7 @@ const Account = () => {
              <div className="max-w-4xl w-full">
                <h1 className="text-xl md:text-2xl lg:text-2xl font-semibold mb-4 border-b border-b-2">Wallet</h1>
                <div className="bg-blue-200 text-center py-6 rounded-lg mb-6">
-                 <h2 className="text-3xl font-bold">50Rs</h2>
+                 <h2 className="text-3xl font-bold">{balance}Rs</h2>
                  <p className="text-lg font-medium">Available Balance</p>
                  <button
               type="submit"
@@ -319,57 +453,81 @@ const Account = () => {
               Redeem
             </button>
                </div>
-               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2  gap-4">
-               <div>
-                 <label className="block text-gray-600">Account Holder Name</label>
-                 <input
-                   type="text"
-                   value="James"
-                   className="w-full p-2 border rounded-lg mt-1 text-gray-700 bg-gray-100"
-                   disabled
-                 />
-               </div>
-               <div>
-                 <label className="block text-gray-600">Account Number</label>
-                 <input
-                   type="text"
-                   value="+91 987898****"
-                   className="w-full p-2 border rounded-lg mt-1 text-gray-700 bg-gray-100"
-                   disabled
-                 />
-               </div>
-               <div className="relative">
-                 <label className="block text-gray-600">IFSC code</label>
-                 <div className="flex">
-                   <input
-                     type="text"
-                     value="James@gmail.com"
-                     className="w-full p-2 border rounded-lg mt-1 text-gray-700 bg-gray-100"
-                     disabled
-                   />
-                 </div>
-               </div>
-             
-        <div >
-               <label className="block text-gray-600">CRN Number</label>
-               <div className="flex">
-                 <input
-                   type="text"
-                   value={referralCode}
-                   className="w-full p-2 border rounded-lg mt-1 text-gray-700 bg-gray-100"
-                   disabled
-                 />
-             
-               </div>
-             </div>
-            
-             </div>
-             <button
-              type="submit"
-              className="w-full bg-[#244856] text-white mt-4 py-1 px-4 rounded-md hover:bg-[#244856] focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              Save
-            </button>
+               <div className="p-4 bg-white shadow-md rounded-lg">
+      <h2 className="text-lg font-bold mb-4">Bank Account Details</h2>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Account Holder Name */}
+        <div>
+          <label className="block text-gray-600">Account Holder Name</label>
+          <input
+            type="text"
+            name="acc_holder_name"
+            value={inputs?.acc_holder_name || ""} 
+            onChange={handleInputChange}
+            disabled={!isEditMode}
+            className={`w-full p-2 border rounded-lg mt-1 text-gray-700 ${
+              isEditMode ? "bg-white" : "bg-gray-100"
+            }`}
+          />
+        </div>
+
+        {/* Account Number */}
+        <div>
+          <label className="block text-gray-600">Account Number</label>
+          <input
+            type="text"
+            name="acc_number"
+            value={inputs?.acc_number || ""}
+            onChange={handleInputChange} 
+            disabled={!isEditMode}
+            className={`w-full p-2 border rounded-lg mt-1 text-gray-700 ${
+              isEditMode ? "bg-white" : "bg-gray-100"
+            }`}
+          />
+        </div>
+
+        {/* IFSC Code */}
+        <div>
+          <label className="block text-gray-600">IFSC Code</label>
+          <input
+            type="text"
+            name="ifsc_code"
+            value={inputs?.ifsc_code || ""}
+            onChange={handleInputChange}
+            disabled={!isEditMode}
+            className={`w-full p-2 border rounded-lg mt-1 text-gray-700 ${
+              isEditMode ? "bg-white" : "bg-gray-100"
+            }`}
+          />
+        </div>
+
+        {/* CRN Number */}
+        <div>
+          <label className="block text-gray-600">CRN Number</label>
+          <input
+            type="text"
+            name="bank_name"
+            value={inputs?.bank_name || ""}
+            onChange={handleInputChange}
+            disabled={!isEditMode}
+            className={`w-full p-2 border rounded-lg mt-1 text-gray-700 ${
+              isEditMode ? "bg-white" : "bg-gray-100"
+            }`}
+          />
+        </div>
+      </div>
+
+      {/* Save/Edit Button */}
+      <button
+  onClick={handleSaveOrEdit}
+  className="w-full bg-[#244856] text-white mt-4 py-2 rounded-lg hover:bg-[#244856]"
+>
+  {isEditMode ? "Save" : inputs && Object.keys(inputs).length > 0 ? "Edit" : "Add Details"}
+</button>
+
+
+    </div>
             <div className="flex flex-col items-center justify-center p-4">
   <div className="flex items-center w-full ">
     {/* Horizontal line */}
@@ -408,56 +566,68 @@ Save
             {activeSection === "change" && (
               <div className="bg-white  p-0 md:p-6 lg:p-6 ">
                  <h1 className="text-xl md:text-2xl lg:text-2xl font-semibold text-gray-800 mb-6 border-b border-b-2">Change Password</h1>
-        <form className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 bg-white ">
-          {/* Current Password */}
-          <div className="col-span-2 md:col-span-1">
-            <label htmlFor="current-password" className="block text-sm font-medium text-gray-700 mb-2">
-              Current Password
-            </label>
-            <input
-              id="current-password"
-              type="password"
-              className="w-full border border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              placeholder="Enter Current Password"
-            />
-          </div>
+                 <form onSubmit={handleChangePassword} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 bg-white p-6 shadow-lg rounded-lg">
+      {/* Current Password */}
+      <div className="col-span-2 md:col-span-1">
+        <label htmlFor="current-password" className="block text-sm font-medium text-gray-700 mb-2">
+          Current Password
+        </label>
+        <input
+          id="current-password"
+          type="password"
+          value={currentPassword}
+          onChange={(e) => setCurrentPassword(e.target.value)}
+          className="w-full border border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          placeholder="Enter Current Password"
+          required
+        />
+      </div>
 
-          {/* New Password */}
-          <div className="col-span-2 md:col-span-1">
-            <label htmlFor="new-password" className="block text-sm font-medium text-gray-700 mb-2">
-              New Password
-            </label>
-            <input
-              id="new-password"
-              type="password"
-              className="w-full border border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              placeholder="Enter New Password"
-            />
-          </div>
+      {/* New Password */}
+      <div className="col-span-2 md:col-span-1">
+        <label htmlFor="new-password" className="block text-sm font-medium text-gray-700 mb-2">
+          New Password
+        </label>
+        <input
+          id="new-password"
+          type="password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+          className="w-full border border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          placeholder="Enter New Password"
+          required
+        />
+      </div>
 
-          {/* Re-enter New Password */}
-          <div className="col-span-2">
-            <label htmlFor="reenter-password" className="block text-sm font-medium text-gray-700 mb-2">
-              Re-enter New Password
-            </label>
-            <input
-              id="reenter-password"
-              type="password"
-              className="w-full border border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              placeholder="Re-enter New Password"
-            />
-          </div>
+      {/* Re-enter New Password */}
+      <div className="col-span-2">
+        <label htmlFor="reenter-password" className="block text-sm font-medium text-gray-700 mb-2">
+          Re-enter New Password
+        </label>
+        <input
+          id="reenter-password"
+          type="password"
+          value={confirmNewPassword}
+          onChange={(e) => setConfirmNewPassword(e.target.value)}
+          className="w-full border border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          placeholder="Re-enter New Password"
+          required
+        />
+      </div>
 
-          {/* Submit Button */}
-          <div className="col-span-2">
-            <button
-              type="submit"
-              className="w-full bg-[#244856] text-white py-2 px-4 rounded-md hover:bg-[#244856] focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              Submit
-            </button>
-          </div>
-        </form>
+      {/* Display error or success message */}
+      {message && <p className="col-span-2 text-center text-red-500">{message}</p>}
+
+      {/* Submit Button */}
+      <div className="col-span-2">
+        <button
+          type="submit"
+          className="w-full bg-[#244856] text-white py-2 px-4 rounded-md hover:bg-[#1b3642] focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
               </div>
             )}
           </main>

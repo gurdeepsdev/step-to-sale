@@ -154,6 +154,8 @@ const handleSubmit = async (e) => {
        Cookies.set("referral_code", encryptData(referral_code), { expires: 7 });
        Cookies.set("username", encryptData(username), { expires: 7 });
        Cookies.set("email", encryptData(email), { expires: 7 });
+       Cookies.set("phone_number", encryptData(email), { expires: 7 });
+
  
       // Success alert
       Swal.fire({
@@ -212,7 +214,7 @@ const handleSubmit = async (e) => {
         localStorage.removeItem("password");
         localStorage.setItem("rememberMe", "false");
       }
-      const { token,userId, balance, referral_code, username, email } = response.data;
+      const { token,userId, balance, referral_code, username, email,phone_number } = response.data;
 
      // Encrypt and store data in cookies
      Cookies.set("userId", encryptData(userId), { expires: 7 });
@@ -222,6 +224,8 @@ const handleSubmit = async (e) => {
      Cookies.set("referral_code", encryptData(referral_code), { expires: 7 });
      Cookies.set("username", encryptData(username), { expires: 7 });
      Cookies.set("email", encryptData(email), { expires: 7 });
+     Cookies.set("phone_number", encryptData(phone_number), { expires: 7 });
+
   
       // Success alert
       Swal.fire({
