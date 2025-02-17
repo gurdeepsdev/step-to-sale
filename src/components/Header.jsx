@@ -8,6 +8,7 @@ import CryptoJS from "crypto-js"; // Import crypto-js
 import axiosInstance from "../axiosInstance";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
+import Headerpop from "../components/Headerpop"
 // import { io } from "socket.io-client";
 
 
@@ -22,6 +23,8 @@ import { LuCircleUserRound } from "react-icons/lu";
 
 const Header = () => {
   const { token, userId, balance, username, email, referralCode } = useContext(AuthContext);
+
+  const [showCategories, setShowCategories] = useState(false);
 
   const [showCountryToggle, setShowCountryToggle] = useState(false);
   const [showProfileToggle, setShowProfileToggle] = useState(false);
@@ -422,9 +425,19 @@ console.log("notifications",notifications)
 
         {/* Bottom Navbar */}
         <div className="flex justify-center py-2 bg-[#244856] text-center">
-  <a href="#" className="text-white hover:text-red-500 px-2 text-[10px] sm:px-2 lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg">
+  <p           onClick={() => setShowCategories(!showCategories)}
+ className="text-white hover:text-red-500 px-2 text-[10px] sm:px-2 lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg">
     Popular Categories
-  </a>
+  </p>
+    {/* Show CategoryPopup only when showCategories is true */}
+    {showCategories && (
+          <div
+            className="absolute left-1/2 right-4 transform -translate-x-1/2 mt-2 w-auto"
+          >
+            <Headerpop />
+          </div>
+        )}
+
   <a href="#" className="text-white hover:text-red-500 px-2 text-[10px] sm:px-2 lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg">
     Top Stores
   </a>
@@ -505,8 +518,7 @@ console.log("notifications",notifications)
 
 
 />
-
-
+ 
 {/* {showModal && <Sigline setShowModal={setShowModal} />} */}
 
     </>

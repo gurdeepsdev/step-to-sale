@@ -13,6 +13,8 @@ import CouponsDetails from "./pages/CouponsDetails";
 import CouponFilters from "./pages/CouponFilters";
 import Account from "./pages/Account";
 import My from "./pages/My";
+import HowitWorks from "./pages/HowitWorks";
+
 
 
 
@@ -39,11 +41,13 @@ const App = () => {
               <Route path="/Singup" element={<Singup/>} /> 
               <Route path="/CouponFilters" element={<CouponFilters/>} />  
               <Route path="/My" element={<My/>} /> 
+              <Route path="/HowitWorks" element={<HowitWorks/>} /> 
+
 {/* Correct usage of ProtectedRoute */}
 <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
             <Route path="/Account" element={<Account />} />  {/* Account is now directly the element */}
           </Route>
-
+          
      
         </Routes>
       </div>
