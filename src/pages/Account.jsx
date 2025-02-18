@@ -30,6 +30,8 @@ const Account = () => {
 
 
   const [isEditMode, setIsEditMode] = useState(false);
+  const [isEditUpiMode, setIsEditUpiMode] = useState(false);
+
   const [accountDetails, setAccountDetails] = useState(null);
   const [inputs, setInputs] = useState({
     acc_number: "",
@@ -37,6 +39,9 @@ const Account = () => {
     ifsc_code: "",
     bank_name: "",
   });
+
+  const [upi, setUpi] = useState("")
+ 
 
 
   // Fetch user bank details on component mount
@@ -49,8 +54,20 @@ const Account = () => {
         console.error("Error fetching bank details:", err);
         setInputs(res.data); // Fallback to empty object
       });
+
+      axios.get(`${apiUrl}/api/upi-details/${userId}`)
+      .then((res) => {
+        setUpi(res.data.upi
+          || {} ); // Ensure it's always an object
+      })
+      .catch((err) => {
+        console.error("Error fetching bank details:", err);
+        setInputs(res.data); // Fallback to empty object
+      });
+
   }, []);
 
+console.log("upi",upi)
   // Handle input change
   // const handleInputChange = (e) => {
   //   setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -63,6 +80,11 @@ const Account = () => {
       [name]: value, // Directly update the input state
     }));
   };
+
+  const handleUpiChange = (e) => {
+    setUpi(e.target.value); // Update UPI state with the input value
+  };
+
 
 
   // Save or Update Bank Details
@@ -112,6 +134,58 @@ const Account = () => {
     }
   };
   
+ // Save or Update Bank Details
+ const handleSaveUpiEdit = () => {
+  if (isEditUpiMode) {
+    // If editing, update the UPI details
+    if (upi && upi.length > 0) {
+      // If UPI is provided, update the details (PUT API)
+      axios.put(`${apiUrl}/api/upi-details/${userId}`, { upi })
+        .then((res) => {
+          setUpi(res.data.upi); // Update state with the latest UPI details
+          setIsEditUpiMode(false);
+          Swal.fire({
+            title: "Updated Successfully!",
+            icon: "success",
+            draggable: true,
+          });
+        })
+        .catch((err) => {
+          console.error("Error updating UPI details:", err);
+          Swal.fire({
+            title: "Error updating UPI details!",
+            icon: "warning",
+            draggable: true,
+          });
+        });
+    }
+    else{
+      axios.post(`${apiUrl}/api/upi-details`, { userId,upi })
+    .then((res) => {
+      setUpi(res.data);
+      setIsEditUpiMode(false);
+       Swal.fire({
+              title: "Added Successful!",
+              icon: "success",
+              draggable: true
+            });
+    })
+    console.log("upid",upi)
+
+    .catch((err) => console.error("Error adding bank details:", err));
+     Swal.fire({
+            title: "Error adding bank details",
+            icon: "warning",
+            draggable: true
+          });
+    }
+     
+}
+ else {
+    // If not in edit mode, enable edit mode
+    setIsEditUpiMode(true);
+  }
+};
 
   
   const handleChangePassword = async (e) => {
@@ -549,12 +623,21 @@ const Account = () => {
     {/* Input Field */}
     <input
       type="text"
-      className="flex-1 px-6 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      value={upi || ""}
+      onChange={handleUpiChange}
+      disabled={!isEditUpiMode}
+      className={`w-full p-2 border rounded-lg mt-1 text-gray-700 ${
+        isEditUpiMode ? "bg-white" : "bg-gray-100"
+      }`}
+      // "flex-1 px-6 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
     />
     {/* Withdraw Button */}
     <button className="w-full md:w-auto bg-[#1b4c5b] text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-[#153c48] transition" 
+     onClick={handleSaveUpiEdit}
+     
 >
-Save
+{isEditUpiMode ? "Save" : upi.length > 0 ? "Edit" : "Add Details"}
+
     </button>
   </div>
 </div>

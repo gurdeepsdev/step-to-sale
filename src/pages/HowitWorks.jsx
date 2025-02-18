@@ -1,107 +1,70 @@
 import React from "react";
-import Couponcard from "../components/Couponcard";
 import Header from "../components/Header";
 import { AiOutlineLike,AiOutlineDislike} from "react-icons/ai";
-import Subscribe from "../components/Subscribe";
+import Worksub from "../components/Worksub";
 import Footer from "../components/Footer";
 import { IoMdShare } from "react-icons/io";
+import useEmblaCarousel from "embla-carousel-react";
+
 
 
 
 const OfferCard = () => {
+  const [emblaRef] = useEmblaCarousel({
+    loop: true, // Enable infinite loop for mobile slider
+    align: "start", // Align to the start of each step
+    dragFree: true, // Allow drag-free mode
+  });
+
   return (
     <>
     <Header/>
+    <div className="relative w-full">
+      {/* Background Image */}
+      <img src="/img/Refer.png" alt="Refer and Earn" className="w-full h-auto" />
 
-    <div className="px-6 md:px-6 lg:px-6 md:px-12 lg:px-20 py-6 md:py-12 lg:py-12 bg-[#90AEAE] items-center">
-  {/* Header */}
-  <div className="flex justify-between items-center px-4 md:px-6 lg:px-6 py-4 mx-0 md:mx-16 lg:mx-16">
-    <button className="text-white text-sm md:text-lg lg:text-lg font-medium flex items-center hover:underline">
-      ← Go Back
-    </button>
-    <button className="text-white text-sm md:text-lg lg:text-lg font-medium flex items-center hover:underline gap-1">
-    <span>Share</span>  <IoMdShare className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
-
-    </button>
-  </div>
-  {/* Outer Container */}
-  <div className="bg-white rounded-lg shadow-lg mx-0 md:mx-16 lg:mx-16">
-    {/* Main Content */}
-    <div className="flex flex-col md:flex-row">
-      {/* Left Section (60%) */}
-      <div className="md:w-3/5 px-4 py-6 md:px-6 lg:px-6 md:py-8 lg:py-8 border-r border-gray-300">
-        <div className="text-center">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
-            alt="Amazon"
-            className="w-36 mx-auto"
-          />
-          <h2 className="text-lg md:text-2xl lg:text-2xl font-bold mt-4 text-gray-800">
-            Get 25% OFF on{" "}
-            <span className="text-orange-500">Redmi Mobiles</span>
-          </h2>
-          <p className="text-gray-600 mt-2 text-sm">
-            Amazon Great Indian Sale - Get 25% OFF on Redmi Mobiles
-          </p>
-        </div>
-
-        <div className="flex items-center justify-center mt-6">
-          <div className="flex items-center rounded-full">
-            {/* Left Section: Button */}
-            <button className="bg-[#5396AF] text-white px-4 py-1 md:px-6 lg:px-6 md:py-2 lg:py-2 rounded-l-full text-lg font-medium hover:bg-blue-600 transition">
-              Show Coupon
-            </button>
-            {/* Right Section: Code */}
-            <span className="bg-white text-black px-2 py-1 md:py-1 lg:py-1 text-lg font-semibold border-t border-b border-r border-dotted border-[#5396AF] rounded-r-full">
-              D8GH
-            </span>
-          </div>
-        </div>
-
-        <div className="text-sm text-gray-600 mt-6 leading-relaxed">
-          <p>
-            Offer's Details: Lorem ipsum dolor sit amet consectetur. Turpis ac
-            pretium justo enim. Tellus at at cras aliquam ac.
-          </p>
-          <p className="mt-2 mb-2 text-center">Valid until 14 Feb 2025</p>
-        </div>
-
-        <div className="flex items-center justify-center gap-4">
-          <span>Did it work? </span>
-
-          {/* Yes Button */}
-          <button className="flex items-center bg-green-300 text-green-600 px-2 py-1 rounded-md  text-sm font-medium hover:bg-green-600 hover:text-white transition">
-            <AiOutlineLike className="w-5 h-5 mr-2" /> Yes
-          </button>
-
-          {/* No Button */}
-          <button className="flex items-center bg-red-300 text-red-600 px-2 py-1 rounded-md shadow-md text-sm font-medium hover:bg-red-600 hover:text-white transition">
-            <AiOutlineDislike className="w-5 h-5 mr-2" /> No
-          </button>
-        </div>
-      </div>
-
-      {/* Right Section (40%) */}
-      <div className="md:w-2/5 px-6 py-8">
-        <h3 className="text-lg font-bold text-gray-800 mb-4 text-center">
-          Terms and Conditions
-        </h3>
-        <ul className="text-sm text-gray-600 space-y-3 leading-relaxed list-disc list-inside">
-          <li>Lorem ipsum dolor sit amet consectetur.</li>
-          <li>
-            Turpis ac pretium justo enim. Tellus at at cras aliquam ac.
-          </li>
-          <li>Tellus at at cras aliquam ac volutpat in hac.</li>
-          <li>Lorem ipsum dolor sit amet consectetur.</li>
-          <li>Tellus ac pretium justo enim.</li>
-        </ul>
+      {/* Overlay & Text Section */}
+      <div className="absolute inset-0 flex flex-col items-start justify-center pl-8 md:pl-16 lg:pl-24 text-white">
+        <h2 className="text-lg md:text-3xl lg:text-4xl font-bold">Refer And Earn</h2>
+        
+        {/* Button */}
+        <button className="mt-4 bg-[#E74833] hover:bg-white text-white hover:text-black font-semibold px-4 py-1 md:px-4 lg:px-6 md:py-2 lg:py-2 rounded-full text-sm md:text-base transition duration-300">
+          Share Now
+        </button>
       </div>
     </div>
-  </div>
+
+<div className="px-6 py-4 lg:px-16 lg:py-10 md:py-10 bg-white text-center">
+      
+
+      {/* How it works Section */}
+      <div>
+        <h2 className="text-xl font-semibold lg:text-4xl md:text-4xl text-black-800 mb-4 md:mb-8 lg:mb-8">
+        Refer and Earn        </h2>
+<p className="mb-4 md:mb-8 lg:mb-8 text-[10px] md:text-lg lg:text-lg"> Earn rewards effortlessly by referring your friends to Step to Sale. Follow these simple steps to start earning today!
+</p>
+<div>
+    <img src="/img/works2.png"></img>
+</div>
+   
+
+      </div>
+    </div>
+
+    <div className="px-6">
+    <h2 className="text-xl font-semibold lg:text-4xl md:text-4xl text-black-800 mb-4 md:mb-8 lg:mb-8  text-center">
+    How it Works!      </h2>
+        <img src="/img/works.png"></img>
+    </div>
+
+<div className="flex flex-col items-center text-center">
+    <h2 className="text-xl md:text-3xl lg:text-3xl font-bold text-gray-900 mt-2 md:mt-8 lg:mt-8">Share and Earn</h2>
+    <img src="/img/share.png" className="mt-2 w-[1003px] mb-2 md:mb-8 lg:mb-8" alt="Share" />
 </div>
 
-    <Couponcard/>
-    <Subscribe/>
+
+    
+    <Worksub/>
     <Footer/>
     </>
   );
