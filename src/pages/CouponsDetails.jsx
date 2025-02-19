@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getCouponBySlug } from "../utils/api";
 import Couponcard from "../components/Couponcard";
 import Header from "../components/Header";
 import { AiOutlineLike,AiOutlineDislike} from "react-icons/ai";
@@ -9,6 +10,28 @@ import { IoMdShare } from "react-icons/io";
 
 
 const OfferCard = () => {
+  const { slug } = useParams(); // Get slug from URL
+  const [coupon, setCoupon] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+
+
+
+
+    useEffect(() => {
+        const fetchCoupon = async () => {
+            const data = await getCouponBySlug(slug);
+            if (data.success) {
+                setCoupon(data.data);
+            }
+            setLoading(false);
+        };
+
+        fetchCoupon();
+    }, []);
+
+    if (loading) return <h2>Loading Coupon Details...</h2>;
+    if (!coupon) return <h2>Coupon Not Found</h2>;
   return (
     <>
     <Header/>

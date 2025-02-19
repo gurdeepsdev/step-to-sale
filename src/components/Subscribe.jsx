@@ -1,6 +1,48 @@
-import React from "react";
+import React, { useState,useEffect,useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
+import api from "../utils/api"; // Import API utility
 
 const CouponAlert = () => {
+      const { token, userId, balance, username, referralCode, phone_number } = useContext(AuthContext);
+      const apiUrl = import.meta.env.VITE_API_URL;
+
+      const [email, setEmail] = useState("");
+
+const handleSubmit = (e) => {
+  e.preventDefault(); // Prevent form reload
+  submitEmail(email);
+};
+
+
+const submitEmail = async (email) => {
+  // Simple email regex for validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!email || !emailRegex.test(email)) {
+    alert("Please enter a valid email address.");
+    return;
+  }
+
+  try {
+    console.log("Submitting email:", email);
+
+    const response = await api.post("/api/subscribe-details", { email: email.trim().toLowerCase() });
+
+    console.log("API Response:", response.data);
+    alert(response.data.message);
+  } catch (err) {
+    console.error("API Error:", err);
+    if (err.response) {
+      alert(err.response.data.message || "Failed to subscribe");
+    } else {
+      alert("Network error. Please try again.");
+    }
+  }
+};
+
+  
+
   return (
     <div className="bg-[#90AEAE] text-white  py-4 md:py-8 lg:py-8 px-4">
     <div className=" mx-2 lg:mx-16 flex flex-col lg:flex-row items-center lg:gap-8">
@@ -28,11 +70,15 @@ const CouponAlert = () => {
         {/* Input and Button */}
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-[28rem]">
           <input
-            type="email"
+           type="email"
+           value={email}
+           onChange={(e) => setEmail(e.target.value)}
+           required
             placeholder="Enter your email address"
             className="flex-grow px-2 lg:px-10 py-1 rounded-full border border-gray-300 text-gray-800 focus:outline-none"
           />
-          <button className="bg-[#E74833] hover:bg-white text-white hover:text-black font-medium px-4 py-1 rounded-full">
+          <button className="bg-[#E74833] hover:bg-white text-white hover:text-black font-medium px-4 py-1 rounded-full"
+          onClick={handleSubmit}>
             SUBSCRIBE
           </button>
         </div>

@@ -11,6 +11,8 @@ import Cookies from "js-cookie";
 import InstantWithdrawal from "../components/Withdraw"; // Import your component
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
+import api from "../utils/api"; // Import API utility
+import { useParams } from "react-router-dom";
 
 
 
@@ -26,6 +28,7 @@ const Account = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [transactionsq, setTransactions] = useState([]);
 
 
 
@@ -33,6 +36,8 @@ const Account = () => {
   const [isEditUpiMode, setIsEditUpiMode] = useState(false);
 
   const [accountDetails, setAccountDetails] = useState(null);
+  const [accountupiDetails, setAccountupiDetails] = useState({ upi: "" }); // Initial state
+
   const [inputs, setInputs] = useState({
     acc_number: "",
     acc_holder_name: "",
@@ -40,15 +45,45 @@ const Account = () => {
     bank_name: "",
   });
 
-  const [upi, setUpi] = useState("")
- 
+  const [upi, setUpi] = useState(null)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
+  console.log("userId",userId)
+//for transection history
+const fetchTransactions = async () => {
+  setLoading(true);
+  setError(null);
+
+  console.log("Calling API...");
+
+  try {
+    const response = await api.get(`/api/tdetails/${userId}`);
+    console.log("API Response:", response.data);
+
+    setTransactions(response.data);
+  } catch (err) {
+    console.error("API Error:", err);
+    if (err.response) {
+      setError(err.response.data.message || "Failed to load transactions");
+    } else {
+      setError("Network error. Please try again.");
+    }
+  }
+
+  setLoading(false);
+};
+
+useEffect(() => {
+  fetchTransactions();
+}, []);
 
   // Fetch user bank details on component mount
   useEffect(() => {
     axios.get(`${apiUrl}/api/bank-details/${userId}`)
       .then((res) => {
-        setInputs(res.data || {} ); // Ensure it's always an object
+        setInputs(res.data || {} );
+        setAccountDetails(res.data || {} )// Ensure it's always an object
       })
       .catch((err) => {
         console.error("Error fetching bank details:", err);
@@ -57,17 +92,17 @@ const Account = () => {
 
       axios.get(`${apiUrl}/api/upi-details/${userId}`)
       .then((res) => {
-        setUpi(res.data.upi
-          || {} ); // Ensure it's always an object
+        setUpi(res.data.upi || {} );
       })
       .catch((err) => {
         console.error("Error fetching bank details:", err);
         setInputs(res.data); // Fallback to empty object
       });
 
+
+
   }, []);
 
-console.log("upi",upi)
   // Handle input change
   // const handleInputChange = (e) => {
   //   setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -86,106 +121,236 @@ console.log("upi",upi)
   };
 
 
+  // // Save or Update Bank Details
+  // const handleSaveOrEdit = () => {
+  //   if (isEditMode) {
+  //     if (inputs && Object.keys(inputs).length > 0) {
+  //       console.log("put true")
 
-  // Save or Update Bank Details
-  const handleSaveOrEdit = () => {
-    if (isEditMode) {
-      if (inputs && Object.keys(inputs).length > 0) {
-        // If bank details already exist, update (PUT API)
-        axios
-          .put(`${apiUrl}/api/bank-details/${userId}`, inputs)
-          .then((res) => {
-            setAccountDetails(res.data); // Update state with latest details
-            setIsEditMode(false);
-             Swal.fire({
-                    title: "updated Successful!",
-                    icon: "success",
-                    draggable: true
-                  });
-          })
-          .catch((err) => console.error("Error updating bank details:", err));
-          Swal.fire({
-            title: "Error updating bank details!",
-            icon: "warning",
-            draggable: true
-          });
-      } else {
-        // If no bank details exist, add new (POST API)
-        axios
-          .post(`${apiUrl}/api/bank-details`, { userId, ...inputs })
-          .then((res) => {
-            setAccountDetails(res.data);
-            setIsEditMode(false);
-             Swal.fire({
-                    title: "Added Successful!",
-                    icon: "success",
-                    draggable: true
-                  });
-          })
-          .catch((err) => console.error("Error adding bank details:", err));
-           Swal.fire({
-                  title: "Error adding bank details",
-                  icon: "warning",
-                  draggable: true
-                });
-      }
-    } else {
-      setIsEditMode(true);
-    }
-  };
+  //       // If bank details already exist, update (PUT API)
+  //       axios
+  //         .put(`${apiUrl}/api/bank-details/${userId}`, inputs)
+  //         .then((res) => {
+  //           setAccountDetails(res.data); // Update state with latest details
+  //           setIsEditMode(false);
+  //            Swal.fire({
+  //                   title: "updated Successful!",
+  //                   icon: "success",
+  //                   draggable: true
+  //                 });
+  //         })
+  //         .catch((err) => console.error("Error updating bank details:", err));
+  //         Swal.fire({
+  //           title: "Error updating bank details!",
+  //           icon: "warning",
+  //           draggable: true
+  //         });
+  //     } else {
+  //       // If no bank details exist, add new (POST API)
+  //       console.log("post true")
+
+  //       axios
+  //         .post(`${apiUrl}/api/bank-details`, { userId, ...inputs })
+  //         .then((res) => {
+  //           setAccountDetails(res.data);
+  //           setIsEditMode(false);
+  //            Swal.fire({
+  //                   title: "Added Successful!",
+  //                   icon: "success",
+  //                   draggable: true
+  //                 });
+  //         })
+  //         .catch((err) => console.error("Error adding bank details:", err));
+  //          Swal.fire({
+  //                 title: "Error adding bank details",
+  //                 icon: "warning",
+  //                 draggable: true
+  //               });
+  //     }
+  //   } else {
+  //     setIsEditMode(true);
+  //   }
+  // };
   
- // Save or Update Bank Details
- const handleSaveUpiEdit = () => {
-  if (isEditUpiMode) {
-    // If editing, update the UPI details
-    if (upi && upi.length > 0) {
-      // If UPI is provided, update the details (PUT API)
-      axios.put(`${apiUrl}/api/upi-details/${userId}`, { upi })
-        .then((res) => {
-          setUpi(res.data.upi); // Update state with the latest UPI details
-          setIsEditUpiMode(false);
-          Swal.fire({
-            title: "Updated Successfully!",
-            icon: "success",
-            draggable: true,
-          });
-        })
-        .catch((err) => {
-          console.error("Error updating UPI details:", err);
-          Swal.fire({
-            title: "Error updating UPI details!",
-            icon: "warning",
-            draggable: true,
-          });
-        });
-    }
-    else{
-      axios.post(`${apiUrl}/api/upi-details`, { userId,upi })
-    .then((res) => {
-      setUpi(res.data);
-      setIsEditUpiMode(false);
-       Swal.fire({
-              title: "Added Successful!",
-              icon: "success",
-              draggable: true
-            });
-    })
-    console.log("upid",upi)
+  // Save or Update Bank Details
+const handleSaveOrEdit = () => {
+  if (!isEditMode) {
+    setIsEditMode(true);
+    return;
+  }
 
-    .catch((err) => console.error("Error adding bank details:", err));
-     Swal.fire({
-            title: "Error adding bank details",
-            icon: "warning",
-            draggable: true
-          });
-    }
-     
-}
- else {
-    // If not in edit mode, enable edit mode
-    setIsEditUpiMode(true);
+  // Check if bank details already exist in the state
+  const isUpdating = accountDetails && Object.keys(accountDetails).length > 0;
+
+  if (isUpdating) {
+    // If data exists, update (PUT)
+    console.log("Calling PUT API...");
+
+    axios
+      .put(`${apiUrl}/api/bank-details/${userId}`, inputs)
+      .then((res) => {
+        setAccountDetails(res.data); // Update state with latest details
+        setIsEditMode(false);
+        Swal.fire({
+          title: "Updated Successfully!",
+          icon: "success",
+          draggable: true,
+        });
+      })
+      .catch((err) => {
+        console.error("Error updating bank details:", err);
+        Swal.fire({
+          title: "Error updating bank details!",
+          text: err.response?.data?.message || "Something went wrong.",
+          icon: "error",
+          draggable: true,
+        });
+      });
+  } else {
+    // If no data exists, add new (POST)
+    console.log("Calling POST API...");
+
+    axios
+      .post(`${apiUrl}/api/bank-details`, { userId, ...inputs })
+      .then((res) => {
+        setAccountDetails(res.data);
+        setIsEditMode(false);
+        Swal.fire({
+          title: "Added Successfully!",
+          icon: "success",
+          draggable: true,
+        });
+      })
+      .catch((err) => {
+        console.error("Error adding bank details:", err);
+        Swal.fire({
+          title: "Error adding bank details!",
+          text: err.response?.data?.message || "Something went wrong.",
+          icon: "error",
+          draggable: true,
+        });
+      });
   }
 };
+
+// Save or Update Bank Details
+const handleSaveUpiEdit = () => {
+  // If not in edit mode, enable the edit mode and return
+  if (!isEditUpiMode) {
+    setIsEditUpiMode(true);
+    return;
+  }
+
+  // Check if UPI is already set (i.e. it's not null or empty)
+  const isNewUpi = !upi || upi.trim().length === 0;
+
+  if (!isNewUpi) {
+    // UPI exists → Update using PUT API
+    console.log("Calling PUT API for UPI...");
+
+    axios
+      .put(`${apiUrl}/api/upi-details/${userId}`, { upi })
+      .then((res) => {
+        console.log("UPI Updated:", res.data);
+        setAccountupiDetails((prev) => ({ ...prev, upi: res.data.upi }));
+        setIsEditUpiMode(false);
+        Swal.fire({
+          title: "UPI Updated Successfully!",
+          icon: "success",
+          draggable: true,
+        });
+      })
+      .catch((err) => {
+        console.error("Error updating UPI details:", err);
+        Swal.fire({
+          title: "Error updating UPI details!",
+          text: err.response?.data?.message || "Something went wrong.",
+          icon: "error",
+          draggable: true,
+        });
+      });
+  } else {
+    // UPI doesn't exist (empty or null) → Create using POST API
+    console.log("Calling POST API for UPI...");
+
+    axios
+      .post(`${apiUrl}/api/upi-details`, { userId, upi })
+      .then((res) => {
+        console.log("UPI Added:", res.data);
+        setAccountupiDetails((prev) => ({ ...prev, upi: res.data.upi }));
+        setIsEditUpiMode(false);
+        Swal.fire({
+          title: "UPI Added Successfully!",
+          icon: "success",
+          draggable: true,
+        });
+      })
+      .catch((err) => {
+        console.error("Error adding UPI details:", err);
+        Swal.fire({
+          title: "Error adding UPI details!",
+          text: err.response?.data?.message || "Something went wrong.",
+          icon: "error",
+          draggable: true,
+        });
+      });
+  }
+};
+
+
+
+// const handleSaveUpiEdit = () => {
+//   if (isEditUpiMode) {
+//     // If editing mode is on, check if UPI exists
+//     if (upi && upi.length > 0) {
+//       // UPI exists → Update using PUT
+//       axios.put(`${apiUrl}/api/upi-details/${userId}`, { upi })
+//         .then((res) => {
+//           console.log("upi",res.data)
+
+//           setAccountDetails(res.data.upi); // Update state with the latest UPI details
+//           setIsEditUpiMode(false);
+//           Swal.fire({
+//             title: "Updated Successfully!",
+//             icon: "success",
+//             draggable: true,
+//           });
+//         })
+//         .catch((err) => {
+//           console.error("Error updating UPI details:", err);
+//           Swal.fire({
+//             title: "Error updating UPI details!",
+//             icon: "warning",
+//             draggable: true,
+//           });
+//         });
+//     } else {
+//       // If UPI is empty, create a new one using POST
+//       axios.post(`${apiUrl}/api/upi-details`, { userId, upi })
+//         .then((res) => {
+//           console.log("upi",res.data)
+//           setAccountDetails(res.data.upi);
+//           setIsEditUpiMode(false);
+//           Swal.fire({
+//             title: "Added Successfully!",
+//             icon: "success",
+//             draggable: true,
+//           });
+//         })
+//         .catch((err) => {
+//           console.error("Error adding UPI details:", err);
+//           Swal.fire({
+//             title: "Error adding UPI details!",
+//             icon: "warning",
+//             draggable: true,
+//           });
+//         });
+//     }
+//   } else {
+//     // If not in edit mode, enable edit mode
+//     setIsEditUpiMode(true);
+//   }
+// };
 
   
   const handleChangePassword = async (e) => {
@@ -309,6 +474,7 @@ console.log("upi",upi)
   };
   
 
+console.log("transactionsq",transactionsq)
   return (
     <>
       <Header />
@@ -334,7 +500,7 @@ console.log("upi",upi)
                 onClick={() => setActiveSection("history")}
               >
                 <MdHistoryEdu className="w-4 h-4 md:w-5 md:h-5 lg:w-7 lg:h-7" />
-                <span>History</span>
+                <span onClick={fetchTransactions}>History</span>
               </button>
 
               <button
@@ -632,13 +798,13 @@ console.log("upi",upi)
       // "flex-1 px-6 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
     />
     {/* Withdraw Button */}
-    <button className="w-full md:w-auto bg-[#1b4c5b] text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-[#153c48] transition" 
-     onClick={handleSaveUpiEdit}
-     
+    <button
+  className="w-full md:w-auto bg-[#1b4c5b] text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-[#153c48] transition"
+  onClick={handleSaveUpiEdit}
 >
-{isEditUpiMode ? "Save" : upi.length > 0 ? "Edit" : "Add Details"}
+  {isEditUpiMode ? "Save" : (upi && upi.length > 0 ? "Edit" : "Add Details")}
+</button>
 
-    </button>
   </div>
 </div>
 

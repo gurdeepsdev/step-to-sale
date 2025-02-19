@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState,useEffect,useContext } from "react";
 import Header from "../components/Header";
 import { AiOutlineLike,AiOutlineDislike} from "react-icons/ai";
 import Worksub from "../components/Worksub";
@@ -10,6 +10,9 @@ import useEmblaCarousel from "embla-carousel-react";
 
 
 const OfferCard = () => {
+    const [isOpen, setIsOpen] = useState(false);
+
+
   const [emblaRef] = useEmblaCarousel({
     loop: true, // Enable infinite loop for mobile slider
     align: "start", // Align to the start of each step
@@ -25,10 +28,12 @@ const OfferCard = () => {
 
       {/* Overlay & Text Section */}
       <div className="absolute inset-0 flex flex-col items-start justify-center pl-8 md:pl-16 lg:pl-24 text-white">
-        <h2 className="text-lg md:text-3xl lg:text-4xl font-bold">Refer And Earn</h2>
+        <h2 className="text-lg md:text-3xl lg:text-4xl font-bold ">Refer And Earn</h2>
         
         {/* Button */}
-        <button className="mt-4 bg-[#E74833] hover:bg-white text-white hover:text-black font-semibold px-4 py-1 md:px-4 lg:px-6 md:py-2 lg:py-2 rounded-full text-sm md:text-base transition duration-300">
+        <button className="mt-4 bg-[#E74833] hover:bg-white text-white hover:text-black font-semibold px-4 py-1 md:px-4 lg:px-6 md:py-2 lg:py-2 rounded-full  md:text-base  text-xs lg:text-lg transition duration-300"
+                onClick={() => setIsOpen(true)}
+>
           Share Now
         </button>
       </div>
@@ -64,8 +69,8 @@ const OfferCard = () => {
 
 
     
-    <Worksub/>
-    <Footer/>
+<Worksub isOpen={isOpen} setIsOpen={setIsOpen} />
+<Footer/>
     </>
   );
 };

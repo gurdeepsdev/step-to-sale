@@ -1,4 +1,5 @@
 import React, { useState,useEffect,useContext } from "react";
+import { Link } from "react-router-dom"; 
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoIosClose,IoIosSearch } from "react-icons/io";
 import Signup from "../auth/Singup";
@@ -9,6 +10,8 @@ import axiosInstance from "../axiosInstance";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import Headerpop from "../components/Headerpop"
+import api from "../utils/api"; // Import API utility
+
 // import { io } from "socket.io-client";
 
 
@@ -34,8 +37,38 @@ const Header = () => {
   // const [balance, setBalance] = useState("0"); 
   // const [userId, setUserid] = useState("0");
   const navigate = useNavigate();
-  console.log("allin",token, userId, balance, username, email, referralCode )
+  // console.log("allin",token, userId, balance, username, email, referralCode )
 
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  
+  const fetchTransactions = async () => {
+    setLoading(true);
+    setError(null);
+  
+    console.log("Calling API...");
+  
+    try {
+      const response = await api.get(`/api/notification/${userId}`);
+      console.log("API Response:", response.data);
+  
+      setNotifications(response.data);
+    } catch (err) {
+      console.error("API Error:", err);
+      if (err.response) {
+        setError(err.response.data.message || "Failed to load transactions");
+      } else {
+        setError("Network error. Please try again.");
+      }
+    }
+  
+    setLoading(false);
+  };
+  
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
 
   const toggleSidebar = () => setShowSidebar(!showSidebar);
 
@@ -57,15 +90,12 @@ const Header = () => {
     setShowProfileToggle(false);
     setShowNotificationsSidebar(false);
     setShowMobileSearch(false);
-    console.log("logo")
   };
 
   const toggleProfileMenu = () => {
     const token = Cookies.get("token");
-    console.log("token",token)
 
     if (token) {
-      console.log("token",token)
       navigate("/Account");
     } else {
       setShowProfileToggle(!showProfileToggle);
@@ -113,39 +143,9 @@ const Header = () => {
     { code: "Ca", flag: "/img/can.webp", name: "Canada" },
   ];
 
-  const [notifications, setNotifications] = useState([]);
 
-  // useEffect(() => {
-  //     if (userId) {
-  //         socket.emit("join", userId); // Join the room for this user
+  console.log(notifications,"notifications")
 
-  //         // Listen for notifications for this user
-  //         socket.on("newNotification", (notification) => {
-  //             setNotifications((prev) => [notification, ...prev]); // Add new notification to the list
-  //         });
-
-  //         // Clean up the socket listener on component unmount
-  //         return () => {
-  //             socket.off("newNotification");
-  //         };
-  //     }
-  // }, [userId]);
-
-  // // Fetch notifications on initial load
-  // useEffect(() => {
-  //     const fetchNotifications = async () => {
-  //         try {
-  //             const response = await axiosInstance.get(`/api/notification?userId=${userId}`);
-  //             setNotifications(response.data.notifications);
-  //         } catch (error) {
-  //             console.error("Error fetching notifications:", error);
-  //         }
-  //     };
-
-  //     fetchNotifications();
-  // }, [userId]);
-
-console.log("notifications",notifications)
   return (
     <>
       <div className=" bg-white shadow sticky top-0 bg-white z-50 ">
@@ -447,10 +447,10 @@ console.log("notifications",notifications)
    <a href="#" className="text-white hover:text-red-500 px-2 text-[10px] sm:px-2 lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg">
     Deal Zone
   </a> 
-  <a href="#" className="text-white hover:text-red-500 px-0 md:px-2 lg:px-2 text-[10px] sm:px-2 lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg flex items-center space-x-2">
+  <Link to="/HowitWorks" className="text-white hover:text-red-500 px-0 md:px-2 lg:px-2 text-[10px] sm:px-2 lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg flex items-center space-x-2">
   <span className=" hidden sm:block"> Share and Earn</span>
   <span><FaRegShareSquare /></span>
-</a>
+</Link>
 
 </div>
 

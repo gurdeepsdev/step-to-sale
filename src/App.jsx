@@ -37,7 +37,7 @@ const App = () => {
         {/* Define Routes */}
         <Routes>
           <Route path="/" element={<Home />} />
-              <Route path="/CouponsDetails" element={<CouponsDetails/>} /> 
+              <Route path="/CouponsDetails/:slug" element={<CouponsDetails/>} /> 
               <Route path="/Singup" element={<Singup/>} /> 
               <Route path="/CouponFilters" element={<CouponFilters/>} />  
               <Route path="/My" element={<My/>} /> 
