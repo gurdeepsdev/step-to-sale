@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
+import { getAllCoupons } from "../utils/api";
+
 
 const PopularStores = () => {
   const stores = [
@@ -15,6 +17,23 @@ const PopularStores = () => {
     { id: 10, name: "Nike", logo: "/img/brand4.png", offers: 30, offer: "Upto 10%" },
   ];
 
+    const [coupons, setCoupons] = useState([]);
+    const [loading, setLoading] = useState(true);
+  
+      useEffect(() => {
+          const fetchCoupons = async () => {
+              const data = await getAllCoupons();
+              if (data.success) {
+                  setCoupons(data.data);
+              }
+              setLoading(false);
+          };
+  
+          fetchCoupons();
+      }, []);
+      console.log("coupons",coupons)
+
+  
   const [emblaRef] = useEmblaCarousel({
     loop: false, // Disable infinite loop
     align: "start", // Align items to the start
@@ -92,3 +111,53 @@ const PopularStores = () => {
 };
 
 export default PopularStores;
+
+
+//   {/* Slider Section for small screens (only visible on mobile) */}
+//   <div className="block lg:hidden overflow-hidden" ref={emblaRef}>
+//   <div className="flex space-x-4">
+//     {coupons.map((store) => (
+//        <div
+//        key={store.id}
+//        className="group relative border rounded-lg shadow-md p-4 flex flex-col items-center justify-center hover:bg-[#874F42] transition"
+//      >
+//        <img
+//          src={store.logo}
+//          alt={`${store.name} Logo`}
+//          className="h-12 mb-4 group-hover:opacity-0 transition-opacity"
+//        />
+//        <p className="font-semibold border border-gray-400 rounded-full px-4 transition-opacity group-hover:opacity-0 whitespace-nowrap">
+//          {store.offer}
+//        </p>
+//        <p className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center text-white font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+//          {store.amount} Offers
+//        </p>
+//      </div>
+
+
+//     ))}
+//   </div>
+// </div>
+
+// {/* Grid Section for larger screens (only visible on larger screens) */}
+// <div className="hidden lg:grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+//   {coupons.map((store) => (
+//   <div
+//   key={store.id}
+//   className="group relative border rounded-lg shadow-md p-4 flex flex-col items-center justify-center hover:bg-[#874F42] transition"
+// >
+//   <img
+//     src={store.logo}
+//     alt={`${store.name} Logo`}
+//     className="h-12 mb-4 group-hover:opacity-0 transition-opacity"
+//   />
+//   <p className="font-semibold border border-gray-400 rounded-full px-4 transition-opacity group-hover:opacity-0">
+//     {store.offer}
+//   </p>
+//   <p className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center text-white font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+//   Get flat {store.amount}Rs 
+//   </p>
+// </div>
+
+//   ))}
+// </div>

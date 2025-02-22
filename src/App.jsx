@@ -23,12 +23,16 @@ import Singup from "./auth/Singup";
 
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(null); // Initially null
 
   useEffect(() => {
     const token = Cookies.get("token");
     setIsAuthenticated(!!token);
   }, []);
+
+  if (isAuthenticated === null) {
+    return <div>Loading...</div>; // Prevents incorrect redirection
+  }
   return (
     <Router>
       <div>
@@ -39,14 +43,14 @@ const App = () => {
           <Route path="/" element={<Home />} />
               <Route path="/CouponsDetails/:slug" element={<CouponsDetails/>} /> 
               <Route path="/Singup" element={<Singup/>} /> 
-              <Route path="/CouponFilters" element={<CouponFilters/>} />  
+              <Route path="/CouponFilters/:categoryName" element={<CouponFilters/>} />  
               <Route path="/My" element={<My/>} /> 
               <Route path="/HowitWorks" element={<HowitWorks/>} /> 
 
-{/* Correct usage of ProtectedRoute */}
-<Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
-            <Route path="/Account" element={<Account />} />  {/* Account is now directly the element */}
-          </Route>
+     {/* Protected Route */}
+     <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
+          <Route path="/Account" element={<Account />} />
+        </Route>
           
      
         </Routes>

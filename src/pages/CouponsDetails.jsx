@@ -6,13 +6,15 @@ import { AiOutlineLike,AiOutlineDislike} from "react-icons/ai";
 import Subscribe from "../components/Subscribe";
 import Footer from "../components/Footer";
 import { IoMdShare } from "react-icons/io";
+import { useParams, useNavigate } from "react-router-dom";
+
 
 
 
 const OfferCard = () => {
-  const { slug } = useParams(); // Get slug from URL
-  const [coupon, setCoupon] = useState(null);
-  const [loading, setLoading] = useState(true);
+    const { slug } = useParams(); // Get slug from URL
+    const [coupon, setCoupon] = useState(null);
+    const [loading, setLoading] = useState(true);
 
 
 
@@ -29,7 +31,21 @@ const OfferCard = () => {
 
         fetchCoupon();
     }, []);
+console.log("coupon",coupon)
 
+const shareToWhatsApp = () => {
+  const url = encodeURIComponent(window.location.href);
+  const text = encodeURIComponent("Check out this link: ");
+  const whatsappUrl = `https://wa.me/?text=${text}${url}`;
+  window.open(whatsappUrl, "_blank");
+};
+
+const shareToSMS = () => {
+  const url = encodeURIComponent(window.location.href);
+  const text = encodeURIComponent("Check out this link: ");
+  const smsUrl = `sms:?body=${text}${url}`;
+  window.location.href = smsUrl; // Opens SMS app on mobile
+};
     if (loading) return <h2>Loading Coupon Details...</h2>;
     if (!coupon) return <h2>Coupon Not Found</h2>;
   return (
@@ -43,7 +59,7 @@ const OfferCard = () => {
       ← Go Back
     </button>
     <button className="text-white text-sm md:text-lg lg:text-lg font-medium flex items-center hover:underline gap-1">
-    <span>Share</span>  <IoMdShare className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
+    <span onClick={shareToWhatsApp}>Share</span>  <IoMdShare className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
 
     </button>
   </div>

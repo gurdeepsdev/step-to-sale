@@ -5,14 +5,30 @@ import Worksub from "../components/Worksub";
 import Footer from "../components/Footer";
 import { IoMdShare } from "react-icons/io";
 import useEmblaCarousel from "embla-carousel-react";
+import { AuthContext } from "../context/AuthContext";
+import Swal from 'sweetalert2'
 
 
 
 
 const OfferCard = () => {
+        const { token, userId, balance, username, email, referralCode } = useContext(AuthContext);
+  
     const [isOpen, setIsOpen] = useState(false);
 
 
+      const handleReferClick = () => {
+      
+        if (token) {
+          setIsOpen(true); // Open modal if logged in
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'Please login first!',
+              });
+        }
+      };
   const [emblaRef] = useEmblaCarousel({
     loop: true, // Enable infinite loop for mobile slider
     align: "start", // Align to the start of each step
@@ -32,7 +48,7 @@ const OfferCard = () => {
         
         {/* Button */}
         <button className="mt-4 bg-[#E74833] hover:bg-white text-white hover:text-black font-semibold px-4 py-1 md:px-4 lg:px-6 md:py-2 lg:py-2 rounded-full  md:text-base  text-xs lg:text-lg transition duration-300"
-                onClick={() => setIsOpen(true)}
+                onClick={handleReferClick}
 >
           Share Now
         </button>

@@ -19,7 +19,7 @@ import { useParams } from "react-router-dom";
 const Account = () => {
     const { token, userId, balance, username, email, referralCode, phone_number } = useContext(AuthContext);
     const apiUrl = import.meta.env.VITE_API_URL;
-
+console.log("user",phone_number,balance,username,email,referralCode)
   const [activeSection, setActiveSection] = useState("profile");
   const [copied, setCopied] = useState(false);
   // const referralCode = "ICRTSHU45JFI";
@@ -473,7 +473,18 @@ const handleSaveUpiEdit = () => {
     });
   };
   
-
+    const handleReferClick = () => {
+      
+        if (inputs.acc_number ||  upi) {
+        setIsModalOpen(true)
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'Please Add Bank or Upi details First!',
+              });
+        }
+      };
 console.log("transactionsq",transactionsq)
   return (
     <>
@@ -641,7 +652,7 @@ console.log("transactionsq",transactionsq)
   </div> */}
 
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-    {transactions.map((transaction, index) => (
+    {transactionsq.map((transaction, index) => (
       <div
         key={index}
         className="bg-white p-4 rounded-lg shadow-md border border-gray-200"
@@ -656,7 +667,7 @@ console.log("transactionsq",transactionsq)
         </div>
         <div className="flex justify-between items-center  mb-2">
           <p className="text-sm text-gray-500 ">Date and Time</p>
-          <p className="text-sm  text-gray-500 ">{transaction.date}</p>
+          <p className="text-sm  text-gray-500 ">{transaction.created_at}</p>
         </div>
         <div className="flex justify-between items-center   mb-2">
           <p className="text-sm text-gray-500 ">Amount</p>
@@ -667,7 +678,7 @@ console.log("transactionsq",transactionsq)
         <div className="flex justify-between items-center">
           <p className="text-sm text-gray-500 ">Status</p>
           <p className="text-sm font-medium text-green-600">
-            {transaction.status}
+            {transaction.description}
           </p>
         </div>
       </div>
@@ -687,7 +698,10 @@ console.log("transactionsq",transactionsq)
                  <button
               type="submit"
               className=" bg-[#244856] text-white mt-2 py-1 px-8 rounded-md hover:bg-[#244856] focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onClick={() => setIsModalOpen(true)}
+              onClick={handleReferClick}
+              
+          
+              
 
             >
               Redeem

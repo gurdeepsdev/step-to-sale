@@ -40,16 +40,30 @@ export const getAllCoupons = async () => {
     }
 };
 
-// // ✅ Fetch a single coupon by slug
-// export const getCouponBySlug = async (slug) => {
-//     try {
-//         const response = await api.get(`/api/coupons/${slug}`);
-//         return response.data;
-//     } catch (error) {
-//         console.error("Error fetching coupon:", error);
-//         return { success: false, message: "Coupon not found" };
-//     }
-// };
+// ✅ Fetch a single coupon by slug
+export const getCouponBySlug = async (slug) => {
+    try {
+        const response = await api.get(`/api/single-coupon/${slug}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching coupon:", error);
+        return { success: false, message: "Coupon not found" };
+    }
+};
+
+
+// ✅ Fetch a catrgore coupon by slug
+export const getAllcategoreCoupons = async (categoryName) => {
+  try {
+      const response = await api.get(`/api/all-couponss/${categoryName}`);
+      return response.data;
+  } catch (error) {
+      console.error("Error fetching coupon:", error);
+      return { success: false, message: "Coupon not found" };
+  }
+};
+
+
 
 
 export default api;

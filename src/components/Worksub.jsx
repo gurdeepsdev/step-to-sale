@@ -3,6 +3,8 @@ import { FiX, FiCopy } from "react-icons/fi"; // Icons for close & copy
 import { FaWhatsapp } from "react-icons/fa";
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
 import { AuthContext } from "../context/AuthContext";
+import Swal from 'sweetalert2'
+
 
 const Worksub = ({isOpen, setIsOpen }) => {
       const { token, userId, balance, username, email, referralCode } = useContext(AuthContext);
@@ -21,7 +23,26 @@ const Worksub = ({isOpen, setIsOpen }) => {
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(referralCode);
-        alert("Referral link copied!"); // Optional feedback
+        Swal.fire({
+          icon: 'warning',
+          title: 'Oops...',
+          text: 'Referral link copied!',
+        });
+      };
+
+
+
+      const handleReferClick = () => {
+      
+        if (token) {
+          setIsOpen(true); // Open modal if logged in
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'Please login first!',
+              });
+        }
       };
 
   return (
@@ -37,7 +58,7 @@ const Worksub = ({isOpen, setIsOpen }) => {
         {/* Right: Button Section */}
         <div className="lg:w-1/3 flex justify-end mt-2 md:mt-0 lg:mt-0">
           <button className="bg-[#E74833] hover:bg-white text-white hover:text-black font-medium px-4 py-1 md:py-2 lg:py-2 md:px-6 lg:px-6 text-xs md:text-lg lg:text-lg rounded-full"
-                  onClick={() => setIsOpen(true)}
+      onClick={handleReferClick}
 >
             Refer Now
           </button>

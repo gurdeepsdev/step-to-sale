@@ -1,33 +1,47 @@
 
 import { Search, ChevronRight } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { getAllCoupons } from "../utils/api";
+import { getAllcategoreCoupons } from "../utils/api";
+import { useParams, useNavigate } from "react-router-dom";
 
 import Header from "../components/Header";
 import Subscribe from "../components/Subscribe";
 import Footer from "../components/Footer";
 
 export default function MobileAndTablet() {
+  const { categoryName } = useParams(); // Get slug from URL
+  console.log("ss",categoryName)
+
   const [showFilters, setShowFilters] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchCoupons = async () => {
-            const data = await getAllCoupons();
+    // useEffect(() => {
+    //     const fetchCoupons = async () => {
+    //         const data = await getAllCoupons();
+    //         if (data.success) {
+    //             setCoupons(data.data);
+    //         }
+    //         setLoading(false);
+    //     };
+
+    //     fetchCoupons();
+    // }, []);
+useEffect(() => {
+        const fetchCoupon = async () => {
+            const data = await getAllcategoreCoupons(categoryName);
             if (data.success) {
-                setCoupons(data.data);
+              setCoupons(data.data);
             }
             setLoading(false);
         };
 
-        fetchCoupons();
+        fetchCoupon();
     }, []);
+console.log("coupon",coupons)
 
-
-    console.log("coupons",coupons)
-    if (loading) return <h2>Loading Coupons...</h2>;
+    // if (loading) return <h2>Loading Coupons...</h2>;
 
 const handleFilterSelection = (e, categoryName) => {
   if (e.target.checked) {

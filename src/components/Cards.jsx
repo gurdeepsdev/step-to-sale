@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-
+import { getAllCoupons } from "../utils/api";
+import { useNavigate } from "react-router-dom";
 const TrendingCategories = () => {
+  const navigate = useNavigate();
   const categories = [
     {
       id: 1,
       title: "Fashion",
+      slug: "Fashion",
       discount: "80% Off on Fashion",
       image: "/img/card1.png", // Replace with your image paths
       button: "Get Deal",
@@ -13,6 +16,7 @@ const TrendingCategories = () => {
     {
       id: 2,
       title: "Mobile & Tablets",
+      slug: "Mobile-&-Tablets",
       discount: "60% Off on Gadget",
       image: "/img/card2.png", // Replace with your image paths
       button: "Get Deal",
@@ -20,6 +24,7 @@ const TrendingCategories = () => {
     {
       id: 3,
       title: "Beauty & Health",
+      slug: "Beauty-&-Health",
       discount: "Upto 8% Rewards",
       image: "/img/card.png", // Replace with your image paths
       button: "Get Deal",
@@ -27,12 +32,31 @@ const TrendingCategories = () => {
     {
       id: 4,
       title: "Food & Dining",
+      slug: "Food-&-Dining",
       discount: "60% Off on Order",
       image: "/img/card3.png", // Replace with your image paths
       button: "Get Deal",
     },
   ];
 
+
+    // const [coupons, setCoupons] = useState([]);
+    //   const [loading, setLoading] = useState(true);
+    
+    //     useEffect(() => {
+    //         const fetchCoupons = async () => {
+    //             const data = await getAllCoupons();
+    //             if (data.success) {
+    //                 setCoupons(data.data);
+    //             }
+    //             setLoading(false);
+    //         };
+    
+    //         fetchCoupons();
+    //     }, []);
+    //     console.log("trendingcoupons",coupons)
+  
+    
   // Embla Carousel Hook
   const [emblaRef] = useEmblaCarousel({
     loop: true,
@@ -40,6 +64,12 @@ const TrendingCategories = () => {
     skipSnaps: false, //
   });
 
+
+  const getDeal = (categoryName) => {
+    navigate(`/CouponFilters/${categoryName}`)
+
+  };
+  
   return (
     <div className="bg-white px-4 py-8 lg:px-16 lg:py-12">
       {/* Heading Section */}
@@ -78,7 +108,9 @@ const TrendingCategories = () => {
         <div className="flex-grow"></div>
 <br/>
         {/* Button */}
-        <button className="px-3 md:px-6 lg:px-6 py-1 md:py-2 lg:py-2 text-sm md:text-base lg:text-base border border-gray-800 text-gray-800 bg-white rounded-full hover:bg-[#E74833] hover:border-[#E74833] hover:text-white transition mt-auto">
+        <button 
+onClick={() => getDeal(category.slug)}
+        className="px-3 md:px-6 lg:px-6 py-1 md:py-2 lg:py-2 text-sm md:text-base lg:text-base border border-gray-800 text-gray-800 bg-white rounded-full hover:bg-[#E74833] hover:border-[#E74833] hover:text-white transition mt-auto">
           {category.button}
         </button>
       </div>
@@ -112,7 +144,10 @@ const TrendingCategories = () => {
             {/* Discount */}
             <p className="text-white mt-2 mb-4 text-xl font-semibold">{category.discount}</p>
             {/* Button */}
-            <button className="px-3 md:px-6 lg:px-6 py-1 md:py-2 lg:py-2 text-sm md:text-base lg:text-base border border-gray-800 bg-white text-gray-800 rounded-full hover:bg-[#E74833] hover:border-[#E74833] hover:text-white transition">
+            <button 
+
+onClick={() => getDeal(category.slug)}
+            className="px-3 md:px-6 lg:px-6 py-1 md:py-2 lg:py-2 text-sm md:text-base lg:text-base border border-gray-800 bg-white text-gray-800 rounded-full hover:bg-[#E74833] hover:border-[#E74833] hover:text-white transition">
               {category.button}
             </button>
           </div>

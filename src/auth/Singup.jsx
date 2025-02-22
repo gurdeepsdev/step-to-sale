@@ -1,19 +1,26 @@
 
-import React, { useState , useEffect, useRef} from "react";
+import React, { useState , useEffect, useRef,useContext} from "react";
 import { Eye, EyeOff } from "lucide-react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import CryptoJS from "crypto-js"; // Import crypto-js
 import Swal from 'sweetalert2'
+import SecureStorage from 'react-secure-storage';
+import { initializeOTPless, phoneAuth, verifyOTP } from "../otp/otpless";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 
 
 const SignUpForm = ({isSignUp , setIsSignUp, showModal, setShowModal} ) => {
+  const { login } = useContext(AuthContext);
 
     if (!showModal) return null; // Don't render the modal if showModal is false
     const apiUrl = import.meta.env.VITE_API_URL;
     // Secret key for encryption and decryption (should be kept safe)
-    console.log("apiUrl:", apiUrl);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [actionType, setActionType] = useState("");
+    const navigate = useNavigate();
 
 const SECRET_KEY = import.meta.env.VITE_API_SECRET_KEY;
 
@@ -21,9 +28,15 @@ const [useOtp, setUseOtp] = useState(false);
 const [step, setStep] = useState("phone");
 
 const [phoneNumber, setPhoneNumber] = useState("");
-const [otp, setOtp] = useState(["", "", "", ""]);
+const [otp, setOtp] = useState("");
 const [countdown, setCountdown] = useState(90);
 const [isCountdownActive, setIsCountdownActive] = useState(false);
+
+useEffect(() => {
+  initializeOTPless();
+}, []);
+
+
 
 const otpRefs = Array(4)
   .fill(null)
@@ -41,10 +54,18 @@ useEffect(() => {
   return () => clearInterval(interval);
 }, [countdown, isCountdownActive]);
 
-const handlePhoneSubmit = (e) => {
+
+const handlePhoneAuth = (e) => {
   e.preventDefault();
-  setStep("otp");
-  setIsCountdownActive(true);
+
+console.log("new",)
+
+    // setShowOTPForm(true);
+    setIsAdmin(true);  // Switch to admin login
+
+    phoneAuth(formData1.phone, "+91"); // Dynamic values
+
+
 };
 
 const handleOtpChange = (index, value) => {
@@ -65,10 +86,10 @@ const handleKeyDown = (index, e) => {
 };
 
 const handleResendOtp = () => {
-  setOtp(["", "", "", ""]);
+  setOtp("");
   setCountdown(90);
   setIsCountdownActive(true);
-  otpRefs[0].current?.focus();
+  // otpRefs[0].current?.focus();
 };
 
 const handleSubmitOtp = (e) => {
@@ -103,6 +124,77 @@ const handleSubmitOtp = (e) => {
       [name]: value,
     }));
   };
+
+
+const handlePhoneSubmit = (e) => {
+  e.preventDefault();
+console.log("formData.phone_number",phoneNumber)
+  phoneAuth(phoneNumber, "+91"); // Dynamic values
+  console.log("handlePhoneSubmit triggered!"); 
+  setUseOtp(true);  // Ensure OTP form is enabled
+  setStep("otp"); 
+};
+
+const handleSignSubmit = (e) => {
+  e.preventDefault();
+
+  phoneAuth(formData1.phone_number, "+91"); // Dynamic values
+  console.log("handlePhoneSubmit triggered!"); 
+  setUseOtp(true) 
+  setActionType("signup") 
+  setStep("otp"); 
+};
+
+const [loading, setLoading] = useState(false); // Loader state
+
+const handleVerifyOTP = async (e) => {
+  e.preventDefault();
+  setLoading(true); // Show loader
+
+  const onSuccess = () => {
+    handleOTPVerificationSuccess(); // Call success handler
+  };
+
+  const onFailure = () => {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Wrong OTP. Please try again.',
+    });
+  };
+
+  try {
+    // Call OTP verification logic
+    await verifyOTP(formData1.phone_number, otp, "+91", onSuccess, onFailure);
+    console.log("otp",otp)
+  } catch (error) {
+    console.error("Error verifying OTP:", error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'An error occurred during OTP verification. Please try again.',
+    });
+  } finally {
+    setLoading(false); // Hide loader
+  }
+};
+
+const handleOTPVerificationSuccess = async () => {
+  setLoading(true); // Show loader
+  try {
+    handleSubmit();
+    // setCurrentStep(3); // Proceed to the next step
+    // setShowOTPForm(false); // Hide OTP form
+    // setShowThankYou(true); // Show Thank You message
+  } catch (error) {
+    console.error("Error handling OTP success:", error);
+  } finally {
+    setLoading(false); // Hide loader
+  }
+};
+
+
+
   // Load saved credentials if Remember Me is checked
   useEffect(() => {
     const savedPhone = localStorage.getItem("phone_number");
@@ -117,6 +209,21 @@ const handleSubmitOtp = (e) => {
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const handleForgotChange = (e) => {
+    console.log("click")
+    setUseOtp(true) 
+    setActionType("forgotPassword") 
+   };
+   const handelSingotp = (e) => {
+    console.log("click")
+    setUseOtp(true)
+    setActionType("loginWithOtp")
+   };
+
+
+
+            {/* setUseOtp(true) setActionType("forgotPassword")*/}
 
 
 //   const [isSignUp, setIsSignUp] = useState(true); // State to toggle between SignUp and SignIn forms
@@ -139,22 +246,24 @@ const handleSubmitOtp = (e) => {
     return CryptoJS.AES.encrypt(JSON.stringify(data), SECRET_KEY).toString();
   };
 const handleSubmit = async (e) => {
-    e.preventDefault();
     setError(""); // Clear previous errors
 
     try {
       const response = await axios.post("http://localhost:5000/api/signup", formData1);
 
       // Save user data and JWT in cookies
-      const { token, balance, referral_code, username, email } = response.data;
+      const { token, balance, referral_code, username, email,phone_number } = response.data;
+      SecureStorage.setItem('token', token);
 
        // Encrypt and store data in cookies
        Cookies.set("token", encryptData(token), { expires: 7 });
+       Cookies.set("userId", encryptData(userId), { expires: 7 });
+
        Cookies.set("balance", encryptData(balance), { expires: 7 });
        Cookies.set("referral_code", encryptData(referral_code), { expires: 7 });
        Cookies.set("username", encryptData(username), { expires: 7 });
        Cookies.set("email", encryptData(email), { expires: 7 });
-       Cookies.set("phone_number", encryptData(email), { expires: 7 });
+       Cookies.set("phone_number", encryptData(phone_number), { expires: 7 });
 
  
       // Success alert
@@ -188,6 +297,38 @@ const handleSubmit = async (e) => {
     }
   };
 
+  const handleForgotPassword = () => {
+    console.log("Forgot Password Triggered");
+    // Implement forgot password logic here
+  };
+  
+  const handleLoginWithOtp = () => {
+    console.log("Login with OTP Triggered");
+    // Implement login with OTP logic here
+  };
+  
+  const handleSignup = () => {
+    console.log("Signup Triggered");
+    // Implement signup logic here
+  };
+  const handleAction = (e) => {
+    e.preventDefault();
+    
+    switch (actionType) {
+      case "forgotPassword":
+        handleForgotPassword();
+        break;
+      case "loginWithOtp":
+        handleLoginWithOtp();
+        break;
+      case "signup":
+        handleSignup();
+        break;
+      default:
+        console.log("No action selected");
+    }
+  };  
+
   const handleGoogleSignUp = () => {
     setShowModal(false)
     setStep("phone")
@@ -202,8 +343,11 @@ const handleSubmit = async (e) => {
         phone_number: formData.phone_number,
         password: formData.password,
       });
-  
+  console.log("data",response.data)
+
       // Store token in localStorage
+      SecureStorage.setItem('token', response.data.token);
+
       localStorage.setItem("token", response.data.token);
       if (formData.rememberMe) {
         localStorage.setItem("phone_number", formData.phone_number);
@@ -214,17 +358,17 @@ const handleSubmit = async (e) => {
         localStorage.removeItem("password");
         localStorage.setItem("rememberMe", "false");
       }
-      const { token,userId, balance, referral_code, username, email,phone_number } = response.data;
+      // const { token,userId, balance, referral_code, username, email,phone_number } = response.data;
+      login(response.data); // Call login to set cookies and update context immediately
+    //  // Encrypt and store data in cookies
+    //  Cookies.set("userId", encryptData(userId), { expires: 7 });
 
-     // Encrypt and store data in cookies
-     Cookies.set("userId", encryptData(userId), { expires: 7 });
-
-     Cookies.set("token", encryptData(token), { expires: 7 });
-     Cookies.set("balance", encryptData(balance), { expires: 7 });
-     Cookies.set("referral_code", encryptData(referral_code), { expires: 7 });
-     Cookies.set("username", encryptData(username), { expires: 7 });
-     Cookies.set("email", encryptData(email), { expires: 7 });
-     Cookies.set("phone_number", encryptData(phone_number), { expires: 7 });
+    //  Cookies.set("token", encryptData(token), { expires: 7 });
+    //  Cookies.set("balance", encryptData(balance), { expires: 7 });
+    //  Cookies.set("referral_code", encryptData(referral_code), { expires: 7 });
+    //  Cookies.set("username", encryptData(username), { expires: 7 });
+    //  Cookies.set("email", encryptData(email), { expires: 7 });
+    //  Cookies.set("phone_number", encryptData(phone_number), { expires: 7 });
 
   
       // Success alert
@@ -233,6 +377,7 @@ const handleSubmit = async (e) => {
         icon: "success",
         draggable: true
       });
+
       // alert("Login Successful!");
       setShowModal(false)
 
@@ -253,6 +398,11 @@ const handleSubmit = async (e) => {
 
 <>
 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20 backdrop-blur-sm z-50">
+{loading && (
+  <div className="flex justify-center items-center fixed inset-0 bg-gray-900 bg-opacity-50 z-50">
+    <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+  </div>
+)}
       <div className="fixed inset-0 bg-white w-full max-w-md mx-auto rounded-lg shadow-lg mt-20 mb-20 z-50 p-6 relative">
         <button className="absolute right-4 top-4 text-gray-500" onClick={() => setShowModal(false)}>
           ×
@@ -269,9 +419,10 @@ const handleSubmit = async (e) => {
           </h2>
         </div>
 
+
 {useOtp ? (
           step === "phone" ? (
-             <form onSubmit={handlePhoneSubmit}>
+             <form onSubmit={handlePhoneSubmit}> handleAction
             <p className="mb-2 text-sm text-center">Please fill in the information below:</p>
 
 
@@ -299,21 +450,26 @@ const handleSubmit = async (e) => {
   Enter the OTP sent to +91 {phoneNumber} to proceed.
 </p>
 
-<form onSubmit={handleSubmitOtp}>
-  <div className="flex gap-2 mb-6 justify-center">
-    {otp.map((digit, index) => (
-      <input
-        key={index}
-        type="text"
-        maxLength={1}
-        ref={otpRefs[index]}
-        value={digit}
-        onChange={(e) => handleOtpChange(index, e.target.value)}
-        onKeyDown={(e) => handleKeyDown(index, e)}
-        className="w-12 h-12 border-2 rounded-md text-center text-xl font-semibold focus:border-blue-500 focus:outline-none"
-      />
-    ))}
-  </div>
+<form onSubmit={handleAction}>
+<div className="flex justify-center space-x-2">
+                  {Array(4)
+                    .fill("")
+                    .map((_, index) => (
+                      <input
+                        key={index}
+                        type="text"
+                        maxLength="1"
+                        value={otp[index] || ""}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, "");
+                          setOtp((prevOtp) =>
+                            prevOtp.slice(0, index) + value + prevOtp.slice(index + 1)
+                          );
+                        }}
+                        className="border border-gray-300 rounded-md w-12 h-12 text-center text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    ))}
+                </div>
 
   {/* Resend OTP */}
   <div className="text-center mb-6">
@@ -345,8 +501,8 @@ const handleSubmit = async (e) => {
     )
   ) : isSignUp ? (
     
-    <form onSubmit={handleSubmit}>
-
+    <form onSubmit={handleSignSubmit}>
+{/*handleSubmit*/}
     <div className="mb-4">
       {/* <p className="text-sm font-medium mb-4">Sign Up with Email Address</p> */}
       <div className="space-y-4">
@@ -428,19 +584,27 @@ const handleSubmit = async (e) => {
     </div>
 
     <button
-      type="submit"
-      className="w-full bg-[#244856] text-white py-2 rounded-md hover:bg-blue-600"
+    type="button"  // Important: Prevents unwanted form submission
+    onClick={handlePhoneSubmit}
+          className="w-full bg-[#244856] text-white py-2 rounded-md hover:bg-blue-600"
     >
       Sign Up
     </button>
 
 
   </form>
-) : (
+) 
+:
+
+
+(
     <form >
             <div className="mb-4">
             <button
-onClick={() => setUseOtp(true)} 
+            // // setUseOtp(true)
+            // setActionType("loginWithOtp")
+            onClick={handelSingotp}
+
     className="w-full mb-4 bg-gray-100 py-2 rounded-md text-gray-700 hover:bg-gray-200"
         >
           Sign in with OTP
@@ -499,9 +663,10 @@ onClick={() => setUseOtp(true)}
             />
             <span className="text-sm">Remember me</span>
           </label>
-          <a href="#" className="text-sm text-[#244856] hover:underline"     onClick={() => setUseOtp(true)} 
+          <a href="#" className="text-sm text-[#244856] hover:underline"     onClick={handleForgotChange} 
 
           >
+          {/* setUseOtp(true) setActionType("forgotPassword")*/}
             Forgot Password?
 
           </a>

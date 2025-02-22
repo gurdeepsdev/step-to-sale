@@ -1,12 +1,15 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
+import Cookies from "js-cookie";
 
-const ProtectedRoute = ({ isAuthenticated }) => {
-  if (!isAuthenticated) {
-    return <Navigate to="/" replace />; // Redirect to your login/signup page
+const ProtectedRoute = () => {
+  const token = Cookies.get("token");  // Check authentication on every render
+
+  if (!token) {
+    return <Navigate to="/" replace />;
   }
 
-  return <Outlet />; // This will render the nested <Route> (Account)
+  return <Outlet />;
 };
 
 export default ProtectedRoute;
