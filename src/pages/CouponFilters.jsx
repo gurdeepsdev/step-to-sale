@@ -72,7 +72,7 @@ const handleBrandFilterSelection = (e, brandName) => {
           <div className="container text-sm text-gray-500 mb-2">
             Home / Coupon / Mobile
           </div>
-          <h1 className="text-2xl font-bold">Mobile And Tablet</h1>
+          <h1 className="text-2xl font-bold">{categoryName}</h1>
           <p className="text-gray-500 text-sm">
             Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet.
           </p>

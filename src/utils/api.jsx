@@ -63,6 +63,18 @@ export const getAllcategoreCoupons = async (categoryName) => {
   }
 };
 
+// ✅ Fetch transactions by userId
+export const fetchTransactions = async (userId) => {
+  try {
+    const response = await api.get(`/api/tdetails/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching transactions:", error);
+    return { success: false, message: "Failed to load transactions" };
+  }
+};
+
+
 
 
 

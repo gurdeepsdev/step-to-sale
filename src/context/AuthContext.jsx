@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }) => {
   const [referralCode, setReferralCode] = useState(() => decryptData(Cookies.get("referral_code")));
   const [phone_number, setPhonenumber] = useState(() => decryptData(Cookies.get("phone_number")));
 
+  console.log("referralCode",referralCode)
   // Function to refresh cookies manually after login or changes
   const refreshAuth = () => {
     setToken(decryptData(Cookies.get("token")));

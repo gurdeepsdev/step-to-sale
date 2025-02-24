@@ -13,6 +13,8 @@ import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import api from "../utils/api"; // Import API utility
 import { useParams } from "react-router-dom";
+import { fetchTransactions } from "../utils/api"; // Adjust the path
+import BalaceHook from "../utils/BalaceHook";
 
 
 
@@ -50,32 +52,38 @@ console.log("user",phone_number,balance,username,email,referralCode)
   const [error, setError] = useState(null);
 
   console.log("userId",userId)
+
+  const loadTransactions = async () => {
+    const data = await fetchTransactions(userId);
+    setTransactions(data)
+    console.log("Fetched Transactions:", data);
+  };
 //for transection history
-const fetchTransactions = async () => {
-  setLoading(true);
-  setError(null);
+// const fetchTransactions = async () => {
+//   setLoading(true);
+//   setError(null);
 
-  console.log("Calling API...");
+//   console.log("Calling API...");
 
-  try {
-    const response = await api.get(`/api/tdetails/${userId}`);
-    console.log("API Response:", response.data);
+//   try {
+//     const response = await api.get(`/api/tdetails/${userId}`);
+//     console.log("API Response:", response.data);
 
-    setTransactions(response.data);
-  } catch (err) {
-    console.error("API Error:", err);
-    if (err.response) {
-      setError(err.response.data.message || "Failed to load transactions");
-    } else {
-      setError("Network error. Please try again.");
-    }
-  }
+//     setTransactions(response.data);
+//   } catch (err) {
+//     console.error("API Error:", err);
+//     if (err.response) {
+//       setError(err.response.data.message || "Failed to load transactions");
+//     } else {
+//       setError("Network error. Please try again.");
+//     }
+//   }
 
-  setLoading(false);
-};
+//   setLoading(false);
+// };
 
 useEffect(() => {
-  fetchTransactions();
+  loadTransactions();
 }, []);
 
   // Fetch user bank details on component mount
@@ -269,7 +277,7 @@ const handleSaveUpiEdit = () => {
           draggable: true,
         });
       });
-  } else {
+  } else if(isNewUpi){
     // UPI doesn't exist (empty or null) → Create using POST API
     console.log("Calling POST API for UPI...");
 
@@ -651,39 +659,46 @@ console.log("transactionsq",transactionsq)
     <p className="text-lg font-medium">Available Balance</p>
   </div> */}
 
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-    {transactionsq.map((transaction, index) => (
-      <div
-        key={index}
-        className="bg-white p-4 rounded-lg shadow-md border border-gray-200"
-      >
-        <div className="flex justify-between items-center  mb-2">
-          <p className="text-sm text-black font-semibold">
-            Transaction ID
-          </p>
-          <p className="text-sm text-blue-600 font-medium">
-            {transaction.id}
-          </p>
+<div>
+  {transactionsq.length === 0 ? (
+    <p className="text-center text-gray-500 text-lg font-medium">
+      No transactions yet
+    </p>
+  ) : (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+      {transactionsq.map((transaction, index) => (
+        <div
+          key={index}
+          className="bg-white p-4 rounded-lg shadow-md border border-gray-200"
+        >
+          <div className="flex justify-between items-center  mb-2">
+            <p className="text-sm text-black font-semibold">Transaction ID</p>
+            <p className="text-sm text-blue-600 font-medium">#12{transaction.id}003</p>
+          </div>
+          <div className="flex justify-between items-center mb-2">
+            <p className="text-sm text-gray-500">Date</p>
+            <p className="text-sm text-gray-500">
+              {transaction.created_at.split("T")[0]} {/* Show only Date */}
+            </p>
+          </div>
+          <div className="flex justify-between items-center mb-2">
+            <p className="text-sm text-gray-500">Amount</p>
+            <p className="text-sm font-medium text-green-600">
+              {transaction.amount}
+            </p>
+          </div>
+          <div className="flex justify-between items-center">
+            <p className="text-sm text-gray-500">Status</p>
+            <p className="text-[10px] md:text-sm lg:text-sm font-medium text-green-600">
+              {transaction.description}
+            </p>
+          </div>
         </div>
-        <div className="flex justify-between items-center  mb-2">
-          <p className="text-sm text-gray-500 ">Date and Time</p>
-          <p className="text-sm  text-gray-500 ">{transaction.created_at}</p>
-        </div>
-        <div className="flex justify-between items-center   mb-2">
-          <p className="text-sm text-gray-500 ">Amount</p>
-          <p className="text-sm font-medium text-green-600">
-            {transaction.amount}
-          </p>
-        </div>
-        <div className="flex justify-between items-center">
-          <p className="text-sm text-gray-500 ">Status</p>
-          <p className="text-sm font-medium text-green-600">
-            {transaction.description}
-          </p>
-        </div>
-      </div>
-    ))}
-  </div>
+      ))}
+    </div>
+  )}
+</div>
+
 </div>
 </div>
             )}
@@ -899,6 +914,7 @@ console.log("transactionsq",transactionsq)
 
       {/* Popup Modal */}
       <InstantWithdrawal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      {/* <BalaceHook userId={userId} /> */}
       <Footer />
     </>
   );

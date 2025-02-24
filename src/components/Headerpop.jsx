@@ -1,57 +1,48 @@
-import React from "react";
 
-const CategoryPopup = () => {
+import { useState } from "react";
+
+const categories = [
+  {
+    title: "Mobile & Tablets",
+    items: ["Mobile", "Tablets", "Accessories"],
+  },
+  {
+    title: "Fashion",
+    items: ["Clothes", "T-Shirts", "Shoes"],
+  },
+  {
+    title: "Beauty & Health",
+    items: ["Makeup", "Skincare", "Wellness"],
+  },
+  {
+    title: "Food & Drinks",
+    items: ["Pizza", "Burger", "Health Drinks"],
+  },
+];
+
+export default function CategorySection() {
   return (
-    <div className="relative">
-      <div className="absolute top-6 left-0 w-[950px] max-w-[98%] sm:max-w-[95%] md:w-[900px] bg-white shadow-lg p-4 z-50 border">
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          {/* Category Column */}
-          <div>
-            <h3 className="font-bold text-red-600 mb-2">Mobile & Tablets</h3>
-            <ul className="text-sm text-gray-600 space-y-1">
-              <li>Mobile</li>
-              <li>Tablets</li>
-              <li>Accessories</li>
+    <div className="w-screen md:w-full max-w-4xl mx-auto p-2 bg-white rounded-lg shadow-md mt-0 md:mt-6 lg:mt-6">
+      <h2 className="text-xl font-semibold text-center mb-4">Popular Categories</h2>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {categories.map((category) => (
+          <div key={category.title}>
+            <h3 className="text-red-600 font-semibold mb-1">{category.title}</h3>
+            <ul className="space-y-1 text-gray-700 text-sm">
+              {category.items.map((item) => (
+                <li key={item} className="hover:text-red-500 cursor-pointer">
+                  {item}
+                </li>
+              ))}
             </ul>
           </div>
-
-          <div>
-            <h3 className="font-bold text-red-600 mb-2">Fashion</h3>
-            <ul className="text-sm text-gray-600 space-y-1">
-              <li>Clothes</li>
-              <li>T-Shirts</li>
-              <li>Shoes</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-bold text-red-600 mb-2">Beauty & Health</h3>
-            <ul className="text-sm text-gray-600 space-y-1">
-              <li>Makeup</li>
-              <li>Skincare</li>
-              <li>Wellness</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-bold text-red-600 mb-2">Food & Drinks</h3>
-            <ul className="text-sm text-gray-600 space-y-1">
-              <li>Pizza</li>
-              <li>Burger</li>
-              <li>Health Drinks</li>
-            </ul>
-          </div>
-        </div>
-
-        {/* View All Categories */}
-        <div className="text-center mt-4">
+        ))}
+      </div>
+      <div className="text-center mt-4">
           <button className="px-4 py-2 bg-gray-200 rounded-lg text-sm font-semibold">
             View All Categories <span className="ml-2">&rarr;</span>
           </button>
         </div>
-      </div>
     </div>
   );
-};
-
-export default CategoryPopup;
+}

@@ -1,14 +1,64 @@
-import React, { useState } from "react";
+import React, { useState,useEffect,useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import Swal from 'sweetalert2'
+import axios from "axios";
+
 
 const InstantWithdrawal = ({ isOpen, onClose }) => {
+      const { token, userId, balance, username, email, referralCode, phone_number } = useContext(AuthContext);
+    const { login } = useContext(AuthContext);
+  
   const [amount, setAmount] = useState("");
   const [transferMethod, setTransferMethod] = useState("bank");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
-  const handleWithdraw = () => {
-    alert(`Withdrawing ${amount} via ${transferMethod}`);
+  
+  const handleWithdrawal = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+
+      setLoading(true);
+      setError(null);
+      setSuccess(false);
+console.log("uat", userId,
+  amount,
+  transferMethod,)
+      try {
+          const response = await axios.post("http://localhost:5000/api/add-withdrow-details", {
+              userId,
+              amount,
+              type:transferMethod
+          });
+
+          if (response.status === 201) {
+              setSuccess(true);
+              Swal.fire({
+                title: "✅ Withdrawal successful",
+                // text: err.response?.data?.message || "Something went wrong.",
+                icon: "success",
+                draggable: true,
+              });
+              console.log("✅ Withdrawal successful:", response.data);
+          } else {
+              throw new Error("Unexpected response from server");
+          }
+      } catch (err) {
+        Swal.fire({
+          title: "❌ Withdrawal error:",
+          // text: err.response?.data?.message || "Something went wrong.",
+          icon: "warning",
+          draggable: true,
+        });
+          console.error("❌ Withdrawal error:", err.response?.data?.error || err.message);
+          setError(err.response?.data?.error || "Something went wrong");
+      } finally {
+          setLoading(false);
+      }
   };
 
   if (!isOpen) return null; // Hide modal if isOpen is false
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -25,18 +75,43 @@ const InstantWithdrawal = ({ isOpen, onClose }) => {
 
         {/* Amount Input */}
         <div className="mb-4">
-          <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">
-            Enter Amount
-          </label>
-          <input
-            type="number"
-            id="amount"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="50 Rs"
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          />
-        </div>
+  <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">
+    Enter Amount
+  </label>
+  <input
+    type="number"
+    id="amount"
+    value={amount}
+    required
+    onChange={(e) => {
+      const enteredAmount = parseFloat(e.target.value);
+
+      if (balance == 0 ) {
+          Swal.fire({
+                  title: "Your wallet amount is empty.",
+                  // text: err.response?.data?.message || "Something went wrong.",
+                  icon: "warning",
+                  draggable: true,
+                });
+
+      } else if(enteredAmount <= balance){
+        setAmount(e.target.value); // Allow valid input
+
+      }
+      else {
+        Swal.fire({
+          title: `You can enter up to ₹${balance} only.`,
+          // text: err.response?.data?.message || "Something went wrong.",
+          icon: "warning",
+          draggable: true,
+        });
+      }
+    }}
+    placeholder="50 Rs"
+    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+  />
+</div>
+
 
         {/* Transfer Methods */}
         <div className="mb-4">
@@ -77,7 +152,7 @@ const InstantWithdrawal = ({ isOpen, onClose }) => {
 
         {/* Withdraw Button */}
         <button
-          onClick={handleWithdraw}
+          onClick={handleWithdrawal}
           className="w-full bg-[#244856] hover:bg-white hover:text-[#244856] hover:border border-[#244856] text-white font-semibold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
         >
           Withdraw

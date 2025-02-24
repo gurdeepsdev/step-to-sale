@@ -29,7 +29,7 @@ const Header = () => {
 
   const { token, userId, balance, username, email, referralCode, phone_number } = useContext(AuthContext);
   const [showCategories, setShowCategories] = useState(false);
-  console.log("user", phone_number, balance, username, email)
+  console.log("user", phone_number, balance, username, email, referralCode)
   const [showCountryToggle, setShowCountryToggle] = useState(false);
   const [showProfileToggle, setShowProfileToggle] = useState(false);
   const [showNotificationsSidebar, setShowNotificationsSidebar] = useState(false);
@@ -231,7 +231,7 @@ const Header = () => {
                 value={searchTerm}
                 onChange={handleSearchChange}
                 type="text"
-                placeholder="Search For Brands, Categories surbhi"
+                placeholder="Search For Brands, Categories"
                 className="w-96 max-w-full pl-4 pr-10 py-2 border border-black rounded-full text-sm focus:ring-2 focus:ring-red-400"
               />
 {/* Suggestions Dropdown */}
@@ -402,13 +402,19 @@ const Header = () => {
 
                 {/* Notifications Icon */}
                 <div className="relative">
-                  <button
-                    onClick={toggleNotificationsSidebar}
-                    className="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-3xl"
-                  >
-                    <FaRegBell />
-                  </button>
-                </div>
+  <button
+    onClick={toggleNotificationsSidebar}
+    className="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-3xl relative"
+  >
+    <FaRegBell />
+    
+    {/* Red dot when notifications exist */}
+    {notifications.length > 0 && (
+      <span className="absolute top-1 right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+    )}
+  </button>
+</div>
+
 
                 {/* Profile Icon with Balance */}
                 {/* Profile Icon with Balance */}
@@ -512,7 +518,7 @@ const Header = () => {
           {/* Show CategoryPopup only when showCategories is true */}
           {showCategories && (
             <div
-              className="absolute left-1/2 right-4 transform -translate-x-1/2 mt-2 w-auto"
+              className="absolute left-1/2 md:right-0 transform -translate-x-[50%] md:-translate-x-2/3 mt-6 md:mt-10  w-auto"
             >
               <Headerpop />
             </div>
@@ -560,30 +566,40 @@ const Header = () => {
               </button>
             </div>
 
-            {/* Notification Items */}
-            <div className="p-4 space-y-4 overflow-y-auto">
-              {[...Array(3)].map((_, index) => (
-                <div
-                  key={index}
-                  className="flex items-center bg-gray-100 rounded-lg p-3 shadow-md space-x-4"
-                >
-                  {/* Image */}
-                  <img
-                    src="/img/rec.png" // Replace with actual image URL
-                    alt="Sale"
-                    className="w-16 h-16 rounded-lg"
-                  />
-                  {/* Notification Content */}
-                  <div>
-                    <h3 className="font-bold text-sm sm:text-base">Amazon</h3>
-                    <p className="text-gray-600 text-sm">
-                      Flat 60% OFF on HDFC Credit Card & SBI Card
-                    </p>
-                    <p className="text-gray-500 text-xs mt-1">Valid Till - 14 Feb, 2025</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+         {/* Notification Items */}
+{/* Notification Items */}
+<div className="p-4 space-y-4 overflow-y-auto">
+  {notifications.length === 0 ? (
+    <p className="text-center text-gray-500">No notifications exist yet</p>
+  ) : (
+    notifications.map((item, index) => {
+      // Extracting only the date (YYYY-MM-DD)
+      const formattedDate = new Date(item.created_at).toISOString().split("T")[0];
+
+      return (
+        <div
+          key={index}
+          className="flex items-center bg-gray-100 rounded-lg p-3 shadow-md space-x-4"
+        >
+          {/* Image */}
+          <img
+            src="/img/rec.png" // Replace with actual image URL
+            alt="Sale"
+            className="w-16 h-16 rounded-lg"
+          />
+          {/* Notification Content */}
+          <div>
+            <h3 className="font-bold text-sm sm:text-base">#20{item.id}99</h3>
+            <p className="text-gray-600 text-sm">{item.message}</p>
+            <p className="text-gray-500 text-xs mt-1">Date - {formattedDate}</p>
+          </div>
+        </div>
+      );
+    })
+  )}
+</div>
+
+
           </div>
         </>
 
