@@ -19,9 +19,9 @@ import BalaceHook from "../utils/BalaceHook";
 
 
 const Account = () => {
-    const { token, userId, balance, username, email, referralCode, phone_number } = useContext(AuthContext);
+    const { token, userId, balance, username, email, referral_code, phone_number } = useContext(AuthContext);
     const apiUrl = import.meta.env.VITE_API_URL;
-console.log("user",phone_number,balance,username,email,referralCode)
+console.log("user",phone_number,balance,username,email,referral_code)
   const [activeSection, setActiveSection] = useState("profile");
   const [copied, setCopied] = useState(false);
   // const referralCode = "ICRTSHU45JFI";
@@ -58,6 +58,10 @@ console.log("user",phone_number,balance,username,email,referralCode)
     setTransactions(data)
     console.log("Fetched Transactions:", data);
   };
+
+  const updateBalance = (newBalance) => {
+    setBalance(newBalance); // Update balance in the parent
+};
 //for transection history
 // const fetchTransactions = async () => {
 //   setLoading(true);
@@ -403,7 +407,7 @@ const handleSaveUpiEdit = () => {
   
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(referralCode);
+    navigator.clipboard.writeText(referral_code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -631,7 +635,7 @@ console.log("transactionsq",transactionsq)
         <div className="flex">
           <input
             type="text"
-            value={referralCode}
+            value={referral_code}
             className="w-full p-2 border rounded-lg mt-1 text-gray-700 bg-gray-100"
             disabled
           />

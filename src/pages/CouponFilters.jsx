@@ -61,6 +61,70 @@ const handleBrandFilterSelection = (e, brandName) => {
   }
 };
 
+const offers = [
+  {
+    id: 1,
+    image: "/img/brand1.png",
+    title: "26% OFF on Mobiles",
+    description: "Amazon Coupons, Latest Coupons & Best Deals on Mobiles.",
+    validTill: "28 January 2025",
+    category: "Fashion",
+    brand: "Nike",
+    type: "Deals",
+  },
+  {
+    id: 2,
+    image: "/img/brand2.png",
+    title: "Flat 50% OFF on Electronics",
+    description: "Exclusive Flipkart offers for a limited time.",
+    validTill: "15 February 2025",
+    category: "Fashion",
+    brand: "Puma",
+    type: "Coupons",
+  },
+  {
+    id: 3,
+    image: "/img/brand3.png",
+    title: "30% Cashback on Fashion",
+    description: "Myntra special cashback deal for new users.",
+    validTill: "10 March 2025",
+    category: "Fashion",
+    brand: "Gucci",
+    type: "Deals",
+  },
+  {
+    id: 4,
+    image: "/img/brand4.png",
+    title: "Buy 1 Get 1 Free - Food",
+    description: "Swiggy & Zomato BOGO Offer on selected restaurants.",
+    validTill: "5 April 2025",
+    category: "Mobile & Tablets",
+    brand: "Adidas",
+    type: "Coupons",
+  },
+];
+
+const [selectedCategory, setSelectedCategory] = useState("All");
+const [selectedBrand, setSelectedBrand] = useState("All");
+const [selectedType, setSelectedType] = useState("ALL");
+
+// Filtering Offers
+const filteredOffers = offers.filter((offer) => {
+  return (
+    (selectedCategory === "All" || offer.category === selectedCategory) &&
+    (selectedBrand === "All" || offer.brand === selectedBrand) &&
+    (selectedType === "ALL" || offer.type === selectedType)
+  );
+});
+
+
+ // Function to clear all filters
+ const clearFilters = () => {
+  setSelectedCategory("All");
+  setSelectedBrand("All");
+  setSelectedType("ALL");
+};
+
 
   return (
     <>
@@ -150,7 +214,8 @@ const handleBrandFilterSelection = (e, brandName) => {
             >
               <div className="flex justify-between items-center mb-4 border-b border-dashed border-grey-700">
                 <h3 className="font-semibold">Filters</h3>
-                <span className="hover:underline sm:block hidden">clear</span>
+                <span className="hover:underline sm:block hidden"           onClick={clearFilters}
+                >clear</span>
                 <button
                   className="text-blue-600 text-sm md:hidden"
                   onClick={() => setShowFilters(false)}
@@ -193,7 +258,9 @@ const handleBrandFilterSelection = (e, brandName) => {
           type="checkbox" 
           className="form-checkbox text-[#4F93AD]" 
           value={category.name}
-          onChange={(e) => handleFilterSelection(e, category.name)}
+         
+          onChange={(e) => setSelectedCategory(e.target.value)}
+
         />
         <span>{category.name}</span>
       </label>
@@ -255,7 +322,9 @@ const handleBrandFilterSelection = (e, brandName) => {
           type="checkbox" 
           className="form-checkbox text-[#4F93AD]" 
           value={brand.name}
-          onChange={(e) => handleBrandFilterSelection(e, brand.name)}
+
+          onChange={(e) => setSelectedBrand(e.target.value)}
+
         />
         <span>{brand.name}</span>
       </label>
@@ -278,7 +347,12 @@ const handleBrandFilterSelection = (e, brandName) => {
                         key={tab.name}
                         className={`text-sm font-medium px-4 py-2 rounded hover:bg-gray-200 ${
                           tab.active ? "text-blue-600" : "text-gray-500"
+                          
                         }`}
+                        value={tab.name}
+
+                        onClick={(e) => setSelectedType(e.target.value)}
+
                       >
                         {tab.name}({tab.count})
                       </button>
@@ -295,9 +369,12 @@ const handleBrandFilterSelection = (e, brandName) => {
 
               {/* Offer Cards Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4">
-                {[1, 2, 3, 4].map((i) => (
-                  <OfferCard key={i} />
-                ))}
+              {filteredOffers.length > 0 ? (
+          filteredOffers.map((offer) => <OfferCard key={offer.id} offer={offer} />)
+        ) : (
+          <p className="text-center text-gray-500">No offers found.</p>
+        )}
+
               </div>
 
               <button className="underline rounded px-4 py-2 w-full mt-6 text-center">
@@ -313,7 +390,7 @@ const handleBrandFilterSelection = (e, brandName) => {
   );
 }
 
-function OfferCard() {
+const OfferCard = ({ offer }) => {
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm">
       <div className="flex flex-col items-center gap-4">
@@ -324,31 +401,34 @@ function OfferCard() {
           className=""
         />
 
+
         {/* Title and Description */}
         <div>
-          <h3 className="font-semibold mb-1">26% OFF on Mobiles</h3>
-          <p className="text-sm text-gray-500 mb-2">
-            Amazon Coupons, Latest Coupons & best type 26% On Mobile Mobiles
-          </p>
-          <p className="text-sm text-gray-500">Valid Till: 28 January 2025</p>
+          <h3 className="font-semibold mb-1">{offer.title}</h3>
+          <p className="text-sm text-gray-500 mb-2">{offer.description}</p>
+          <p className="text-sm text-gray-500">Valid Till: {offer.validTill}</p>
         </div>
-        <button className="bg-[#5396AF]  text-white hover:text-black font-medium px-4 py-1 rounded">
+
+        {/* Button */}
+        <button className="bg-[#5396AF] text-white hover:text-black font-medium px-4 py-1 rounded">
           Get Deal
         </button>
+
         <span className="w-full border-t" />
-        {/* Buttons */}
+
+        {/* Footer Buttons */}
         <div className="flex justify-between items-center w-full">
           <button className="text-sm text-[#5396AF] hover:underline">
             Show Details
           </button>
-          <button className="text-sm text-[#5396AF] hover:underline ">
+          <button className="text-sm text-[#5396AF] hover:underline">
             Share
           </button>
         </div>
       </div>
     </div>
   );
-}
+};
 
 const categories = [
   { name: "Mobile & Tablets", count: 345 },

@@ -583,9 +583,9 @@ const Header = () => {
         >
           {/* Image */}
           <img
-            src="/img/rec.png" // Replace with actual image URL
+            src="/img/logo.png" // Replace with actual image URL
             alt="Sale"
-            className="w-16 h-16 rounded-lg"
+            className="w-16 h-16 rounded-lg object-fill"
           />
           {/* Notification Content */}
           <div>

@@ -13,6 +13,8 @@ import CouponsDetails from "./pages/CouponsDetails";
 import CouponFilters from "./pages/CouponFilters";
 import Account from "./pages/Account";
 import My from "./pages/My";
+import Aboutus from "./policies/Aboutus";
+
 import HowitWorks from "./pages/HowitWorks";
 
 
@@ -46,6 +48,8 @@ const App = () => {
               <Route path="/CouponFilters/:categoryName" element={<CouponFilters/>} />  
               <Route path="/My" element={<My/>} /> 
               <Route path="/HowitWorks" element={<HowitWorks/>} /> 
+              <Route path="/Aboutus" element={<Aboutus/>} /> 
+
 
      {/* Protected Route */}
      <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>

@@ -26,10 +26,10 @@ export const AuthProvider = ({ children }) => {
   const [balance, setBalance] = useState(() => decryptData(Cookies.get("balance")));
   const [username, setUsername] = useState(() => decryptData(Cookies.get("username")));
   const [email, setEmail] = useState(() => decryptData(Cookies.get("email")));
-  const [referralCode, setReferralCode] = useState(() => decryptData(Cookies.get("referral_code")));
+  const [referral_code, setReferralCode] = useState(() => decryptData(Cookies.get("referral_code")));
   const [phone_number, setPhonenumber] = useState(() => decryptData(Cookies.get("phone_number")));
 
-  console.log("referralCode",referralCode)
+  console.log("referralCodeat on",referral_code,userId)
   // Function to refresh cookies manually after login or changes
   const refreshAuth = () => {
     setToken(decryptData(Cookies.get("token")));
@@ -41,6 +41,12 @@ export const AuthProvider = ({ children }) => {
     setPhonenumber(decryptData(Cookies.get("phone_number")));
   };
 
+  // ✅ Function to update only balance
+  const updateBalance = (newBalance) => {
+    setBalance(newBalance); // Update balance in state
+    Cookies.set("balance", CryptoJS.AES.encrypt(JSON.stringify(newBalance), SECRET_KEY).toString()); // Update balance in cookies
+  };
+
   // New: Login function to set token and refresh state immediately
   const login = (userData) => {
     Cookies.set("token", CryptoJS.AES.encrypt(JSON.stringify(userData.token), SECRET_KEY).toString());
@@ -48,14 +54,14 @@ export const AuthProvider = ({ children }) => {
     Cookies.set("balance", CryptoJS.AES.encrypt(JSON.stringify(userData.balance), SECRET_KEY).toString());
     Cookies.set("username", CryptoJS.AES.encrypt(JSON.stringify(userData.username), SECRET_KEY).toString());
     Cookies.set("email", CryptoJS.AES.encrypt(JSON.stringify(userData.email), SECRET_KEY).toString());
-    Cookies.set("referral_code", CryptoJS.AES.encrypt(JSON.stringify(userData.referralCode), SECRET_KEY).toString());
+    Cookies.set("referral_code", CryptoJS.AES.encrypt(JSON.stringify(userData.referral_code), SECRET_KEY).toString());
     Cookies.set("phone_number", CryptoJS.AES.encrypt(JSON.stringify(userData.phone_number), SECRET_KEY).toString());
 
     refreshAuth(); // Immediately update context state
   };
-console.log("referralCode",referralCode)
+console.log("referralCode",referral_code)
   return (
-    <AuthContext.Provider value={{ token, userId, balance, username, email, referralCode, phone_number, refreshAuth, login }}>
+    <AuthContext.Provider value={{ token, userId, balance, username, email, referral_code, phone_number, refreshAuth, login, updateBalance }}>
       {children}
     </AuthContext.Provider>
   );

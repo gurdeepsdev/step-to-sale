@@ -7,25 +7,25 @@ import Swal from 'sweetalert2'
 
 
 const Worksub = ({isOpen, setIsOpen }) => {
-      const { token, userId, balance, username, email, referralCode } = useContext(AuthContext);
+      const { token, userId, balance, username, email, referral_code } = useContext(AuthContext);
     
     // const [isOpen, setIsOpen] = useState(false);
-    const referralLink = `https://steptosale.com?ref=${referralCode}`;
+    const referralLink = `https://steptosale.com?ref=${referral_code}`;
   
     const handleWhatsAppShare = () => {
-      const message = `Hey! Your earning journey starts here! Use my referral code ${referralCode} on StepToSale and start making money. Join now: ${referralLink}`;
+      const message = `Hey! Your earning journey starts here! Use my referral code ${referral_code} on StepToSale and start making money. Join now: ${referralLink}`;
       window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
     };
     const handleSMSShare = () => {
-        const message = `Hey! Your earning journey starts here! Use my referral code ${referralCode} on StepToSale and start making money. Join now: ${referralLink}`;
+        const message = `Hey! Your earning journey starts here! Use my referral code ${referral_code} on StepToSale and start making money. Join now: ${referralLink}`;
         window.open(`sms:?body=${encodeURIComponent(message)}`);
     };
 
     const copyToClipboard = () => {
-        navigator.clipboard.writeText(referralCode);
+        navigator.clipboard.writeText(referral_code);
         Swal.fire({
-          icon: 'warning',
-          title: 'Oops...',
+          icon: 'success',
+          title: 'successful',
           text: 'Referral link copied!',
         });
       };
@@ -102,7 +102,7 @@ const Worksub = ({isOpen, setIsOpen }) => {
             <div className="flex items-center border text-black border-gray-300 rounded-lg overflow-hidden">
               <input
                 type="text"
-                value={referralCode}
+                value={referral_code}
                 readOnly
                 className="w-full p-2 text-sm  outline-none"
               />

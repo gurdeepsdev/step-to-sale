@@ -22,7 +22,7 @@ const categories = [
 
 export default function CategorySection() {
   return (
-    <div className="w-screen md:w-full max-w-4xl mx-auto p-2 bg-white rounded-lg shadow-md mt-0 md:mt-6 lg:mt-6">
+    <div className="w-screen md:w-full max-w-4xl mx-auto p-2 bg-white rounded-lg shadow-md mt-0 md:mt-0 lg:mt-0">
       <h2 className="text-xl font-semibold text-center mb-4">Popular Categories</h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {categories.map((category) => (

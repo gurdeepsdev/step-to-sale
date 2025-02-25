@@ -4,9 +4,8 @@ import Swal from 'sweetalert2'
 import axios from "axios";
 
 
-const InstantWithdrawal = ({ isOpen, onClose }) => {
-      const { token, userId, balance, username, email, referralCode, phone_number } = useContext(AuthContext);
-    const { login } = useContext(AuthContext);
+const InstantWithdrawal = ({ isOpen, onClose,  }) => {
+      const { token, userId, balance, username, email, referral_code, phone_number, updateBalance } = useContext(AuthContext);
   
   const [amount, setAmount] = useState("");
   const [transferMethod, setTransferMethod] = useState("bank");
@@ -39,7 +38,12 @@ console.log("uat", userId,
                 icon: "success",
                 draggable: true,
               });
-              console.log("✅ Withdrawal successful:", response.data);
+              console.log("✅ Withdrawal successful:", response.data);               //
+              //  ✅ Update balance in context & cookies
+
+              updateBalance(response.data.updatedBalance
+              ); // Send new balance to parent
+
           } else {
               throw new Error("Unexpected response from server");
           }

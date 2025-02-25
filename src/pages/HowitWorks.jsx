@@ -12,7 +12,7 @@ import Swal from 'sweetalert2'
 
 
 const OfferCard = () => {
-        const { token, userId, balance, username, email, referralCode } = useContext(AuthContext);
+        const { token, userId, balance, username, email, referral_code } = useContext(AuthContext);
   
     const [isOpen, setIsOpen] = useState(false);
 
