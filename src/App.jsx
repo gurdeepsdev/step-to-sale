@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import {  useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import '@fontsource/mulish'; // Defaults to 400 weight
 import '@fontsource/mulish/300.css'; // Light
@@ -14,6 +14,14 @@ import CouponFilters from "./pages/CouponFilters";
 import Account from "./pages/Account";
 import My from "./pages/My";
 import Aboutus from "./policies/Aboutus";
+import Contactus from "./policies/Contactus";
+import PrivacyPolicy from "./policies/PrivacyPolicy";
+
+import TermsConditions from "./policies/TermsConditions ";
+
+
+
+
 
 import HowitWorks from "./pages/HowitWorks";
 
@@ -49,6 +57,13 @@ const App = () => {
               <Route path="/My" element={<My/>} /> 
               <Route path="/HowitWorks" element={<HowitWorks/>} /> 
               <Route path="/Aboutus" element={<Aboutus/>} /> 
+              <Route path="/Contactus" element={<Contactus/>} /> 
+              <Route path="/PrivacyPolicy" element={<PrivacyPolicy/>} /> 
+              <Route path="/TermsConditions" element={<TermsConditions/>} /> 
+
+
+              
+              
 
 
      {/* Protected Route */}

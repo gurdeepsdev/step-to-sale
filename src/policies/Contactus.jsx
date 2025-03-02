@@ -8,7 +8,7 @@ const ContactUs = () => {
         <Header></Header>
      
       <div className="bg-gray-100 min-h-screen flex items-center justify-center p-6">
-        <div className="max-w-3xl w-full bg-white shadow-lg rounded-2xl p-8">
+        <div className="max-w-3xl w-full bg-white  rounded-xl p-3 md:p-6 lg:p-6">
           <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">Contact Us</h1>
           <p className="text-gray-700 leading-relaxed mb-4 text-center">
             It was so nice getting feedback from everyone; we're so glad we have the right approach at Step to Sale.

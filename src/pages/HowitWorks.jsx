@@ -1,9 +1,7 @@
-import React, { useState,useEffect,useContext } from "react";
+import  { useState,useContext } from "react";
 import Header from "../components/Header";
-import { AiOutlineLike,AiOutlineDislike} from "react-icons/ai";
 import Worksub from "../components/Worksub";
 import Footer from "../components/Footer";
-import { IoMdShare } from "react-icons/io";
 import useEmblaCarousel from "embla-carousel-react";
 import { AuthContext } from "../context/AuthContext";
 import Swal from 'sweetalert2'
@@ -12,7 +10,7 @@ import Swal from 'sweetalert2'
 
 
 const OfferCard = () => {
-        const { token, userId, balance, username, email, referral_code } = useContext(AuthContext);
+        const { token } = useContext(AuthContext);
   
     const [isOpen, setIsOpen] = useState(false);
 

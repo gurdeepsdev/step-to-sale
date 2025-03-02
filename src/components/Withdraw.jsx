@@ -1,12 +1,13 @@
-import React, { useState,useEffect,useContext } from "react";
+import  { useState,useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import Swal from 'sweetalert2'
 import axios from "axios";
 
 
 const InstantWithdrawal = ({ isOpen, onClose,  }) => {
-      const { token, userId, balance, username, email, referral_code, phone_number, updateBalance } = useContext(AuthContext);
-  
+      const {  userId, balance, updateBalance } = useContext(AuthContext);
+      const apiUrl = import.meta.env.VITE_API_URL;
+
   const [amount, setAmount] = useState("");
   const [transferMethod, setTransferMethod] = useState("bank");
   const [loading, setLoading] = useState(false);
@@ -20,11 +21,11 @@ const InstantWithdrawal = ({ isOpen, onClose,  }) => {
       setLoading(true);
       setError(null);
       setSuccess(false);
-console.log("uat", userId,
+console.log("uat", userId,loading,success,error,
   amount,
   transferMethod,)
       try {
-          const response = await axios.post("http://localhost:5000/api/add-withdrow-details", {
+          const response = await axios.post(`${apiUrl}/api/add-withdrow-details`, {
               userId,
               amount,
               type:transferMethod

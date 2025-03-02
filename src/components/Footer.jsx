@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
@@ -31,10 +30,10 @@ const Footer = () => {
           <div className="col-span-1 ">
             <h3 className="text-lg font-semibold mb-4">Help & Support</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="hover:underline">FAQ</a></li>
-              <li><a href="#" className="hover:underline">How It Works</a></li>
+              <li><Link to="/" className="hover:underline">FAQ</Link></li>
+              <li><Link to="/HowitWorks"  className="hover:underline">How It Works</Link></li>
               <li><a href="#" className="hover:underline">Register</a></li>
-              <li><a href="#" className="hover:underline">Contact Us</a></li>
+              <li><Link to="/Contactus" className="hover:underline">Contact Us</Link></li>
             </ul>
           </div>
 
@@ -43,10 +42,10 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">Our Guidelines
             </h3>
             <ul className="space-y-2">
-              <li><a href="#" className="hover:underline">About Us</a></li>
-              <li><a href="#" className="hover:underline">Terms and Conditions</a></li>
-              <li><a href="#" className="hover:underline">Disclaimer</a></li>
-              <li><a href="#" className="hover:underline">Privacy Policy</a></li>
+              <li><Link to="/Aboutus" className="hover:underline">About Us</Link></li>
+              <li><Link to="/TermsConditions" className="hover:underline">Terms and Conditions</Link></li>
+              <li><Link to="/Contactus" className="hover:underline">Disclaimer</Link></li>
+              <li><Link to="/PrivacyPolicy" className="hover:underline">Privacy Policy</Link></li>
             </ul>
           </div>
 
@@ -70,7 +69,9 @@ const Footer = () => {
 
       {/* Footer Bottom */}
       <div className="border-t border-gray-300 mt-8 pt-4 text-center">
-        <p className="text-sm">All Right Reserved</p>
+        <p className="text-sm">© 2025 StepToSale. All Rights Reserved.
+
+</p>
       </div>
     </footer>
   );

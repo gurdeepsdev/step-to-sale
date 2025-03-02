@@ -1,4 +1,4 @@
-import React, { useState,useEffect,useContext } from "react";
+import  { useContext } from "react";
 import { FiX, FiCopy } from "react-icons/fi"; // Icons for close & copy
 import { FaWhatsapp } from "react-icons/fa";
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
@@ -7,7 +7,7 @@ import Swal from 'sweetalert2'
 
 
 const Worksub = ({isOpen, setIsOpen }) => {
-      const { token, userId, balance, username, email, referral_code } = useContext(AuthContext);
+      const { token, referral_code } = useContext(AuthContext);
     
     // const [isOpen, setIsOpen] = useState(false);
     const referralLink = `https://steptosale.com?ref=${referral_code}`;

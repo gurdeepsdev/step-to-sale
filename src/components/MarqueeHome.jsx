@@ -1,4 +1,3 @@
-import React from "react";
 import "./Marquee.css"; // Import custom CSS for the animation
 
 const Footer = () => {

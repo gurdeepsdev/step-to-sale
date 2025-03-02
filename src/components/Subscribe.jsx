@@ -1,11 +1,7 @@
-import React, { useState,useEffect,useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
-import axios from "axios";
+import  { useState } from "react";
 import api from "../utils/api"; // Import API utility
 
 const CouponAlert = () => {
-      const { token, userId, balance, username, referralCode, phone_number } = useContext(AuthContext);
-      const apiUrl = import.meta.env.VITE_API_URL;
 
       const [email, setEmail] = useState("");
 

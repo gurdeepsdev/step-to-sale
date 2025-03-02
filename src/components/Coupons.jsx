@@ -1,64 +1,63 @@
-import React from "react";
+import  { useEffect, useState } from "react";
+import { getAllCoupons } from "../utils/api";
+import { useNavigate } from "react-router-dom";
+
+
 import useEmblaCarousel from "embla-carousel-react";
 
-const couponsData = [
-  {
-    id: 1,
-    title: "50% off",
-    descriptionLine1: "up to ₹150 on all restaurants |",
-    descriptionLine2: "Valid For New Users",
-    brand: "ZOMATO",
-    backgroundImage: "/img/coupon.png",
-  },
-  {
-    id: 2,
-    title: "50% off",
-    descriptionLine1: "up to ₹150 on all restaurants |",
-    descriptionLine2: "Valid For New Users",
-    brand: "ZOMATO",
-    backgroundImage: "/img/coupon.png",
-  },
-  {
-    id: 3,
-    title: "50% off",
-    descriptionLine1: "up to ₹150 on all restaurants |",
-    descriptionLine2: "Valid For New Users",
-    brand: "ZOMATO",
-    backgroundImage: "/img/coupon.png",
-  },
-  {
-    id: 4,
-    title: "50% off",
-    descriptionLine1: "up to ₹150 on all restaurants |",
-    descriptionLine2: "Valid For New Users",
-    brand: "ZOMATO",
-    backgroundImage: "/img/coupon.png",
-  },
-  {
-    id: 5,
-    title: "50% off",
-    descriptionLine1: "up to ₹150 on all restaurants |",
-    descriptionLine2: "Valid For New Users",
-    brand: "ZOMATO",
-    backgroundImage: "/img/coupon.png",
-  },
-  {
-    id: 6,
-    title: "50% off",
-    descriptionLine1: "up to ₹150 on all restaurants |",
-    descriptionLine2: "Valid For New Users",
-    brand: "ZOMATO",
-    backgroundImage: "/img/coupon.png",
-  },
-];
+
+
+const decodeHtmlEntities = (html) => {
+  const parser = new DOMParser();
+  return parser.parseFromString(html, "text/html").body.textContent || "";
+};
+
+const stripHtmlTags = (html) => {
+  return decodeHtmlEntities(html)
+    .replace(/<[^>]+>/g, "") // Remove HTML tags
+    .replace(/\u00A0|&nbsp;/g, " ") // Convert &nbsp; or Unicode NBSP to a normal space
+    .trim();
+};
+
 
 const Coupons = () => {
+    const navigate = useNavigate();
+  
+  const  backgroundImage = "/img/coupon.png";
+
   const [emblaRef] = useEmblaCarousel({
     loop: true,
     align: "start",
     dragFree: true,
   });
 
+
+      const [coupons, setCoupons] = useState([]);
+      const [loading, setLoading] = useState(true);
+
+        useEffect(() => {
+            const fetchCoupons = async () => {
+                const data = await getAllCoupons();
+                if (data.success) {
+                    setCoupons(data.data);
+                }
+                setLoading(false);
+            };
+    
+            fetchCoupons();
+        }, []);
+
+            // Handle click on suggestion
+     const handleSelectCoupon = (slug) => {
+      navigate(`/CouponsDetails/${slug}`);
+  
+    };
+
+    const [showAll, setShowAll] = useState(false);
+
+    // Show only 10 initially, show all when `showAll` is true
+    const displayedCoupons = showAll ? coupons : coupons.slice(0, 6);
+console.log("loading",loading)
   return (
     <section className="px-8   md:px-12 lg:px-20">
       {/* Header Section */}
@@ -72,24 +71,25 @@ const Coupons = () => {
       {/* Slider Section for Mobile Screens */}
       <div className="block lg:hidden overflow-hidden" ref={emblaRef}>
         <div className="flex space-x-4">
-          {couponsData.map((coupon) => (
+          {coupons.map((coupon) => (
             <div
               key={coupon.id}
               className="flex-shrink-0 w-[80%] p-4 rounded-lg border hover:shadow-lg"
-              style={{ backgroundImage: `url(${coupon.backgroundImage})` }}
-            >
+              style={{ backgroundImage: `url(${backgroundImage})` }}
+              >
               <div className="relative bg-cover bg-center text-white p-2 flex items-center">
                 {/* Left Section */}
                 <div className="flex flex-col items-center py-2 px-2 rotate-[270deg]">
-                  <span className="text-sm uppercase">{coupon.brand}</span>
+                  <span className="text-sm uppercase">{coupon.title}</span>
                 </div>
                 {/* Right Section */}
                 <div className="flex-1 py-2 px-0 rounded-lg">
-                  <h3 className="text-[14px] font-bold">{coupon.title}</h3>
+                  <h3 className="text-[14px] font-bold">               {coupon.payout_model === "percentage" ? `${coupon.payout}%` : `Rs. ${coupon.payout}`}  
+                  </h3>
                   <p className="text-[10px] lg:text-[12px]">
-                    {coupon.descriptionLine1}
-                    <br />
-                    {coupon.descriptionLine2}
+                  {stripHtmlTags(coupon.description)}
+                  <br />
+                    {/* {coupon.description} */}
                   </p>
                 </div>
               </div>
@@ -99,35 +99,43 @@ const Coupons = () => {
       </div>
 
       {/* Grid Section for Larger Screens */}
-      <div className="hidden lg:grid grid-cols-3 gap-6">
-        {couponsData.map((coupon) => (
-          <div
-            key={coupon.id}
-            className="relative bg-cover bg-center text-white p-4 border hover:shadow-lg"
-            style={{ backgroundImage: `url(${coupon.backgroundImage})` }}
-          >
-            <div className="flex items-center">
-              {/* Left Section */}
-              <div className="flex flex-col items-center py-2 px-2 rotate-[270deg]">
-                <span className="text-sm uppercase">{coupon.brand}</span>
-              </div>
-              {/* Right Section */}
-              <div className="flex-1 py-2 px-0 rounded-lg">
-                <h3 className="text-2xl font-bold">{coupon.title}</h3>
-                <p className="text-[10px] lg:text-[12px]">
-                  {coupon.descriptionLine1}
-                  <br />
-                  {coupon.descriptionLine2}
-                </p>
-              </div>
-            </div>
-          </div>
-        ))}
+      <div className="hidden lg:grid grid-cols-3 gap-6" >
+  {displayedCoupons.map((coupon) => (
+    <div
+      key={coupon.id}
+      onClick={() => handleSelectCoupon(coupon.title)}
+      className="relative bg-cover bg-center text-white p-4 border hover:shadow-lg min-h-[120px] lg:min-h-[120px] flex flex-col justify-between"
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
+   {/* Fixed Placement: Left Section */}
+<div className="flex flex-col items-center px-2 rotate-[270deg] absolute left-2 top-1/2 -translate-y-1/2 w-[50px] md:w-[90px] text-center"           
+>
+  <span className="text-xs uppercase whitespace-normal break-words leading-tight">
+    {coupon.title}
+  </span>
+</div>
+
+
+      {/* Fixed Placement: Right Section */}
+      <div className="flex flex-col items-center justify-center flex-1 text-center">
+        <h3 className="text-2xl font-bold">
+          {coupon.payout_model === "percentage" ? `${coupon.payout}%` : `Rs. ${coupon.payout}`}
+        </h3>
+        <p className="text-[10px] lg:text-[12px] w-full max-w-[150px] truncate">
+          { stripHtmlTags(coupon.description)}
+        </p>
       </div>
+    </div>
+  ))}
+</div>
+
+
 
       {/* Button */}
       <div className="mt-8 text-center">
-        <button className="px-3 md:px-6 lg:px-6 py-1 md:py-2 lg:py-2 text-sm md:text-base lg:text-base border border-gray-700 text-gray-700 hover:bg-[#E74833] hover:border-[#E74833] hover:text-white transition rounded-full">
+        <button className="px-3 md:px-6 lg:px-6 py-1 md:py-2 lg:py-2 text-sm md:text-base lg:text-base border border-gray-700 text-gray-700 hover:bg-[#E74833] hover:border-[#E74833] hover:text-white transition rounded-full"
+                            onClick={() => setShowAll(true)}
+>
           See More
         </button>
       </div>

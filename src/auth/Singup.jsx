@@ -17,6 +17,7 @@ const SignUpForm = ({ isSignUp, setIsSignUp, showModal, setShowModal }) => {
 
   if (!showModal) return null; // Don't render the modal if showModal is false
   const apiUrl = import.meta.env.VITE_API_URL;
+  console.log("apiUrl",apiUrl)
   // Secret key for encryption and decryption (should be kept safe)
   const [isAdmin, setIsAdmin] = useState(false);
   const [actionType, setActionType] = useState("");
@@ -133,7 +134,7 @@ const SignUpForm = ({ isSignUp, setIsSignUp, showModal, setShowModal }) => {
     console.log("phoneNumber", phoneNumber)
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/login-otp-exists", { phone_number: phoneNumber });
+      const response = await axios.post(`${apiUrl}/api/login-otp-exists`, { phone_number: phoneNumber });
       console.log("response.data", response)
       if (response.data.status === "User exists") {
         phoneAuth(phoneNumber, "+91"); // Dynamic values
@@ -157,7 +158,7 @@ const SignUpForm = ({ isSignUp, setIsSignUp, showModal, setShowModal }) => {
     const { email, phone_number } = formData1; // Extract from state
   
     try {
-      const response = await axios.post("http://localhost:5000/api/check-user-exist", { email, phone_number });
+      const response = await axios.post(`${apiUrl}/api/check-user-exist`, { email, phone_number });
   
       if (response.status === 200) {
         // If both email and phone are available, proceed with OTP verification
@@ -331,7 +332,7 @@ const SignUpForm = ({ isSignUp, setIsSignUp, showModal, setShowModal }) => {
     console.log("Submitting Data:", formData1); // Check if data is correct
   
     try {
-      const response = await axios.post("http://localhost:5000/api/signup", formData1, {
+      const response = await axios.post(`${apiUrl}/api/signup`, formData1, {
         headers: { "Content-Type": "application/json" },
       });
   
@@ -348,7 +349,7 @@ const SignUpForm = ({ isSignUp, setIsSignUp, showModal, setShowModal }) => {
 
 //       // Save user data and JWT in cookies
       login(response.data);
-      SecureStorage.setItem('token', token);
+      SecureStorage.setItem('token', response.data.token);
     } catch (err) {
       console.log("Error:", err); // Debug full error object
       console.log("Error Response:", err.response); // Debug response object
@@ -426,7 +427,7 @@ console.log("hellow")
   // // Validate password match
   if (newPassword === confirmPassword) {
     try {   
-      const response = await axios.post("http://localhost:5000/api/forget-password", {
+      const response = await axios.post(`${apiUrl}/api/forget-password`, {
         phone_number:phoneNumber,  // Directly using state values
         new_password: newPassword, // Ensure matching backend field names
       });
@@ -459,42 +460,17 @@ else{
     // Implement forgot password logic here
   };
 
-  const handleLoginWithOtp = () => {
-    console.log("Login with OTP Triggered api");
+  
 
-    // Implement login with OTP logic here
-  };
-
-  const handleSignup = () => {
-    console.log("Signup Triggered api");
-    // Implement signup logic here
-  };
-  const handleAction = (e) => {
-    e.preventDefault();
-
-    switch (actionType) {
-      case "forgotPassword":
-        handleForgotPassword();
-        break;
-      case "loginWithOtp":
-        handleLoginWithOtp();
-        break;
-      case "signup":
-        handleSignup();
-        break;
-      default:
-        console.log("No action selected");
-    }
-  };
-
-  const handleGoogleSignUp = () => {
-    setShowModal(false)
-    setStep("phone")
-  };
+  // const handleGoogleSignUp = () => {
+  //   setShowModal(false)
+  //   setStep("phone")
+  // };
 
   const handleSubmitlog = async (e) => {
     e.preventDefault();
     setError(""); // Clear previous errors
+    alert("hellow")
 
     try {
       const response = await axios.post(`${apiUrl}/api/login`, {

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import  { useState } from "react";
 
 // Import your components or pages
 import Header from "../components/Header";

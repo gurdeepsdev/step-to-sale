@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { getAllCoupons } from "../utils/api";
 import { useNavigate } from "react-router-dom";
 const TrendingCategories = () => {
   const navigate = useNavigate();
@@ -8,7 +6,7 @@ const TrendingCategories = () => {
     {
       id: 1,
       title: "Fashion",
-      slug: "Fashion",
+      slug: "ecommerce",
       discount: "80% Off on Fashion",
       image: "/img/card1.png", // Replace with your image paths
       button: "Get Deal",
@@ -23,8 +21,8 @@ const TrendingCategories = () => {
     },
     {
       id: 3,
-      title: "Beauty & Health",
-      slug: "Beauty-&-Health",
+      title: "health",
+      slug: "health",
       discount: "Upto 8% Rewards",
       image: "/img/card.png", // Replace with your image paths
       button: "Get Deal",

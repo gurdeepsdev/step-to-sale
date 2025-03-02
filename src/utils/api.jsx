@@ -32,7 +32,7 @@ api.interceptors.request.use(
 // ✅ Fetch all coupons
 export const getAllCoupons = async () => {
     try {
-        const response = await api.get("/api/all-coupon");
+        const response = await api.get("/api/get-campains");
         return response.data; // Return API response
     } catch (error) {
         console.error("Error fetching coupons:", error);
@@ -76,6 +76,16 @@ export const fetchTransactions = async (userId) => {
 
 
 
+// ✅ Fetch top 4 stores with the most offers
+export const fetchTopStores = async () => {
+  try {
+      const response = await api.get("/api/topStores");
+      return response.data.topStores;
+  } catch (error) {
+      console.error("Error fetching top stores:", error);
+      return { success: false, message: "Failed to load top stores" };
+  }
+};
 
 
 export default api;

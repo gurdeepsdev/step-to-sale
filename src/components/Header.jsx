@@ -1,17 +1,15 @@
-import React, { useState, useEffect, useContext } from "react";
+import  { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoIosClose, IoIosSearch } from "react-icons/io";
 import Signup from "../auth/Singup";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import CryptoJS from "crypto-js"; // Import crypto-js
-import axiosInstance from "../axiosInstance";
-import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import Headerpop from "../components/Headerpop"
+import HeaderpopOver from "../components/HeaderpopOver"
+
 import api, { getAllCoupons } from "../utils/api"; // Import API utility
-import SecureStorage from 'react-secure-storage';
 
 // import { io } from "socket.io-client";
 
@@ -27,8 +25,10 @@ import { LuCircleUserRound } from "react-icons/lu";
 
 const Header = () => {
 
-  const { token, userId, balance, username, email, referralCode, phone_number } = useContext(AuthContext);
+  const {  userId, balance, username, email, referralCode, phone_number } = useContext(AuthContext);
   const [showCategories, setShowCategories] = useState(false);
+  const [showTopstores, setShowTopstores] = useState(false);
+
   console.log("user", phone_number, balance, username, email, referralCode)
   const [showCountryToggle, setShowCountryToggle] = useState(false);
   const [showProfileToggle, setShowProfileToggle] = useState(false);
@@ -46,9 +46,8 @@ const Header = () => {
 
 
 
-  const accesstoken = Cookies.get("token");
-  console.log("balance-suru", balance)
 
+console.log("loading",loading,error)
 
   const toggleProfileMenu = () => {
     const accesstoken = Cookies.get("token");
@@ -119,19 +118,7 @@ const Header = () => {
   };
 
 
-  const checkUserEmail = () => {
-    const userIdentifier = SecureStorage.getItem('userIdentifier');
 
-    // Check if the email exists in sessionStorage
-    if (userIdentifier) {
-
-      // Navigate to My Orders page and pass the email
-      navigate('/Myorders', { state: { userIdentifier: userIdentifier } });
-    } else {
-
-      navigate('/Login'); // Navigate to Login page
-    }
-  };
   const toggleNotificationsSidebar = () => {
     setShowNotificationsSidebar(!showNotificationsSidebar);
     setShowCountryToggle(false);
@@ -148,15 +135,12 @@ const Header = () => {
     setShowNotificationsSidebar(false);
   };
 
-  const [showCountrysToggle, setShowCountrysToggle] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState({
     code: "IN",
     flag: "/img/india.webp",
   });
 
-  const toggleCountrysMenu = () => {
-    setShowCountryToggle((prev) => !prev);
-  };
+
 
   const handleCountrySelect = (country) => {
     setSelectedCountry(country);
@@ -212,6 +196,27 @@ const Header = () => {
   };
   console.log("home coupon data", filteredCoupons)
 
+    // Handle click on suggestion
+    const handelStores = () => {
+      setShowTopstores(!showTopstores)
+      setShowCategories(false)
+
+    };
+
+        // Handle click on suggestion
+        const handelCategories = () => {
+          setShowTopstores(false)
+          setShowCategories(!showCategories)
+
+    
+        };
+        const slug = "All";
+
+  const getDeal = (categoryName) => {
+    navigate(`/CouponFilters/${categoryName}`)
+
+  };
+
   return (
     <>
       <div className=" bg-white shadow sticky top-0 bg-white z-50 ">
@@ -241,7 +246,7 @@ const Header = () => {
                     <li
                       key={coupon.id}
                       className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                      onClick={() => handleSelectCoupon(coupon.slug)}
+                      onClick={() => handleSelectCoupon(coupon.title)}
                     >
                       {coupon.title}
                     </li>
@@ -495,7 +500,7 @@ const Header = () => {
                     <li
                       key={coupon.id}
                       className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                      onClick={() => handleSelectCoupon(coupon.slug)}
+                      onClick={() => handleSelectCoupon(coupon.title)}
                     >
                       {coupon.title}
                     </li>
@@ -511,7 +516,7 @@ const Header = () => {
 
         {/* Bottom Navbar */}
         <div className="flex justify-center py-2 bg-[#244856] text-center">
-          <p onClick={() => setShowCategories(!showCategories)}
+          <p onClick={handelCategories}
             className="text-white hover:text-red-500 px-2 text-[10px] sm:px-2 lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg">
             Popular Categories
           </p>
@@ -524,15 +529,23 @@ const Header = () => {
             </div>
           )}
 
-          <a href="#" className="text-white hover:text-red-500 px-2 text-[10px] sm:px-2 lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg">
+          <p onClick={handelStores} className="text-white hover:text-red-500 px-2 text-[10px] sm:px-2 lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg">
             Top Stores
-          </a>
+          </p>
+          {showTopstores && (
+            <div
+              className="absolute left-1/2 md:right-0 transform -translate-x-[50%] md:-translate-x-2/3 mt-6 md:mt-10  w-auto"
+            >
+              <HeaderpopOver />
+            </div>
+          )}
           <a href="#" className="text-white hover:text-red-500 px-2 text-[10px] sm:px-2  lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg">
             Coupon Codes
           </a>
-          <a href="#" className="text-white hover:text-red-500 px-2 text-[10px] sm:px-2 lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg">
+          <p    onClick={() => getDeal(slug)}
+           className="text-white hover:text-red-500 px-2 text-[10px] sm:px-2 lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg">
             Deal Zone
-          </a>
+          </p>
           <Link to="/HowitWorks" className="text-white hover:text-red-500 px-0 md:px-2 lg:px-2 text-[10px] sm:px-2 lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg flex items-center space-x-2">
             <span className=" hidden sm:block"> Share and Earn</span>
             <span><FaRegShareSquare /></span>

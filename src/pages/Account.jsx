@@ -1,4 +1,4 @@
-import React, { useState,useEffect,useContext } from "react";
+import  { useState,useEffect,useContext } from "react";
 import { MdAccountCircle, MdHistoryEdu } from "react-icons/md";
 import { IoMdWallet } from "react-icons/io";
 import { RiLockPasswordFill } from "react-icons/ri";
@@ -12,9 +12,7 @@ import InstantWithdrawal from "../components/Withdraw"; // Import your component
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import api from "../utils/api"; // Import API utility
-import { useParams } from "react-router-dom";
 import { fetchTransactions } from "../utils/api"; // Adjust the path
-import BalaceHook from "../utils/BalaceHook";
 
 
 
@@ -48,8 +46,8 @@ console.log("user",phone_number,balance,username,email,referral_code)
   });
 
   const [upi, setUpi] = useState(null)
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(null);
 
   console.log("userId",userId)
 
@@ -59,33 +57,37 @@ console.log("user",phone_number,balance,username,email,referral_code)
     console.log("Fetched Transactions:", data);
   };
 
-  const updateBalance = (newBalance) => {
-    setBalance(newBalance); // Update balance in the parent
-};
-//for transection history
-// const fetchTransactions = async () => {
-//   setLoading(true);
-//   setError(null);
+  console.log("transactionsq",transactionsq)
 
-//   console.log("Calling API...");
+  const [imageUrl, setImageUrl] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-//   try {
-//     const response = await api.get(`/api/tdetails/${userId}`);
-//     console.log("API Response:", response.data);
+  useEffect(() => {
+      if (!userId) return;
 
-//     setTransactions(response.data);
-//   } catch (err) {
-//     console.error("API Error:", err);
-//     if (err.response) {
-//       setError(err.response.data.message || "Failed to load transactions");
-//     } else {
-//       setError("Network error. Please try again.");
-//     }
-//   }
+      const fetchUserImage = async () => {
+          setLoading(true);
+          setError(null);
 
-//   setLoading(false);
-// };
+          try {
+              const response = await axios.get(`${apiUrl}/api/getimage/${userId}`);
+              
+              if (response.data.success) {
+                  setImageUrl(response.data.image_url);
+              } else {
+                  setError("Failed to fetch image.");
+              }
+          } catch (err) {
+              console.error("Error fetching user image:", err);
+              setError(err.response?.data?.message || "Something went wrong.");
+          } finally {
+              setLoading(false);
+          }
+      };
 
+      fetchUserImage();
+  }, []);
 useEffect(() => {
   loadTransactions();
 }, []);
@@ -412,44 +414,65 @@ const handleSaveUpiEdit = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const transactions = [
-    {
-      id: "#21454844",
-      date: "31 January 2025",
-      amount: 250,
-      status: "Credit",
-    },
-    {
-        id: "#21454844",
-        date: "31 January 2025",
-        amount: 250,
-        status: "Credit",
-      },
-      {
-        id: "#21454844",
-        date: "31 January 2025",
-        amount: 250,
-        status: "Debit",
-      },
-      {
-        id: "#21454844",
-        date: "31 January 2025",
-        amount: 250,
-        status: "Credit",
-      },
-  ];
 
-  const [profileImage, setProfileImage] = useState("/img/profile.png");
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageURL = URL.createObjectURL(file);
-      setProfileImage(imageURL); // Update the profile image preview
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  // const [message, setMessage] = useState("");
+  // const handleImageChange = (event) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     const imageURL = URL.createObjectURL(file);
+  //     setProfileImage(imageURL); // Update the profile image preview
+  //   }
+  // };
+
+    // Handle file selection
+    const handleFileChange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        setSelectedFile(file);
+        setImageUrl(URL.createObjectURL(file)); // Show preview
+      }
+    };
+  
+  // Handle image upload
+  const handleUpload = async () => {
+    if (!selectedFile) {
+        setMessage("Please select an image");
+        return;
     }
-  };
 
-  const handleLogout = (event) => {
+    const formData = new FormData();
+    formData.append("user_id", userId);
+    formData.append("image", selectedFile);
+
+    try {
+        setUploading(true);
+        setMessage("Image updated successfully!");
+
+        const response = await axios.post(`${apiUrl}/api/updateimage`, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        setPreview(selectedFile);
+
+        // ✅ Check if there's a response
+        if (response.data) {
+            console.log("API Response:", response.data);
+        } else {
+            setMessage("Image updated successfully!");
+        }
+    } catch (error) {
+        setMessage(error.response?.data?.message || "Error updating image");
+    } finally {
+        setUploading(false);
+    }
+};
+
+console.log("preview",preview)
+  const handleLogout = () => {
     Swal.fire({
       title: "Are you sure?",
       text: "You want to logout your account?!",
@@ -567,7 +590,7 @@ console.log("transactionsq",transactionsq)
       {/* Image Display */}
       <label htmlFor="image-upload" className="cursor-pointer">
         <img
-          src={profileImage}
+          src={imageUrl}
           alt="Profile"
           className="w-24 h-24 rounded-full border-4 border-gray-200"
         />
@@ -578,17 +601,20 @@ console.log("transactionsq",transactionsq)
         id="image-upload"
         type="file"
         accept="image/*"
-        onChange={handleImageChange}
+        onChange={handleFileChange}
         className="hidden"
       />
 
       {/* Upload Button */}
       <button
-        onClick={() => document.getElementById("image-upload").click()}
-        className="mt-2 bg-[#244856] text-white px-2 py-1 text-sm rounded-lg"
+ onClick={handleUpload}
+ disabled={uploading}        className="mt-2 bg-[#244856] text-white px-2 py-1 text-sm rounded-lg"
       >
-        Upload Image
-      </button>
+         Upload Image
+        </button>
+
+        {message && <p className="mt-3 text-center text-sm text-gray-700">{message}</p>}
+
     </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
         <div>
@@ -664,7 +690,7 @@ console.log("transactionsq",transactionsq)
   </div> */}
 
 <div>
-  {transactionsq.length === 0 ? (
+  {transactionsq.success == false ? (
     <p className="text-center text-gray-500 text-lg font-medium">
       No transactions yet
     </p>
