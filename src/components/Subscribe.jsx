@@ -45,7 +45,7 @@ const submitEmail = async (email) => {
       {/* Left: Image Section */}
       <div className="lg:w-1/2 flex justify-center lg:justify-start">
         <img
-          src="/img/subscribe.png" // Replace with your image URL
+          src="/img/subscribe.webp" // Replace with your image URL
           alt="Subscribe Illustration"
           className="w-56 h-auto lg:w-64"
         />

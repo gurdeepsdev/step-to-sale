@@ -20,17 +20,18 @@ const TrendingCategories = () => {
       button: "Get Deal",
     },
     {
-      id: 3,
-      title: "health",
-      slug: "health",
+      id: 4,
+      title: "Food & Dining",
+      slug: "Food-&-Dining",
       discount: "Upto 8% Rewards",
       image: "/img/card.png", // Replace with your image paths
       button: "Get Deal",
     },
     {
-      id: 4,
-      title: "Food & Dining",
-      slug: "Food-&-Dining",
+      id: 3,
+      title: "health & cosmetic",
+      slug: "health",
+     
       discount: "60% Off on Order",
       image: "/img/card3.png", // Replace with your image paths
       button: "Get Deal",

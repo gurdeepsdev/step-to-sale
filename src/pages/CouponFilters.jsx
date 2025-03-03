@@ -81,7 +81,7 @@ const details = [
   },
   {
     id: 4,
-    title: "Upgrade for Less!",
+    title: "Everything Deals & Discounts in One Place",
     description: "Shop the best mobile and tablet deals with top-rated offers. Stay connected without overspending!",
     categoryName:"All"
 

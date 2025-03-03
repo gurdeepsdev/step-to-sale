@@ -1,6 +1,7 @@
 import  { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { getAllCoupons } from "../utils/api";
+import { useParams, useNavigate } from "react-router-dom";
 
 
 
@@ -10,7 +11,8 @@ const PopularStores = () => {
  
     const [coupons, setCoupons] = useState([]);
     const [loading, setLoading] = useState(true);
-  
+    const navigate = useNavigate();
+
       useEffect(() => {
           const fetchCoupons = async () => {
               const data = await getAllCoupons();
@@ -37,6 +39,11 @@ const PopularStores = () => {
   // Show only 10 initially, show all when `showAll` is true
   const displayedCoupons = showAll ? coupons : coupons.slice(0, 10);
 
+  const handleSelectCoupon = (slug) => {
+    navigate(`/CouponsDetails/${slug}`);
+
+  };
+
 
   return (
     <div className="bg-white py-12 px-6 md:px-16 lg:px-16 mx-0 md:mx-16 lg:mx-16">
@@ -59,14 +66,15 @@ const PopularStores = () => {
              <img
                src={store.logo_url}
                alt={`${store.logo_url} Logo`}
-               className="h-12 mb-4 group-hover:opacity-0 transition-opacity"
+               className="h-12 mb-4 group-hover:opacity-0 transition-opacity object-contain"
              />
              <p className="font-semibold border border-gray-400 rounded-full px-4 transition-opacity group-hover:opacity-0 whitespace-nowrap">
                {/* {store.offer} */}
                 {/* {store.currency}{" "} */}
                {store.payout_model === "percentage" ? `${store.payout}%` : `Rs. ${store.payout}`}  
              </p>
-             <p className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center text-white font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+             <p className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center text-white font-semibold opacity-0 group-hover:opacity-100 transition-opacity"                       onClick={() => handleSelectCoupon(store.title)}
+             >
                {/* {store.countries}  */}
               Get Offers
              </p>
@@ -87,12 +95,13 @@ const PopularStores = () => {
         <img
           src={store.logo_url}
           alt={`${store.logo_url} Logo`}
-          className="h-12 mb-4 group-hover:opacity-0 transition-opacity"
+          className="h-12 mb-4 group-hover:opacity-0 transition-opacity object-contain"
         />
         <p className="font-semibold border border-gray-400 rounded-full px-4 transition-opacity group-hover:opacity-0">
         {/* {store.currency}{" "} */}
         {store.payout_model === "percentage" ? `${store.payout}%` : `Rs. ${store.payout}`}         </p>
-        <p className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center text-white font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+        <p className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center text-white font-semibold opacity-0 group-hover:opacity-100 transition-opacity"   onClick={() => handleSelectCoupon(store.title)}
+        >
           {/* {store.countries} */}
           Get Offers
           </p>

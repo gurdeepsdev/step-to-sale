@@ -1,6 +1,7 @@
 import  { useState,useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { getAllCoupons } from "../utils/api";
+import { useParams, useNavigate } from "react-router-dom";
 
 
 
@@ -19,7 +20,7 @@ const stripHtmlTags = (html) => {
 const RelatedCoupons = (category) => {
 
   const [emblaRef] = useEmblaCarousel({ loop: true });
- console.log(emblaRef)
+  const navigate = useNavigate();
     const [coupons, setCoupons] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -47,7 +48,10 @@ const RelatedCoupons = (category) => {
         });
 
         console.log("coupons",filteredCoupons)
-
+        const handleSelectCoupon = (slug) => {
+          navigate(`/CouponsDetails/${slug}`);
+     
+        };
      
 
 
@@ -65,9 +69,10 @@ const RelatedCoupons = (category) => {
         coupons && coupons.length > 0 ? (
           <>
             {/* Desktop View */}
-            <div className="hidden lg:grid grid-cols-3 gap-6 px-6 lg:px-16">
+            <div className="hidden lg:grid grid-cols-3 gap-6 px-6 lg:px-16"   
+            >
               {filteredCoupons.map((coupon) => (
-                <div key={coupon.id} className="border rounded-lg shadow-sm p-4 text-center">
+                <div key={coupon.id} className="border rounded-lg shadow-sm p-4 text-center" onClick={() => handleSelectCoupon(coupon.title)}>
                   <div className="flex justify-center mb-4">
                     <img
                       src={coupon.logo_url}
