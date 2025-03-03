@@ -16,7 +16,6 @@ const SignUpForm = ({ isSignUp, setIsSignUp, showModal, setShowModal }) => {
 
   if (!showModal) return null; // Don't render the modal if showModal is false
   const apiUrl = import.meta.env.VITE_API_URL;
-  console.log("apiUrl",apiUrl)
   // Secret key for encryption and decryption (should be kept safe)
   const [isAdmin, setIsAdmin] = useState(false);
   const [actionType, setActionType] = useState("");
@@ -56,34 +55,7 @@ const SignUpForm = ({ isSignUp, setIsSignUp, showModal, setShowModal }) => {
   }, [countdown, isCountdownActive]);
 
 
-  const handlePhoneAuth = (e) => {
-    e.preventDefault();
 
-
-    // setShowOTPForm(true);
-    setIsAdmin(true);  // Switch to admin login
-
-    phoneAuth(formData1.phone, "+91"); // Dynamic values
-
-
-  };
-
-  const handleOtpChange = (index, value) => {
-    if (value.length <= 1 && /^\d*$/.test(value)) {
-      const newOtp = [...otp];
-      newOtp[index] = value;
-      setOtp(newOtp);
-      if (value !== "" && index < 3) {
-        otpRefs[index + 1].current?.focus();
-      }
-    }
-  };
-
-  const handleKeyDown = (index, e) => {
-    if (e.key === "Backspace" && otp[index] === "" && index > 0) {
-      otpRefs[index - 1].current?.focus();
-    }
-  };
 
   const handleResendOtp = () => {
     setOtp("");
@@ -91,11 +63,6 @@ const SignUpForm = ({ isSignUp, setIsSignUp, showModal, setShowModal }) => {
     setIsCountdownActive(true);
     // otpRefs[0].current?.focus();
   };
-
-  const handleSubmitOtp = (e) => {
-    e.preventDefault();
-  };
-
 
 
   const [showPassword, setShowPassword] = useState(false);
@@ -169,7 +136,6 @@ const SignUpForm = ({ isSignUp, setIsSignUp, showModal, setShowModal }) => {
         let emailExists = message.includes("Email");
         let phoneExists = message.includes("Phone");
   
-     console.log("message",message)
         // If only email exists
         if (emailExists) {
           setError1((prev) => ({ ...prev, email: "Email already exists" }));
@@ -225,7 +191,6 @@ const SignUpForm = ({ isSignUp, setIsSignUp, showModal, setShowModal }) => {
     try {
       // Call OTP verification logic
       await verifyOTP(formData1.phone_number, otp, "+91", onSuccess);
-      console.log("otp", otp)
     } catch (error) {
       onFailure()
       console.error("Error verifying OTP:", error);
@@ -284,37 +249,17 @@ const SignUpForm = ({ isSignUp, setIsSignUp, showModal, setShowModal }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleForgotChange = (e) => {
-    console.log("click")
+  const handleForgotChange = () => {
     setUseOtp(true)
     setActionType("forgotPassword")
     setStep("phone"); // Start with phone number input
   };
-  const handelSingotp = (e) => {
-    console.log("click")
+  const handelSingotp = () => {
     setUseOtp(true)
     setActionType("loginWithOtp")
   };
 
 
-
-  {/* setUseOtp(true) setActionType("forgotPassword")*/ }
-
-
-  //   const [isSignUp, setIsSignUp] = useState(true); // State to toggle between SignUp and SignIn forms
-
-  //   const handleInputChange = (e) => {
-  //     const { name, value } = e.target;
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       [name]: value,
-  //     }));
-  //   };
-
-  //   const handleSubmit = (e) => {
-  //     e.preventDefault();
-  //     console.log("Form submitted:", formData);
-  //   };
 
   // Encrypt function
   const encryptData = (data) => {
@@ -323,14 +268,12 @@ const SignUpForm = ({ isSignUp, setIsSignUp, showModal, setShowModal }) => {
   const handleSubmit = async (e) => {
     // e.preventDefault();
     setError(""); 
-    console.log("Submitting Data:", formData1); // Check if data is correct
   
     try {
       const response = await axios.post(`${apiUrl}/api/signup`, formData1, {
         headers: { "Content-Type": "application/json" },
       });
   
-      console.log("Response Data:", response.data); // Check if response is received
       
 //       // Success alert
       Swal.fire({
@@ -356,63 +299,7 @@ const SignUpForm = ({ isSignUp, setIsSignUp, showModal, setShowModal }) => {
     }
   };
   
-//   const handleSubmit = async (e) => {
-//     setError(""); // Clear previous errors
-// console.log("sur",formData1)
-//     try {
-//       const response = await axios.post("http://localhost:5000/api/signup", formData1);
 
-//       // Save user data and JWT in cookies
-//       login(response.data);
-//       SecureStorage.setItem('token', token);
-
-//       // const { token, balance, referral_code, username, email, phone_number } = response.data;
-//       // SecureStorage.setItem('token', token);
-
-//       // // Encrypt and store data in cookies
-//       // Cookies.set("token", encryptData(token), { expires: 7 });
-//       // Cookies.set("userId", encryptData(userId), { expires: 7 });
-
-//       // Cookies.set("balance", encryptData(balance), { expires: 7 });
-//       // Cookies.set("referral_code", encryptData(referral_code), { expires: 7 });
-//       // Cookies.set("username", encryptData(username), { expires: 7 });
-//       // Cookies.set("email", encryptData(email), { expires: 7 });
-//       // Cookies.set("phone_number", encryptData(phone_number), { expires: 7 });
-
-
-//       // Success alert
-//       Swal.fire({
-//         title: "Signup Successful!",
-//         icon: "success",
-//         draggable: true
-//       });
-//       setUseOtp(false)
-
-//       // alert("Signup successful!");
-//       setShowModal(false)
-//       console.log(response.data);
-//     } catch (err) {
-//       // Check if the error has a response and display specific messages
-//       console.log("err",err.response && err.response.data)
-//       if (err.response && err.response.data) {
-//         const errorMessage = err.response.data.message;
-
-//         // Handle different error scenarios and alert accordingly
-//         if (errorMessage === "Phone number already exists") {
-//           alert("This phone number is already registered. Please use a different one.");
-//         } else if (errorMessage === "Invalid referral code") {
-//           alert("The referral code you entered is invalid. Please check and try again.");
-//         } else if (errorMessage === "Email already exists") {
-//           alert("An account with this email already exists. Please use a different email.");
-//         } else {
-//           alert(errorMessage || "Signup failed. Please try again.");
-//         }
-//       } else {
-//         // General error handling
-//         alert("Signup failed. Please try again.");
-//       }
-//     }
-//   };
 // forget passsword
 const handleNewForgotPassword = async (e) => {
   e.preventDefault();
@@ -456,10 +343,7 @@ else{
 
   
 
-  // const handleGoogleSignUp = () => {
-  //   setShowModal(false)
-  //   setStep("phone")
-  // };
+
 
   const handleSubmitlog = async (e) => {
     e.preventDefault();

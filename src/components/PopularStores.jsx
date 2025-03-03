@@ -24,7 +24,6 @@ const PopularStores = () => {
   
           fetchCoupons();
       }, []);
-      console.log("coupons",coupons,loading)
 
   
   const [emblaRef] = useEmblaCarousel({

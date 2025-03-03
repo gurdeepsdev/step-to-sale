@@ -21,11 +21,9 @@ const submitEmail = async (email) => {
   }
 
   try {
-    console.log("Submitting email:", email);
 
     const response = await api.post("/api/subscribe-details", { email: email.trim().toLowerCase() });
 
-    console.log("API Response:", response.data);
     alert(response.data.message);
   } catch (err) {
     console.error("API Error:", err);

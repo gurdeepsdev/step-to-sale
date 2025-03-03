@@ -9,7 +9,6 @@ import Footer from "../components/Footer";
 
 export default function MobileAndTablet() {
   const { categoryName } = useParams(); // Get slug from URL
-  console.log("ss",categoryName)
   const navigate = useNavigate();
 
   const [showFilters, setShowFilters] = useState(false);
@@ -43,7 +42,6 @@ useEffect(() => {
 
         fetchCoupon();
     }, []);
-console.log("coupon",coupons,loading)
 
     // if (loading) return <h2>Loading Coupons...</h2>;
 

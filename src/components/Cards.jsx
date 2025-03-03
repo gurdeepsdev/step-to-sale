@@ -39,23 +39,7 @@ const TrendingCategories = () => {
   ];
 
 
-    // const [coupons, setCoupons] = useState([]);
-    //   const [loading, setLoading] = useState(true);
-    
-    //     useEffect(() => {
-    //         const fetchCoupons = async () => {
-    //             const data = await getAllCoupons();
-    //             if (data.success) {
-    //                 setCoupons(data.data);
-    //             }
-    //             setLoading(false);
-    //         };
-    
-    //         fetchCoupons();
-    //     }, []);
-    //     console.log("trendingcoupons",coupons)
-  
-    
+
   // Embla Carousel Hook
   const [emblaRef] = useEmblaCarousel({
     loop: true,

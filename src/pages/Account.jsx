@@ -19,7 +19,6 @@ import { fetchTransactions } from "../utils/api"; // Adjust the path
 const Account = () => {
     const { token, userId, balance, username, email, referral_code, phone_number } = useContext(AuthContext);
     const apiUrl = import.meta.env.VITE_API_URL;
-console.log("user",phone_number,balance,username,email,referral_code)
   const [activeSection, setActiveSection] = useState("profile");
   const [copied, setCopied] = useState(false);
   // const referralCode = "ICRTSHU45JFI";
@@ -49,15 +48,12 @@ console.log("user",phone_number,balance,username,email,referral_code)
   // const [loading, setLoading] = useState(false);
   // const [error, setError] = useState(null);
 
-  console.log("userId",userId)
 
   const loadTransactions = async () => {
     const data = await fetchTransactions(userId);
     setTransactions(data)
-    console.log("Fetched Transactions:", data);
   };
 
-  console.log("transactionsq",transactionsq)
 
   const [imageUrl, setImageUrl] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -117,10 +113,7 @@ useEffect(() => {
 
   }, []);
 
-  // Handle input change
-  // const handleInputChange = (e) => {
-  //   setInputs({ ...inputs, [e.target.name]: e.target.value });
-  // };
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -135,56 +128,6 @@ useEffect(() => {
   };
 
 
-  // // Save or Update Bank Details
-  // const handleSaveOrEdit = () => {
-  //   if (isEditMode) {
-  //     if (inputs && Object.keys(inputs).length > 0) {
-  //       console.log("put true")
-
-  //       // If bank details already exist, update (PUT API)
-  //       axios
-  //         .put(`${apiUrl}/api/bank-details/${userId}`, inputs)
-  //         .then((res) => {
-  //           setAccountDetails(res.data); // Update state with latest details
-  //           setIsEditMode(false);
-  //            Swal.fire({
-  //                   title: "updated Successful!",
-  //                   icon: "success",
-  //                   draggable: true
-  //                 });
-  //         })
-  //         .catch((err) => console.error("Error updating bank details:", err));
-  //         Swal.fire({
-  //           title: "Error updating bank details!",
-  //           icon: "warning",
-  //           draggable: true
-  //         });
-  //     } else {
-  //       // If no bank details exist, add new (POST API)
-  //       console.log("post true")
-
-  //       axios
-  //         .post(`${apiUrl}/api/bank-details`, { userId, ...inputs })
-  //         .then((res) => {
-  //           setAccountDetails(res.data);
-  //           setIsEditMode(false);
-  //            Swal.fire({
-  //                   title: "Added Successful!",
-  //                   icon: "success",
-  //                   draggable: true
-  //                 });
-  //         })
-  //         .catch((err) => console.error("Error adding bank details:", err));
-  //          Swal.fire({
-  //                 title: "Error adding bank details",
-  //                 icon: "warning",
-  //                 draggable: true
-  //               });
-  //     }
-  //   } else {
-  //     setIsEditMode(true);
-  //   }
-  // };
   
   // Save or Update Bank Details
 const handleSaveOrEdit = () => {
@@ -198,7 +141,6 @@ const handleSaveOrEdit = () => {
 
   if (isUpdating) {
     // If data exists, update (PUT)
-    console.log("Calling PUT API...");
 
     axios
       .put(`${apiUrl}/api/bank-details/${userId}`, inputs)
@@ -222,7 +164,6 @@ const handleSaveOrEdit = () => {
       });
   } else {
     // If no data exists, add new (POST)
-    console.log("Calling POST API...");
 
     axios
       .post(`${apiUrl}/api/bank-details`, { userId, ...inputs })
@@ -260,7 +201,6 @@ const handleSaveUpiEdit = async () => {
 
   if (!isNewUpi) {
     // UPI exists → Update using PUT API
-    console.log("Calling PUT API for UPI...");
 
     try {
       const response = await fetch(`${apiUrl}/api/upi-details`, {
@@ -288,7 +228,6 @@ const handleSaveUpiEdit = async () => {
     }
   } else if(isNewUpi){
     // UPI doesn't exist (empty or null) → Create using POST API
-    console.log("Calling POST API for UPI...");
 
     try {
       const response = await fetch(`${apiUrl}/api/upi-details`, {
@@ -319,59 +258,6 @@ const handleSaveUpiEdit = async () => {
 
 
 
-
-// const handleSaveUpiEdit = () => {
-//   if (isEditUpiMode) {
-//     // If editing mode is on, check if UPI exists
-//     if (upi && upi.length > 0) {
-//       // UPI exists → Update using PUT
-//       axios.put(`${apiUrl}/api/upi-details/${userId}`, { upi })
-//         .then((res) => {
-//           console.log("upi",res.data)
-
-//           setAccountDetails(res.data.upi); // Update state with the latest UPI details
-//           setIsEditUpiMode(false);
-//           Swal.fire({
-//             title: "Updated Successfully!",
-//             icon: "success",
-//             draggable: true,
-//           });
-//         })
-//         .catch((err) => {
-//           console.error("Error updating UPI details:", err);
-//           Swal.fire({
-//             title: "Error updating UPI details!",
-//             icon: "warning",
-//             draggable: true,
-//           });
-//         });
-//     } else {
-//       // If UPI is empty, create a new one using POST
-//       axios.post(`${apiUrl}/api/upi-details`, { userId, upi })
-//         .then((res) => {
-//           console.log("upi",res.data)
-//           setAccountDetails(res.data.upi);
-//           setIsEditUpiMode(false);
-//           Swal.fire({
-//             title: "Added Successfully!",
-//             icon: "success",
-//             draggable: true,
-//           });
-//         })
-//         .catch((err) => {
-//           console.error("Error adding UPI details:", err);
-//           Swal.fire({
-//             title: "Error adding UPI details!",
-//             icon: "warning",
-//             draggable: true,
-//           });
-//         });
-//     }
-//   } else {
-//     // If not in edit mode, enable edit mode
-//     setIsEditUpiMode(true);
-//   }
-// };
 
   
   const handleChangePassword = async (e) => {
@@ -426,14 +312,7 @@ const handleSaveUpiEdit = async () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [uploading, setUploading] = useState(false);
-  // const [message, setMessage] = useState("");
-  // const handleImageChange = (event) => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const imageURL = URL.createObjectURL(file);
-  //     setProfileImage(imageURL); // Update the profile image preview
-  //   }
-  // };
+
 
     // Handle file selection
     const handleFileChange = (e) => {
@@ -478,7 +357,6 @@ const handleSaveUpiEdit = async () => {
     }
 };
 
-console.log("preview",preview)
   const handleLogout = () => {
     Swal.fire({
       title: "Are you sure?",
@@ -527,7 +405,6 @@ console.log("preview",preview)
               });
         }
       };
-console.log("transactionsq",transactionsq)
   return (
     <>
       <Header />

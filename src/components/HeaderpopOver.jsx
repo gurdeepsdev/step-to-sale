@@ -20,7 +20,6 @@ const StoresGrid = () => {
                 fetchCoupons();
             }, []);
 
-            console.log("gg",coupons,loading)
 
     return (
       <div className="w-screen md:w-full max-w-4xl mx-auto p-2  bg-white rounded-lg shadow-md mt-0 md:mt-0 lg:mt-0">

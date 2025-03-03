@@ -25,20 +25,17 @@ import { LuCircleUserRound } from "react-icons/lu";
 
 const Header = () => {
 
-  const {  userId, balance, username, email, referralCode, phone_number } = useContext(AuthContext);
+  const {  userId, balance } = useContext(AuthContext);
   const [showCategories, setShowCategories] = useState(false);
   const [showTopstores, setShowTopstores] = useState(false);
 
-  console.log("user", phone_number, balance, username, email, referralCode)
   const [showCountryToggle, setShowCountryToggle] = useState(false);
   const [showProfileToggle, setShowProfileToggle] = useState(false);
   const [showNotificationsSidebar, setShowNotificationsSidebar] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false); // State for mobile search toggle
   const [showSidebar, setShowSidebar] = useState(false);  // To toggle the sidebar on mobile
-  // const [balance, setBalance] = useState("0"); 
-  // const [userId, setUserid] = useState("0");
+  
   const navigate = useNavigate();
-  // console.log("allin",token, userId, balance, username, email, referralCode )
 
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -47,12 +44,10 @@ const Header = () => {
 
 
 
-console.log("loading",loading,error)
 
   const toggleProfileMenu = () => {
     const accesstoken = Cookies.get("token");
 
-    console.log("token-suru-1", accesstoken)
     if (accesstoken) {
       // alert("hellow")
       navigate('/Account');
@@ -72,11 +67,9 @@ console.log("loading",loading,error)
     setLoading(true);
     setError(null);
 
-    console.log("Calling API...");
 
     try {
       const response = await api.get(`/api/notification/${userId}`);
-      console.log("API Response:", response.data);
 
       setNotifications(response.data);
     } catch (err) {
@@ -99,7 +92,6 @@ console.log("loading",loading,error)
 
   const [isSignUp, setIsSignUp] = useState(true); // State to toggle between SignUp and SignIn forms
 
-  // const [activeForm, setActiveForm] = useState(null); // "signin" or "signup"
   const [showModal, setShowModal] = useState(false); // Modal visibility state
 
   const handleButtonClick = (formType) => {
@@ -154,7 +146,6 @@ console.log("loading",loading,error)
   ];
 
 
-  console.log(notifications, "notifications")
   const [coupons, setCoupons] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCoupons, setFilteredCoupons] = useState([]);
@@ -194,7 +185,6 @@ console.log("loading",loading,error)
     setSearchTerm(""); // Clear input after selection
     setFilteredCoupons([]); // Hide suggestions
   };
-  console.log("home coupon data", filteredCoupons)
 
     // Handle click on suggestion
     const handelStores = () => {

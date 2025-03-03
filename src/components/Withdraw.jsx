@@ -21,9 +21,7 @@ const InstantWithdrawal = ({ isOpen, onClose,  }) => {
       setLoading(true);
       setError(null);
       setSuccess(false);
-console.log("uat", userId,loading,success,error,
-  amount,
-  transferMethod,)
+
       try {
           const response = await axios.post(`${apiUrl}/api/add-withdrow-details`, {
               userId,

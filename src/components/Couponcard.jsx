@@ -39,7 +39,6 @@ const RelatedCoupons = (category) => {
         const filteredCoupons = coupons.filter((coupon) => {
           try {
             const couponCategories = JSON.parse(coupon.categories); // Convert string to array
-            console.log("new",couponCategories)
             return couponCategories[0].includes(category.category); // Check if category exists
           } catch (error) {
             console.error("Error parsing categories:", error);
@@ -47,7 +46,6 @@ const RelatedCoupons = (category) => {
           }
         });
 
-        console.log("coupons",filteredCoupons)
         const handleSelectCoupon = (slug) => {
           navigate(`/CouponsDetails/${slug}`);
      

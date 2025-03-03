@@ -59,7 +59,6 @@ const Carousel = () => {
     autoplaySpeed: 3000,
     arrows: false,
   };
-console.log("banners",banners)
 
    // Handle click on suggestion
    const handleSelectCoupon = (slug) => {

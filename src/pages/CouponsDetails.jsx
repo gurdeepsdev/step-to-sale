@@ -54,21 +54,12 @@ const OfferCard = () => {
       try {
           const { data } = await axios.get(`${apiUrl}/api/${couponId}/feedback`);
           setStats(data);
-          console.log("dtttaa",data)
       } catch (error) {
           console.error("Error fetching feedback stats",error);
       }
   };
 
-  //   const submitFeedback = async (feedbackType) => {
-  //     try {
-  //         await axios.post(`${apiUrl}/api/feedback`, { coupon_id: couponId, feedback: feedbackType });
-  //         setFeedback(feedbackType);
-  //         fetchFeedbackStats();
-  //     } catch (error) {
-  //         console.error("Error submitting feedback",error);
-  //     }
-  // };
+
   const submitFeedback = async (feedbackType) => {
     try {
         
@@ -196,7 +187,6 @@ useEffect(() => {
 
 
   
-console.log("title,terms",des,terms)
 if (loading) {
   return (
     <div className="flex justify-center items-center h-40">
@@ -227,8 +217,7 @@ if (loading) {
   // const categories = "[\"health &amp; personal care\"]"; // Example input
   const { category, subcategory } = parseCategory(categoryString);
   
-  console.log("Category:", category);       // Output: health
-  console.log("Subcategory:", subcategory); // Output: personal care
+
   const handleClick = async () => {
     try {
         const response = await fetch(
@@ -243,12 +232,7 @@ if (loading) {
             alert(data.message || "Click tracking failed!");
         }
 
-        // if (response.redirected) {
-        //     window.location.href = response.url; // Redirect manually
-        // } else {
-        //     const data = await response.json();
-        //     alert(data.message);
-        // }
+       
     } catch (error) {
         console.error("Error tracking click:", error);
         alert("Something went wrong!");
@@ -268,7 +252,6 @@ const handleReferClick = () => {
   }
 };
 
-    console.log("coupon k details",coupon)
   return (
     <>
     <Header/>

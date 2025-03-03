@@ -28,7 +28,6 @@ const App = () => {
 
      const [isSignUp, setIsSignUp] = useState(true); // State to toggle between SignUp and SignIn forms
   
-    // const [activeForm, setActiveForm] = useState(null); // "signin" or "signup"
     const [showModal, setShowModal] = useState(false); // Modal visibility state
   
     const handleButtonClick = (formType) => {

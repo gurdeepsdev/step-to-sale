@@ -12,7 +12,6 @@ const WalletBalance = ({ userId }) => {
 
         // Listen for balance updates
         socket.on("balanceUpdated", (data) => {
-            console.log("Balance updated:", data.balance);
             setBalance(data.balance); // Update state with new balance
         });
 

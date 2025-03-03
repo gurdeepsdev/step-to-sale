@@ -12,7 +12,6 @@ import Home from "./pages/Home";
 import CouponsDetails from "./pages/CouponsDetails";
 import CouponFilters from "./pages/CouponFilters";
 import Account from "./pages/Account";
-import My from "./pages/My";
 import Aboutus from "./policies/Aboutus";
 import Contactus from "./policies/Contactus";
 import PrivacyPolicy from "./policies/PrivacyPolicy";
@@ -54,7 +53,6 @@ const App = () => {
               <Route path="/CouponsDetails/:slug" element={<CouponsDetails/>} /> 
               <Route path="/Singup" element={<Singup/>} /> 
               <Route path="/CouponFilters/:categoryName" element={<CouponFilters/>} />  
-              <Route path="/My" element={<My/>} /> 
               <Route path="/HowitWorks" element={<HowitWorks/>} /> 
               <Route path="/Aboutus" element={<Aboutus/>} /> 
               <Route path="/Contactus" element={<Contactus/>} /> 

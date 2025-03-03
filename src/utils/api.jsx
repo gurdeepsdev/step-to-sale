@@ -2,7 +2,6 @@ import axios from "axios";
 
 // Base URL for API requests
 const apiUrl = import.meta.env.VITE_API_URL;
-console.log("API URL:", apiUrl);
 
 // Function to get the auth token from localStorage
 const getAuthToken = () => localStorage.getItem("token");

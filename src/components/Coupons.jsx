@@ -57,7 +57,6 @@ const Coupons = () => {
 
     // Show only 10 initially, show all when `showAll` is true
     const displayedCoupons = showAll ? coupons : coupons.slice(0, 6);
-console.log("loading",loading)
   return (
     <section className="px-8   md:px-12 lg:px-20">
       {/* Header Section */}
