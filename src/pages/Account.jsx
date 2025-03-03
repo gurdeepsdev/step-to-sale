@@ -247,8 +247,8 @@ const handleSaveOrEdit = () => {
   }
 };
 
-// Save or Update Bank Details
-const handleSaveUpiEdit = () => {
+
+const handleSaveUpiEdit = async () => {
   // If not in edit mode, enable the edit mode and return
   if (!isEditUpiMode) {
     setIsEditUpiMode(true);
@@ -262,54 +262,61 @@ const handleSaveUpiEdit = () => {
     // UPI exists → Update using PUT API
     console.log("Calling PUT API for UPI...");
 
-    axios
-      .put(`${apiUrl}/api/upi-details/${userId}`, { upi })
-      .then((res) => {
-        console.log("UPI Updated:", res.data);
-        setAccountupiDetails((prev) => ({ ...prev, upi: res.data.upi }));
-        setIsEditUpiMode(false);
-        Swal.fire({
-          title: "UPI Updated Successfully!",
-          icon: "success",
-          draggable: true,
-        });
-      })
-      .catch((err) => {
-        console.error("Error updating UPI details:", err);
-        Swal.fire({
-          title: "Error updating UPI details!",
-          text: err.response?.data?.message || "Something went wrong.",
-          icon: "error",
-          draggable: true,
-        });
+    try {
+      const response = await fetch(`${apiUrl}/api/upi-details`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, upi }),
       });
+  
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Something went wrong");
+      }
+      Swal.fire({
+        title: "Added Successfully!",
+        icon: "success",
+        draggable: true,
+      });
+      setMessage(data.message);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      // setIsLoading(false);
+    }
   } else if(isNewUpi){
     // UPI doesn't exist (empty or null) → Create using POST API
     console.log("Calling POST API for UPI...");
 
-    axios
-      .post(`${apiUrl}/api/upi-details`, { userId, upi })
-      .then((res) => {
-        console.log("UPI Added:", res.data);
-        setAccountupiDetails((prev) => ({ ...prev, upi: res.data.upi }));
-        setIsEditUpiMode(false);
-        Swal.fire({
-          title: "UPI Added Successfully!",
-          icon: "success",
-          draggable: true,
-        });
-      })
-      .catch((err) => {
-        console.error("Error adding UPI details:", err);
-        Swal.fire({
-          title: "Error adding UPI details!",
-          text: err.response?.data?.message || "Something went wrong.",
-          icon: "error",
-          draggable: true,
-        });
+    try {
+      const response = await fetch(`${apiUrl}/api/upi-details`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, upi }),
       });
+  
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Something went wrong");
+      }  Swal.fire({
+        title: "updated Successfully!",
+        icon: "success",
+        draggable: true,
+      });
+  
+      setMessage(data.message);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      // setIsLoading(false);
+    }
   }
 };
+
 
 
 

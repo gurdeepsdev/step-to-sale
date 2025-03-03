@@ -59,7 +59,6 @@ const SignUpForm = ({ isSignUp, setIsSignUp, showModal, setShowModal }) => {
   const handlePhoneAuth = (e) => {
     e.preventDefault();
 
-    console.log("new",)
 
     // setShowOTPForm(true);
     setIsAdmin(true);  // Switch to admin login
@@ -95,7 +94,6 @@ const SignUpForm = ({ isSignUp, setIsSignUp, showModal, setShowModal }) => {
 
   const handleSubmitOtp = (e) => {
     e.preventDefault();
-    console.log("OTP submitted:", otp.join(""));
   };
 
 
@@ -130,14 +128,11 @@ const SignUpForm = ({ isSignUp, setIsSignUp, showModal, setShowModal }) => {
 
   const handlePhoneSubmit = async (e) => {
 
-    console.log("phoneNumber", phoneNumber)
     e.preventDefault();
     try {
       const response = await axios.post(`${apiUrl}/api/login-otp-exists`, { phone_number: phoneNumber });
-      console.log("response.data", response)
       if (response.data.status === "User exists") {
         phoneAuth(phoneNumber, "+91"); // Dynamic values
-        console.log("handlePhoneSubmit triggered!");
         setUseOtp(true);  // Ensure OTP form is enabled
         setStep("otp");
       } else {

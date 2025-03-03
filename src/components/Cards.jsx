@@ -8,7 +8,7 @@ const TrendingCategories = () => {
       title: "Fashion",
       slug: "ecommerce",
       discount: "80% Off on Fashion",
-      image: "/img/card1.png", // Replace with your image paths
+      image: "/img/card1.webp", // Replace with your image paths
       button: "Get Deal",
     },
     {
@@ -16,7 +16,7 @@ const TrendingCategories = () => {
       title: "Mobile & Tablets",
       slug: "Mobile-&-Tablets",
       discount: "60% Off on Gadget",
-      image: "/img/card2.png", // Replace with your image paths
+      image: "/img/card2.webp", // Replace with your image paths
       button: "Get Deal",
     },
     {
@@ -24,7 +24,7 @@ const TrendingCategories = () => {
       title: "Food & Dining",
       slug: "Food-&-Dining",
       discount: "Upto 8% Rewards",
-      image: "/img/card.png", // Replace with your image paths
+      image: "/img/card.webp", // Replace with your image paths
       button: "Get Deal",
     },
     {
@@ -33,7 +33,7 @@ const TrendingCategories = () => {
       slug: "health",
      
       discount: "60% Off on Order",
-      image: "/img/card3.png", // Replace with your image paths
+      image: "/img/card3.webp", // Replace with your image paths
       button: "Get Deal",
     },
   ];
