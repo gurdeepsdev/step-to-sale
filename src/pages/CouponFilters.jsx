@@ -82,7 +82,7 @@ const details = [
   {
     id: 4,
     title: "Everything Deals & Discounts in One Place",
-    description: "Shop the best mobile and tablet deals with top-rated offers. Stay connected without overspending!",
+    description: "Find the best discounts, cashback, and coupon codes from all your favorite Brands. and Get Money Back on Everything You Buy!",
     categoryName:"All"
 
   },

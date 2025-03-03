@@ -1,8 +1,7 @@
 
-import React, { useState, useEffect, useRef, useContext } from "react";
+import  { useState, useEffect, useRef, useContext } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import axios from "axios";
-import Cookies from "js-cookie";
 import CryptoJS from "crypto-js"; // Import crypto-js
 import Swal from 'sweetalert2'
 import SecureStorage from 'react-secure-storage';
@@ -162,7 +161,7 @@ const SignUpForm = ({ isSignUp, setIsSignUp, showModal, setShowModal }) => {
   
       if (response.status === 200) {
         // If both email and phone are available, proceed with OTP verification
-        alert("Email and phone number are available. Proceeding to OTP verification.");
+        // alert("Email and phone number are available. Proceeding to OTP verification.");
         // handleSubmit()
         phoneAuth(phone_number, "+91"); // Call phone authentication function
         setUseOtp(true);
@@ -470,14 +469,12 @@ else{
   const handleSubmitlog = async (e) => {
     e.preventDefault();
     setError(""); // Clear previous errors
-    alert("hellow")
 
     try {
       const response = await axios.post(`${apiUrl}/api/login`, {
         phone_number: formData.phone_number,
         password: formData.password,
       });
-      console.log("data", response.data)
 
       // Store token in localStorage
       SecureStorage.setItem('token', response.data.token);
@@ -533,7 +530,6 @@ else{
       const response = await axios.post(`${apiUrl}/api/login-otp`, {
         phone_number: phoneNumber,
       });
-      console.log("data", response.data)
 
       // Store token in localStorage
       SecureStorage.setItem('token', response.data.token);
