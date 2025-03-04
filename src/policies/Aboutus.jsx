@@ -6,7 +6,7 @@ const AboutUs = () => {
     <>
     <Header></Header>
   
-    <div className="bg-gray-100 min-h-screen flex items-center justify-center p-6 ">
+    <div className="bg-gray-100  flex items-center justify-center p-6 ">
       <div className="max-w-3xl w-full bg-white  rounded-2xl p-2 md:p-8 lg:p-8">
         <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">About Us</h1>
         <p className="text-gray-600 text-lg text-center mb-4">Welcome to <span className="font-semibold">Step to Sale!</span></p>

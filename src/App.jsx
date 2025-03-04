@@ -7,6 +7,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import './index.css'; // Ensure Tailwind CSS is included here
 import Cookies from "js-cookie";
 import ProtectedRoute from './ProtectedRoute';
+import ScrollToTop from "../src/components/ScrollToTop";
 
 import Home from "./pages/Home"; 
 import CouponsDetails from "./pages/CouponsDetails";
@@ -44,6 +45,7 @@ const App = () => {
   }
   return (
     <Router>
+         <ScrollToTop /> 
       <div>
  
 

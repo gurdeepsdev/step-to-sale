@@ -67,14 +67,14 @@ const details = [
     id: 3,
     title: "Feast on Savings!",
     description: "Satisfy your cravings with delicious discounts on top restaurants and food brands. Eat more, spend less!",
-    categoryName:"Food & Dining"
+    categoryName:"Food-&-Dining"
 
   },
   {
     id: 4,
     title: "Upgrade for Less!",
     description: "Shop the best mobile and tablet deals with top-rated offers. Stay connected without overspending!",
-    categoryName:"Mobile & Tablets"
+    categoryName:"Mobile-&-Tablets"
 
   },
   {

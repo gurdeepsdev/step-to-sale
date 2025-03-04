@@ -35,8 +35,10 @@ const App = () => {
       setShowModal(true); // Show the modal
     };
   return (
-  <div className="max-w-container mx-auto">
+    <>
     <Header/>
+  <div className="max-w-container mx-auto">
+   
      <Carousel/>  
     <Steps/>
     <Withdraw/>
@@ -50,7 +52,7 @@ const App = () => {
     <Testimoials/>
     <Subscribe/>
     <FaQ/>
-    <Footer/>
+  
       {/* <Signup isSignUp={isSignUp}  setIsSignUp={setIsSignUp}/> */}
       <Signup
         isSignUp={isSignUp}
@@ -61,6 +63,8 @@ const App = () => {
 
 />
   </div>
+  <Footer/>
+  </>
   );
 };
 

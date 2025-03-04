@@ -211,6 +211,7 @@ const Header = () => {
     <>
       <div className=" bg-white shadow sticky top-0 bg-white z-50 ">
         {/* Top Navbar */}
+        <div className="max-w-container mx-auto">
         <div className="flex justify-between items-center px-6 sm:px-16  border-b">
           {/* Logo */}
           <div className="flex items-center">
@@ -471,7 +472,7 @@ const Header = () => {
             </div>
           </div>
         </div>
-
+</div>
         {/* Mobile Search Bar */}
         {showMobileSearch && (
           <div className="px-4 py-2 sm:hidden">
