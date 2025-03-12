@@ -227,7 +227,15 @@ if (loading) {
         const data = await response.json();
 
         if (data.success && data.redirectUrl) {
-          window.open(data.redirectUrl, "_blank");
+          // window.open(data.redirectUrl, "_blank");
+
+
+          // Open Trackier tracking link in a new tab (user's IP will be logged)
+      window.open(data.trackingUrl, "_blank"); 
+
+      // Redirect user to the merchant site
+      // window.location.href = data.redirectUrl;
+
         } else {
             alert(data.message || "Click tracking failed!");
         }

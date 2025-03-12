@@ -77,7 +77,7 @@ const Carousel = () => {
       <div className="hidden md:block">
         <Slider {...desktopSettings}>
           {banners.map((banner, index) => (
-            <div key={index} className="px-2"> {/* Adds gap between banners */}
+            <div key={index} className="px-2 cursor-pointer"> {/* Adds gap between banners */}
               <img
                 src={banner.banner_url}
                 alt={`Banner ${index + 1}`}
@@ -94,7 +94,7 @@ const Carousel = () => {
       <div className="block md:hidden">
         <Slider {...mobileSettings}>
           {banners.map((banner, index) => (
-            <div key={index}>
+            <div key={index} className="cursor-pointer">
               <img
                 src={banner.banner_url}
                 alt={`Mobile Banner ${index + 1}`}

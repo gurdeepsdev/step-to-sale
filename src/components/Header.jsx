@@ -117,7 +117,7 @@ const Header = () => {
     setShowProfileToggle(false);
     setShowMobileSearch(false);
     setShowSidebar(false);
-    getUserData()
+    // getUserData()
   };
 
   const toggleMobileSearch = () => {

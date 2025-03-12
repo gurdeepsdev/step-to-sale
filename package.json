@@ -1,8 +1,10 @@
 {
-  "name": "myvite",
+  "name": "Step to sale",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://www.steptosale.com",
+
   "scripts": {
     "dev": "vite",
     "build": "vite build",
