@@ -10,7 +10,7 @@ const Footer = () => {
               {/* Logo */}
           <div className="flex items-center">
             <div className="w-[90px] h-[50px] lg:w-[112px] lg:h-[64px]  flex items-center justify-center">
-              <span className="text-white text-2xl font-bold"><img src="/img/logof.png"></img></span>
+              <span className="text-white text-2xl font-bold"><img src="/img/logof.png" alt="Company Logo - StepToSale" title="StepToSale Official Logo"></img></span>
             </div>
           </div>
           </div>
@@ -53,13 +53,13 @@ const Footer = () => {
           <div className="col-span-1">
             <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
             <div className="flex space-x-4">
-              <a href="#" className="hover:text-gray-400">
+              <a href="#" className="hover:text-gray-400" alt="Instagram logo - StepToSale" title="StepToSale Official Instagram">
                 <i className="fab fa-instagram text-2xl"></i>
               </a>
-              <a href="#" className="hover:text-gray-400">
+              <a href="#" className="hover:text-gray-400" alt="Facebook logo - StepToSale" title="StepToSale Official Facebook">
                 <i className="fab fa-facebook-f text-2xl"></i>
               </a>
-              <a href="#" className="hover:text-gray-400">
+              <a href="#" className="hover:text-gray-400" alt="Twitter logo - StepToSale" title="StepToSale Official Twitter">
                 <i className="fab fa-twitter text-2xl"></i>
               </a>
             </div>

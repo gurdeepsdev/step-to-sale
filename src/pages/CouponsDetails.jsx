@@ -217,48 +217,82 @@ if (loading) {
   // const categories = "[\"health &amp; personal care\"]"; // Example input
   const { category, subcategory } = parseCategory(categoryString);
   
-
-  const handleClick = async () => {
+  const handleReferClick = async () => {
+    if (!token) {
+      Swal.fire({
+        icon: "warning",
+        title: "Oops... Please login",
+        text: "Login first to access this offer!",
+      });
+      return;
+    }
+  
+    // Open a blank tab immediately (to bypass popup blockers)
+    const newTab = window.open("", "_blank");
+  
     try {
-        const response = await fetch(
-            `${apiUrl}/api/get-click?user_id=${userId}&coupon_id=${couponId}`,
-            { method: "GET", redirect: "follow" } // Allow redirects
-        );
-        const data = await response.json();
+      const response = await fetch(
+        `${apiUrl}/api/get-click?user_id=${userId}&coupon_id=${couponId}`,
+        { method: "GET", redirect: "follow" }
+      );
+  
+      const data = await response.json();
+  
+      if (data.success && data.trackingUrl) {
+        newTab.location.href = data.trackingUrl; // Redirect opened tab
+      } else {
+        alert(data.message || "Click tracking failed!");
+        newTab.close(); // Close tab if no valid URL
+      }
+    } catch (error) {
+      console.error("Error tracking click:", error);
+      alert("Something went wrong!");
+      newTab.close(); // Close tab on error
+    }
+  };
+  
 
-        if (data.success && data.redirectUrl) {
-          // window.open(data.redirectUrl, "_blank");
+//   const handleClick = async () => {
+//     try {
+//         const response = await fetch(
+//             `${apiUrl}/api/get-click?user_id=${userId}&coupon_id=${couponId}`,
+//             { method: "GET", redirect: "follow" } // Allow redirects
+//         );
+//         const data = await response.json();
+
+//         if (data.success && data.redirectUrl) {
+//           // window.open(data.redirectUrl, "_blank");
 
 
-          // Open Trackier tracking link in a new tab (user's IP will be logged)
-      window.open(data.trackingUrl, "_blank"); 
+//           // Open Trackier tracking link in a new tab (user's IP will be logged)
+//       window.open(data.trackingUrl, "_blank"); 
 
-      // Redirect user to the merchant site
-      // window.location.href = data.redirectUrl;
+//       // Redirect user to the merchant site
+//       // window.location.href = data.redirectUrl;
 
-        } else {
-            alert(data.message || "Click tracking failed!");
-        }
+//         } else {
+//             alert(data.message || "Click tracking failed!");
+//         }
 
        
-    } catch (error) {
-        console.error("Error tracking click:", error);
-        alert("Something went wrong!");
-    }
-};
+//     } catch (error) {
+//         console.error("Error tracking click:", error);
+//         alert("Something went wrong!");
+//     }
+// };
 
-const handleReferClick = () => {
+// const handleReferClick = () => {
       
-  if (token) {
-    handleClick(); // Open modal if logged in
-  } else {
-      Swal.fire({
-          icon: 'warning',
-          title: 'Oops... Please login',
-          text: 'Login first to access this offer!',
-        });
-  }
-};
+//   if (token) {
+//     handleClick(); // Open modal if logged in
+//   } else {
+//       Swal.fire({
+//           icon: 'warning',
+//           title: 'Oops... Please login',
+//           text: 'Login first to access this offer!',
+//         });
+//   }
+// };
 
   return (
     <>

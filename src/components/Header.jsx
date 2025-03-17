@@ -216,7 +216,8 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center">
             <div className="w-[90px] h-[50px] lg:w-[112px] lg:h-[64px] bg-gradient-to-b from-red-500 to-red-700 flex items-center justify-center">
-              <Link to='/'><span className="text-white text-2xl font-bold"><img src="/img/logo.png"></img></span></Link>
+              <Link to='/'><span className="text-white text-2xl font-bold"><img src="/img/logo.png" alt="Company Logo - StepToSale" title="StepToSale Official Logo"/>
+              </span></Link>
             </div>
           </div>
 
@@ -538,11 +539,11 @@ const Header = () => {
             Deal Zone
           </p>
           <Link to="/HowitWorks" className="text-white hover:text-red-500 px-0 md:px-2 lg:px-2 text-[10px] sm:px-2 lg:px-6 md:px-6 sm:text-sm md:px-3 md:text-lg lg:text-lg flex items-center space-x-2">
-            <span className=" hidden sm:block"> Share and Earn</span>
-            <span><FaRegShareSquare /></span>
+            <span className=" hidden sm:block" alt="Share Button - StepToSale" title="StepToSale Share Button"> Share and Earn</span>
+            <span alt="Share Button - StepToSale" title="StepToSale Share Button"><FaRegShareSquare /></span>
           </Link>
 
-        </div>
+        </div> 
 
 
         <>
