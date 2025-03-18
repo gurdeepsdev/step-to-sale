@@ -129,61 +129,61 @@ const decodeHtmlEntities = (html) => {
   return txt.value;
 };
 
-// Function to Extract KPI Data
+// Function to Extract Title and Terms from HTML
 const extractKpiData = (kppi) => {
   if (!kppi) return { title: "", terms: [] };
 
-  // ✅ Step 1: Decode HTML
+  // ✅ Step 1: Decode HTML Entities
   const decodedHtml = decodeHtmlEntities(kppi);
 
-  // ✅ Step 2: Parse the HTML
+  // ✅ Step 2: Parse the HTML into a Document
   const parser = new DOMParser();
   const doc = parser.parseFromString(decodedHtml, "text/html");
 
-  // ✅ Step 3: Extract Title (First <p>)
+  // ✅ Step 3: Extract Title (First Non-Empty Text)
   let title = "";
-  const allPTags = doc.querySelectorAll("p");
+  const elements = doc.body.childNodes; // Get all elements in body
 
-  for (let p of allPTags) {
-    const text = p.textContent.trim();
-    if (text) {
+  for (let el of elements) {
+    const text = el.textContent.trim();
+    if (text && !text.startsWith("-")) { // Ensure it's not a bullet point
       title = text;
       break;
     }
   }
 
-  // ✅ Step 4: Extract Terms (From <b>)
+  // ✅ Step 4: Extract Terms (From <b> or Other Tags)
   let terms = [];
+  
+  // Try extracting from <b> tags first
   const boldElements = doc.querySelectorAll("b");
-
   terms = Array.from(boldElements)
     .map((b) => b.textContent.trim())
     .filter((term) => term.length > 0);
 
-  // ✅ Fallback: If No Bold Elements, Get Remaining <p> Tags
+  // ✅ Fallback: If No Bold Elements, Get Remaining Text
   if (terms.length === 0) {
-    terms = Array.from(allPTags)
-      .slice(1) // Skip the first <p> (Title)
-      .map((p) => p.textContent.trim())
+    terms = Array.from(elements)
+      .slice(1) // Skip first element (title)
+      .map((el) => el.textContent.trim())
       .filter((term) => term.length > 0);
   }
 
-  // ✅ Step 5: Ensure Each Term Starts with a Bullet (•)
+  // ✅ Step 5: Format Terms with Bullet Points
   const formattedTerms = terms.flatMap((term) =>
-    term.split("\n").map((line) => (line.startsWith("-") ? `• ${line.slice(1).trim()}` : line))
+    term.split("\n").map((line) => (line.startsWith("-") ? `• ${line.slice(1).trim()}` : `• ${line}`))
   );
 
   return { title, terms: formattedTerms };
 };
 
-
-
-
+// Usage in React
 useEffect(() => {
   const { title, terms } = extractKpiData(kppi);
   setDes(title);
   setTerms(terms);
 }, [kppi]);
+
 
 
   

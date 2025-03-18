@@ -92,7 +92,7 @@ const RelatedCoupons = (category) => {
             <div className="lg:hidden overflow-hidden px-4"  ref={emblaRef}>
               <div className="flex space-x-4">
                 {filteredCoupons.map((coupon) => (
-                  <div key={coupon.id} className="min-w-full border rounded-lg shadow-sm p-4 text-center">
+                  <div key={coupon.id} className="min-w-full border rounded-lg shadow-sm p-4 text-center" onClick={() => handleSelectCoupon(coupon.title)}>
                     <div className="flex justify-center mb-4">
                       <img
                         src={coupon.logo_url}

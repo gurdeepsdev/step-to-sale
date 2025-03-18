@@ -370,7 +370,7 @@ const Header = () => {
                     onClick={toggleCountryMenu}
                     className="flex items-center   px-3 py-2 focus:outline-none"
                   >
-                    <span className="text-sm"><img src={selectedCountry.flag} className="h-9 w-11"></img></span>
+                    <span className="text-sm"><img src={selectedCountry.flag} className="h-9 w-11" alt="Flags - StepToSale" title="StepToSale Flags"></img></span>
                     <span className="ml-2 text-sm font-medium">{selectedCountry.code}</span>
                     <span className="ml-1 text-gray-500"><RiArrowDropDownLine className="text-5xl" /></span>
                   </button>
