@@ -65,6 +65,11 @@ const OfferCard = () => {
         
 
         if (!token || !userId) {
+          Swal.fire({
+            icon: "warning",
+            title: "Oops... Please login",
+            text: "Login first to access this offer!",
+          });
             console.error("User not authenticated");
             return;
         }
@@ -189,9 +194,9 @@ useEffect(() => {
   
 if (loading) {
   return (
-    <div className="flex justify-center items-center h-40">
-      <div className="w-8 h-8 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
-    </div>
+    <div className="flex justify-center items-center h-64">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
+  </div>
   );
 }
     if (!coupon) return <h2>Coupon Not Found</h2>;
@@ -297,7 +302,9 @@ if (loading) {
   return (
     <>
     <Header/>
- 
+    {/* {loading && <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
+        </div>} */}
     <div className="px-6 md:px-6 lg:px-6 md:px-12 lg:px-20 py-6 md:py-12 lg:py-12 bg-[#90AEAE] items-center">
   {/* Header */}
   <div className="flex justify-between items-center px-4 md:px-6 lg:px-6 py-4 mx-0 md:mx-16 lg:mx-16">
