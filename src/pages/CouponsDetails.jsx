@@ -221,9 +221,15 @@ if (loading) {
   // Example Usage
   // const categories = "[\"health &amp; personal care\"]"; // Example input
   const { category, subcategory } = parseCategory(categoryString);
-  
-  const handleReferClick = async () => {
-    if (!token) {
+  // coupon IDs whose click-outs should work even when the visitor is not logged in
+const PUBLIC_COUPON_IDS = ["6325", "6323"];   // ← put your two IDs here
+
+  const handleReferClicks = async () => {
+    // is this one of the public / no-login offers?
+    const allowAnonymous = PUBLIC_COUPON_IDS.includes(String(couponId));
+    console.log("couponid",couponId)
+    // ---------- login gate ----------
+    if (!token && !allowAnonymous) {
       Swal.fire({
         icon: "warning",
         title: "Oops... Please login",
@@ -231,8 +237,9 @@ if (loading) {
       });
       return;
     }
+    // --------------------------------
   
-    // Open a blank tab immediately (to bypass popup blockers)
+    // open a blank tab immediately (popup-blocker friendly)
     const newTab = window.open("", "_blank");
   
     try {
@@ -244,17 +251,126 @@ if (loading) {
       const data = await response.json();
   
       if (data.success && data.trackingUrl) {
-        newTab.location.href = data.trackingUrl; // Redirect opened tab
+        newTab.location.href = data.trackingUrl;          // redirect opened tab
       } else {
         alert(data.message || "Click tracking failed!");
-        newTab.close(); // Close tab if no valid URL
+        newTab.close();                                   // close tab if no valid URL
       }
     } catch (error) {
       console.error("Error tracking click:", error);
       alert("Something went wrong!");
-      newTab.close(); // Close tab on error
+      newTab.close();                                     // close tab on error
     }
   };
+
+  // ---------------------------------
+// Config
+
+const generateClickId = () => crypto.randomUUID();
+
+const handleReferClick = async () => {
+  // ---------------------------------
+const PUBLIC_COUPON_IDS = ["6342", "6323"];
+const STATIC_USER_ID = "9"; // guest user
+  const isPublicCoupon = PUBLIC_COUPON_IDS.includes(String(couponId));
+  const isGuest = !token;
+  const allowAnonymous = isPublicCoupon;
+
+  if (isGuest && !allowAnonymous) {
+    Swal.fire({
+      icon: "warning",
+      title: "Oops... Please login",
+      text: "Login first to access this offer!",
+    });
+    return;
+  }
+
+  const finalUserId = isPublicCoupon ? STATIC_USER_ID : userId;
+  const clickId = isPublicCoupon && isGuest ? generateClickId() : undefined;
+
+  // Always open new tab immediately to avoid popup blockers
+  const newTab = window.open("about:blank", "_blank");
+
+  try {
+    const params = new URLSearchParams({
+      user_id: finalUserId,
+      coupon_id: couponId,
+    });
+    if (clickId) params.append("click_id", clickId);
+
+    const response = await fetch(`${apiUrl}/api/get-click?${params.toString()}`, {
+      method: "GET",
+      redirect: "follow",
+    });
+
+    const data = await response.json();
+
+    if (data.success && data.trackingUrl) {
+      // Use this trick to safely change location after tab is opened
+      newTab.location.href = data.trackingUrl;
+    } else {
+      newTab.close();
+      Swal.fire({
+        icon: "error",
+        title: "Click failed",
+        text: data.message || "Could not generate tracking link.",
+      });
+    }
+  } catch (err) {
+    console.error("Error during auto click redirect:", err);
+    newTab.close();
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Something went wrong!",
+    });
+  }
+};
+
+
+
+  // const handleReferClick = async () => {
+  //   const PUBLIC_COUPON_IDS = ["6325", "6323"];
+  //   const STATIC_USER_ID = "9"; // Or whatever your backend expects
+    
+  //   const isPublicCoupon = PUBLIC_COUPON_IDS.includes(String(couponId));
+  //   const allowAnonymous = isPublicCoupon;
+  
+  //   if (!token && !allowAnonymous) {
+  //     Swal.fire({
+  //       icon: "warning",
+  //       title: "Oops... Please login",
+  //       text: "Login first to access this offer!",
+  //     });
+  //     return;
+  //   }
+  
+  //   // Use static user ID only for public coupons
+  //   const finalUserId = isPublicCoupon ? STATIC_USER_ID : userId;
+  
+  //   const newTab = window.open("", "_blank");
+  
+  //   try {
+  //     const response = await fetch(
+  //       `${apiUrl}/api/get-click?user_id=${finalUserId}&coupon_id=${couponId}`,
+  //       { method: "GET", redirect: "follow" }
+  //     );
+  
+  //     const data = await response.json();
+  
+  //     if (data.success && data.trackingUrl) {
+  //       newTab.location.href = data.trackingUrl;
+  //     } else {
+  //       alert(data.message || "Click tracking failed!");
+  //       newTab.close();
+  //     }
+  //   } catch (error) {
+  //     console.error("Error tracking click:", error);
+  //     alert("Something went wrong!");
+  //     newTab.close();
+  //   }
+  // };
+  
   
 
 //   const handleClick = async () => {
