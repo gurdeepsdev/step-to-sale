@@ -58,7 +58,7 @@ const OfferCard = () => {
           console.error("Error fetching feedback stats",error);
       }
   };
-
+ 
 
   const submitFeedback = async (feedbackType) => {
     try {
@@ -189,88 +189,13 @@ useEffect(() => {
   setTerms(terms);
 }, [kppi]);
 
-
-
-  
-if (loading) {
-  return (
-    <div className="flex justify-center items-center h-64">
-    <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
-  </div>
-  );
-}
-    if (!coupon) return <h2>Coupon Not Found</h2>;
-    const parseCategory = (categoryString) => {
-      try {
-          // Convert string to an array
-          const categoriesArray = JSON.parse(categoryString);
-  
-          // Take the first category from the array and decode HTML entities
-          const categoryFull = categoriesArray[0].replace("&amp;", "&");
-  
-          // Split into category and subcategory
-          const [category, subcategory] = categoryFull.split(" & ");
-  
-          return { category, subcategory };
-      } catch (error) {
-          console.error("Error parsing category:", error);
-          return { category: "", subcategory: "" };
-      }
-  };
-  
-  // Example Usage
-  // const categories = "[\"health &amp; personal care\"]"; // Example input
-  const { category, subcategory } = parseCategory(categoryString);
-  // coupon IDs whose click-outs should work even when the visitor is not logged in
-const PUBLIC_COUPON_IDS = ["6325", "6323"];   // ← put your two IDs here
-
-  const handleReferClicks = async () => {
-    // is this one of the public / no-login offers?
-    const allowAnonymous = PUBLIC_COUPON_IDS.includes(String(couponId));
-    console.log("couponid",couponId)
-    // ---------- login gate ----------
-    if (!token && !allowAnonymous) {
-      Swal.fire({
-        icon: "warning",
-        title: "Oops... Please login",
-        text: "Login first to access this offer!",
-      });
-      return;
-    }
-    // --------------------------------
-  
-    // open a blank tab immediately (popup-blocker friendly)
-    const newTab = window.open("", "_blank");
-  
-    try {
-      const response = await fetch(
-        `${apiUrl}/api/get-click?user_id=${userId}&coupon_id=${couponId}`,
-        { method: "GET", redirect: "follow" }
-      );
-  
-      const data = await response.json();
-  
-      if (data.success && data.trackingUrl) {
-        newTab.location.href = data.trackingUrl;          // redirect opened tab
-      } else {
-        alert(data.message || "Click tracking failed!");
-        newTab.close();                                   // close tab if no valid URL
-      }
-    } catch (error) {
-      console.error("Error tracking click:", error);
-      alert("Something went wrong!");
-      newTab.close();                                     // close tab on error
-    }
-  };
-
-  // ---------------------------------
-// Config
-
 const generateClickId = () => crypto.randomUUID();
 
 const handleReferClick = async () => {
+  console.log("handleReferClick called after 4 seconds!");
+
   // ---------------------------------
-const PUBLIC_COUPON_IDS = ["6342", "6323"];
+const PUBLIC_COUPON_IDS = ["6342", "6323","6355","6354"];
 const STATIC_USER_ID = "9"; // guest user
   const isPublicCoupon = PUBLIC_COUPON_IDS.includes(String(couponId));
   const isGuest = !token;
@@ -326,6 +251,90 @@ const STATIC_USER_ID = "9"; // guest user
     });
   }
 };
+useEffect(() => {
+  const timer = setTimeout(() => {
+    handleReferClick();
+  }, 4000);
+
+  return () => clearTimeout(timer);
+}, []);
+
+  
+if (loading) {
+  return (
+    <div className="flex justify-center items-center h-64">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
+  </div>
+  );
+}
+    if (!coupon) return <h2>Coupon Not Found</h2>;
+    const parseCategory = (categoryString) => {
+      try {
+          // Convert string to an array
+          const categoriesArray = JSON.parse(categoryString);
+  
+          // Take the first category from the array and decode HTML entities
+          const categoryFull = categoriesArray[0].replace("&amp;", "&");
+  
+          // Split into category and subcategory
+          const [category, subcategory] = categoryFull.split(" & ");
+  
+          return { category, subcategory };
+      } catch (error) {
+          console.error("Error parsing category:", error);
+          return { category: "", subcategory: "" };
+      }
+  };
+  
+  // Example Usage
+  // const categories = "[\"health &amp; personal care\"]"; // Example input
+  const { category, subcategory } = parseCategory(categoryString);
+  // coupon IDs whose click-outs should work even when the visitor is not logged in
+const PUBLIC_COUPON_IDS = ["6342", "6343","6355","6354"];   // ← put your two IDs here
+
+  const handleReferClicks = async () => {
+    // is this one of the public / no-login offers?
+    const allowAnonymous = PUBLIC_COUPON_IDS.includes(String(couponId));
+    console.log("couponid",couponId)
+    // ---------- login gate ----------
+    if (!token && !allowAnonymous) {
+      Swal.fire({
+        icon: "warning",
+        title: "Oops... Please login",
+        text: "Login first to access this offer!",
+      });
+      return;
+    }
+    // --------------------------------
+  
+    // open a blank tab immediately (popup-blocker friendly)
+    const newTab = window.open("", "_blank");
+  
+    try {
+      const response = await fetch(
+        `${apiUrl}/api/get-click?user_id=${userId}&coupon_id=${couponId}`,
+        { method: "GET", redirect: "follow" }
+      );
+  
+      const data = await response.json();
+  
+      if (data.success && data.trackingUrl) {
+        newTab.location.href = data.trackingUrl;          // redirect opened tab
+      } else {
+        alert(data.message || "Click tracking failed!");
+        newTab.close();                                   // close tab if no valid URL
+      }
+    } catch (error) {
+      console.error("Error tracking click:", error);
+      alert("Something went wrong!");
+      newTab.close();                                     // close tab on error
+    }
+  };
+
+  // ---------------------------------
+// Config
+
+
 
 
 
