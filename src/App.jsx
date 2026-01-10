@@ -27,6 +27,11 @@ import Offers from './pages/Offers';
 import HowitWorks from "./pages/HowitWorks";
 import TopStores from "./pages/TopStoreswith";
 import Deals from "./pages/Deals";
+import CategoreNew from "./pages/CategoreNew";
+import SubCategore from "./pages/SubCategore";
+import NewOffers from "./pages/NewOffers";
+import OffersDetails from "./pages/OffersDetails";
+
 
 import Singup from "./auth/Singup";
 
@@ -154,7 +159,12 @@ script.async = true;
         <Route path="/Coupontopcodes" element={<Coupontopcodes />} />
         <Route path="/TopStores" element={<TopStores />} />
         <Route path="/Deals" element={<Deals />} />
+        <Route path="/CategoreNew" element={<CategoreNew />} />
+        <Route path="/CategoreNew/:slug" element={<SubCategore />} />
+        <Route path="/NewOffers" element={<NewOffers />} />
+        <Route path="/OffersDetails/:slug" element={<OffersDetails />} />
 
+        
         
         
         <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>

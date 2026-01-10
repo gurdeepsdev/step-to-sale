@@ -30,83 +30,86 @@ api.interceptors.request.use(
 
 // ✅ Fetch all coupons
 export const getAllCoupons = async () => {
-    try {
-        const response = await api.get("/api/get-campains");
-        return response.data; // Return API response
-    } catch (error) {
-        console.error("Error fetching coupons:", error);
-        return { success: false, message: "Failed to fetch coupons" };
-    }
+  try {
+    const response = await api.get("/api/get-campains");
+    return response.data; // Return API response
+  } catch (error) {
+    console.error("Error fetching coupons:", error);
+    return { success: false, message: "Failed to fetch coupons" };
+  }
 };
 export const getOffercoupon = async () => {
   try {
-      const response = await api.get("/api/get-offercoupon");
-      return response.data; // Return API response
+    const response = await api.get("/api/get-offercoupon");
+    return response.data; // Return API response
   } catch (error) {
-      console.error("Error fetching coupons:", error);
-      return { success: false, message: "Failed to fetch coupons" };
+    console.error("Error fetching coupons:", error);
+    return { success: false, message: "Failed to fetch coupons" };
   }
 };
-
-
 
 // ✅ Fetch all coupons
 export const getAllbrands = async () => {
   try {
-      const response = await api.get("/api/all-brands");
-      return response.data; // Return API response
+    const response = await api.get("/api/all-brands");
+    return response.data; // Return API response
   } catch (error) {
-      console.error("Error fetching coupons:", error);
-      return { success: false, message: "Failed to fetch coupons" };
+    console.error("Error fetching coupons:", error);
+    return { success: false, message: "Failed to fetch coupons" };
+  }
+};
+// ✅ Fetch all categories
+export const getAllCategories = async () => {
+  try {
+    const response = await api.get("/api/categories");
+    return response.data; // Return API response
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return { success: false, message: "Failed to fetch categories" };
   }
 };
 
 // ✅ Fetch a single coupon by slug
 export const getCouponBySlug = async (slug) => {
-    try {
-        const response = await api.get(`/api/single-coupon/${slug}`);
-        return response.data;
-    } catch (error) {
-        console.error("Error fetching coupon:", error);
-        return { success: false, message: "Coupon not found" };
-    }
+  try {
+    const response = await api.get(`/api/single-coupon/${slug}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching coupon:", error);
+    return { success: false, message: "Coupon not found" };
+  }
 };
 
 // ✅ Fetch offers for a brand by slug
 export const getOffer = async (slug) => {
   try {
-      const response = await api.get(`/api/offers/brand/${slug}`);
-      return response.data;
+    const response = await api.get(`/api/offers/brand/${slug}`);
+    return response.data;
   } catch (error) {
-      console.error("Error fetching coupon:", error);
-      return { success: false, message: "Coupon not found" };
+    console.error("Error fetching coupon:", error);
+    return { success: false, message: "Coupon not found" };
   }
 };
 
 // ✅ Fetch a single offer by slug
 export const getsingleOffer = async (slug) => {
   try {
-      const response = await api.get(`/api/CouponOffer/${slug}`);
-      return response.data;
+    const response = await api.get(`/api/CouponOffer/${slug}`);
+    return response.data;
   } catch (error) {
-      console.error("Error fetching coupon:", error);
-      return { success: false, message: "Coupon not found" };
+    console.error("Error fetching coupon:", error);
+    return { success: false, message: "Coupon not found" };
   }
 };
-
-
-
-
-
 
 // ✅ Fetch a catrgore coupon by slug
 export const getAllcategoreCoupons = async (categoryName) => {
   try {
-      const response = await api.get(`/api/all-couponss/${categoryName}`);
-      return response.data;
+    const response = await api.get(`/api/all-couponss/${categoryName}`);
+    return response.data;
   } catch (error) {
-      console.error("Error fetching coupon:", error);
-      return { success: false, message: "Coupon not found" };
+    console.error("Error fetching coupon:", error);
+    return { success: false, message: "Coupon not found" };
   }
 };
 
@@ -121,30 +124,38 @@ export const fetchTransactions = async (userId) => {
   }
 };
 
-
-
 // ✅ Fetch top 4 stores with the most offers
 export const fetchTopStores = async () => {
   try {
-      const response = await api.get("/api/topStores");
-      return response.data.topStores;
+    const response = await api.get("/api/topStores");
+    return response.data.topStores;
   } catch (error) {
-      console.error("Error fetching top stores:", error);
-      return { success: false, message: "Failed to load top stores" };
+    console.error("Error fetching top stores:", error);
+    return { success: false, message: "Failed to load top stores" };
+  }
+};
+// ✅ Fetch offers by category (dynamic)
+export const getOffersByCategory = async (category) => {
+  console.log("Fetching offers for category:", category);
+  try {
+    console.log("API URL:", `/api/offers/${category}`);
+    const response = await api.get(`/api/offers/${category}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching offers for ${category}:`, error);
+    return { success: false, message: "Failed to fetch offers" };
   }
 };
 
-// ✅ Fetch limited time offer 24hours 
+// ✅ Fetch limited time offer 24hours
 export const fetchLimitedOffer = async () => {
   try {
-      const response = await api.get("/api/limited-offer");
-      return response.data;
+    const response = await api.get("/api/limited-offer");
+    return response.data;
   } catch (error) {
-      console.error("Error fetching top stores:", error);
-      return { success: false, message: "Failed to load top stores" };
+    console.error("Error fetching top stores:", error);
+    return { success: false, message: "Failed to load top stores" };
   }
 };
 
-
 export default api;
-

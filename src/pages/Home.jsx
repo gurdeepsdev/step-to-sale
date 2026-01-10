@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 
 // Import your components or pages
 import Header from "../components/Header";
@@ -13,61 +13,51 @@ import Sigline from "../components/Sigline";
 import Finance from "../components/Finance";
 import Subscribe from "../components/Subscribe";
 import FaQ from "../components/FaQ";
-import Coupons from "../components/Coupons";
+import Coupons from "../components/Worksub";
 import Footer from "../components/Footer";
 import Withdraw from "../components/Withdraw";
 import Ps from "../components/PS";
 
-
-
-
-
-
-
 const App = () => {
+  const [isSignUp, setIsSignUp] = useState(true); // State to toggle between SignUp and SignIn forms
 
-     const [isSignUp, setIsSignUp] = useState(true); // State to toggle between SignUp and SignIn forms
-  
-    const [showModal, setShowModal] = useState(false); // Modal visibility state
-  
-    const handleButtonClick = (formType) => {
-      setIsSignUp(formType); // Set the form type ("signin" or "signup")
-      setShowModal(true); // Show the modal
-    };
+  const [showModal, setShowModal] = useState(false); // Modal visibility state
+
+  const handleButtonClick = (formType) => {
+    setIsSignUp(formType); // Set the form type ("signin" or "signup")
+    setShowModal(true); // Show the modal
+  };
   return (
     <>
-    <Header/>
-  <div className="max-w-container mx-auto">
-   
-     <Carousel/>  
-     <Finance/>
+      <Header />
+      <div className="max-w-container mx-auto">
+        <Carousel />
+        {/* <Finance/> */}
 
-    <Steps/>
-    <Withdraw/>
+        <Steps />
+        <Withdraw />
 
-    <Sigline callFunction={handleButtonClick} />
-       <PopularStores/>
+        {/* <Sigline callFunction={handleButtonClick} /> */}
+        {/* <PopularStores/> */}
 
-    <MarqueeHome/>
-    <Cards/>
-<Ps/>
-    <Coupons/>
-    <Testimoials/>
-    <Subscribe/>
-    <FaQ/>
-  
-      {/* <Signup isSignUp={isSignUp}  setIsSignUp={setIsSignUp}/> */}
-      <Signup
-        isSignUp={isSignUp}
-        setIsSignUp={setIsSignUp}
-        showModal={showModal}
-        setShowModal={setShowModal} // Ensure this is passed correctly
+        {/* <MarqueeHome/> */}
+        <Cards />
+        <Ps />
+        <Coupons />
+        <Testimoials />
+        <Subscribe />
+        <FaQ />
 
-
-/>
-  </div>
-  <Footer/>
-  </>
+        {/* <Signup isSignUp={isSignUp}  setIsSignUp={setIsSignUp}/> */}
+        <Signup
+          isSignUp={isSignUp}
+          setIsSignUp={setIsSignUp}
+          showModal={showModal}
+          setShowModal={setShowModal} // Ensure this is passed correctly
+        />
+      </div>
+      <Footer />
+    </>
   );
 };
 

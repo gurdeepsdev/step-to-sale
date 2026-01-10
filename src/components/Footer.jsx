@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#244856]  text-white py-8">
+    <footer className="bg-black  text-white py-8">
       <div className="container mx-auto px-4 md:px-0lg:px-0 flex flex-wrap md:flex-nowrap">
         {/* Logo and Description (30%) */}
         <div className="w-full md:w-3/10 mb-8 md:mb-0 col-span-1">
@@ -32,7 +32,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li><Link to="/" className="hover:underline">FAQ</Link></li>
               <li><Link to="/HowitWorks"  className="hover:underline">How It Works</Link></li>
-              <li><a href="#" className="hover:underline">Register</a></li>
+              {/* <li><a href="#" className="hover:underline">Register</a></li> */}
               <li><Link to="/Contactus" className="hover:underline">Contact Us</Link></li>
             </ul>
           </div>
@@ -59,9 +59,9 @@ const Footer = () => {
               <a href="#" className="hover:text-gray-400" alt="Facebook logo - StepToSale" title="StepToSale Official Facebook">
                 <i className="fab fa-facebook-f text-2xl"></i>
               </a>
-              <a href="#" className="hover:text-gray-400" alt="Twitter logo - StepToSale" title="StepToSale Official Twitter">
+              {/* <a href="#" className="hover:text-gray-400" alt="Twitter logo - StepToSale" title="StepToSale Official Twitter">
                 <i className="fab fa-twitter text-2xl"></i>
-              </a>
+              </a> */}
             </div>
           </div>
         </div>

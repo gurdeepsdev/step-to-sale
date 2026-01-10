@@ -1,13 +1,12 @@
-
- import  { useEffect, useState, useContext } from "react";
-import { getOffer , fetchTopStores,getAllbrands} from "../utils/api";import { CheckCircle2, ChevronDown } from "lucide-react";
+import { useEffect, useState, useContext } from "react";
+import { getOffer, fetchTopStores, getAllbrands } from "../utils/api";
+import { CheckCircle2, ChevronDown } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import Swal from 'sweetalert2';
-
- import Header from "../components/Header";
- import Subscribe from "../components/Subscribe";
- import Footer from "../components/Footer";
+import Swal from "sweetalert2";
+import Header from "../components/Header";
+import Subscribe from "../components/Subscribe";
+import Footer from "../components/Footer";
 /**
  * Responsive coupon page inspired by the provided screenshot.
  *
@@ -19,8 +18,6 @@ import Swal from 'sweetalert2';
  * All layout/styling is handled with Tailwind utility classes, so no extra CSS is required.
  * Feel free to swap the sample data with your real API data.
  */
-
-
 
 const sampleCoupons = [
   {
@@ -43,14 +40,14 @@ const sampleCoupons = [
 
 const tabs = [
   { key: "all", label: "All", count: 7 },
-//   { key: "coupon", label: "Coupon", count: 2 },
-//   { key: "offer", label: "Offer", count: 5 },
+  //   { key: "coupon", label: "Coupon", count: 2 },
+  //   { key: "offer", label: "Offer", count: 5 },
   { key: "product", label: "Product", count: 0, badge: "New" },
 ];
 
 export default function CouponPage() {
   const [activeTab, setActiveTab] = useState("all");
-  const { categoryName,slug } = useParams(); // Get slug from URL
+  const { categoryName, slug } = useParams(); // Get slug from URL
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -65,228 +62,216 @@ export default function CouponPage() {
   const [showAll, setShowAll] = useState(false);
   const [stores, setStores] = useState([]);
   const [error, setError] = useState(null);
- 
+
   const [str, setStors] = useState([]);
   useEffect(() => {
     const fetchCoupon = async () => {
-        const data = await getOffer(slug);
-        console.log("dataw",data[0].img)
+      const data = await getOffer(slug);
+      console.log("dataw", data[0].img);
 
-        // if (data.success) {
-          setCoupons(data);
-          setBranimg(data[0].img)
-          setTotal(data.length)
-          setBtitle(data[0].seo_title)
-        //}
-        setLoading(false);
+      // if (data.success) {
+      setCoupons(data);
+      setBranimg(data[0].img);
+      setTotal(data.length);
+      setBtitle(data[0].seo_title);
+      //}
+      setLoading(false);
     };
-  
-
-
 
     fetchCoupon();
-}, [slug]);
+  }, [slug]);
 
-console.log("coupons",coupons)
-// if (loading) return <h2>Loading Coupons...</h2>;
+  console.log("coupons", coupons);
+  // if (loading) return <h2>Loading Coupons...</h2>;
 
+  useEffect(() => {
+    const fetchCoupons = async () => {
+      const data = await getAllbrands();
+      console.log("data", data);
+      //   if (Array.isArray(data) && data.length > 0) {
+      setStors(data);
+      // }
+      setLoading(false);
+    };
 
-   useEffect(() => {
-          const fetchCoupons = async () => {
-              const data = await getAllbrands();
-              console.log("data",data)
-            //   if (Array.isArray(data) && data.length > 0) {
-                setStors(data);
-             // }
-              setLoading(false);
-          };
-  
-          fetchCoupons();
-      }, []);
+    fetchCoupons();
+  }, []);
   const filteredCoupons =
     activeTab === "all"
       ? sampleCoupons
       : sampleCoupons.filter((c) => c.type === activeTab);
 
-      //   // Handle click on suggestion
-      const handleSelectCoupon = (slug) => {
-        navigate(`/CouponCode/${encodeURIComponent(slug)}`);
-    };
+  //   // Handle click on suggestion
+  const handleSelectCoupon = (slug) => {
+    navigate(`/CouponCode/${encodeURIComponent(slug)}`);
+  };
 
-
-    console.log("str",str)
+  console.log("str", str);
   return (
     <>
-         <Header />
-    
-    <div className="min-h-screen w-full bg-white text-gray-800">
-      {/* Hero */}
-      <header className="bg-[#244856] text-white">
-  <div className="mx-auto max-w-7xl px-2 py-2 flex flex-col md:flex-row md:items-stretch gap-6">
-    <div className="flex items-center justify-center md:justify-start">
-      <img
-        src={branimg}
-        alt="Brand logo"
-        className="h-full max-h-[100px] w-auto object-contain" // <- grow tall but with max cap
-      />
-    </div>
+      <Header />
 
-    <div className="flex-1 text-center md:text-left flex flex-col justify-center">
-      <h1 className="text-2xl md:text-3xl font-semibold">
-        {brandtitle} Coupons And Offers - August 2025
-      </h1>
-      <div className="mt-1 flex flex-wrap justify-center md:justify-start items-center gap-2 text-sm">
-        <span className="font-medium">{total} Coupons & Offers</span>
-        <span className="flex items-center gap-1">
-          <CheckCircle2 className="h-4 w-4 text-green-400" /> Verified
-        </span>
-      </div>
-    </div>
-  </div>
-
-  {/* Tabs */}
-  <nav className="mx-auto max-w-7xl px-4 pb-4">
-    <ul className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-      {tabs.map(({ key, label, count, badge }) => {
-        const isActive = activeTab === key;
-        return (
-          <li key={key}>
-            <button
-              className={
-                "relative w-full rounded border px-4 py-2 text-sm font-medium transition " +
-                (isActive
-                  ? "bg-white text-blue-600 shadow"
-                  : "bg-transparent text-white hover:bg-white/10")
-              }
-              onClick={() => setActiveTab(key)}
-            >
-              {label} ({total})
-              {badge && (
-                <span className="ml-1 rounded bg-green-600 px-1.5 py-0.5 text-[10px] font-semibold text-white">
-                  {badge}
-                </span>
-              )}
-            </button>
-          </li>
-        );
-      })}
-    </ul>
-  </nav>
-</header>
-
-
-      {/* Body */}
-      <main className="mx-auto max-w-7xl px-4 py-2 grid grid-cols-1 md:grid-cols-4 gap-6">
-        {/* Sidebar */}
-        <aside className="space-y-8 md:col-span-1">
-          {/* About Card */}
-          <section className="hidden sm:block rounded-lg border bg-white p-6 ">
-            <h2 className="text-lg font-semibold mb-3">Your Hub for Every Deal
- 
-  </h2>
-            <p className="text-sm leading-relaxed">
-            Step to Sale connects you with amazing savings on everything from daily 
-            necessities to dream purchases. Explore our carefully chosen collection of up-to-date coupons, 
-            special offers, and amazing product discounts!
-
-            </p>
-          </section>
-
-          {/* Popular Store Card */}
-          <section className="hidden sm:block rounded-lg border bg-white p-6">
-            <h2 className="text-lg font-semibold mb-3">POPULAR STORE</h2>
-            <div className="grid grid-cols-3 gap-4">
-              {
-               str
-              .map((src, idx) => (
-                <img
-                  key={idx}
-                  src={src.img}
-                  alt="brand"
-                  className="h-12 w-full object-contain border rounded"
-                />
-              ))}
+      <div className="min-h-screen w-full bg-white text-gray-800">
+        {/* Hero */}
+        <header className="bg-[#244856] text-white">
+          <div className="mx-auto max-w-7xl px-2 py-2 flex flex-col md:flex-row md:items-stretch gap-6">
+            <div className="flex items-center justify-center md:justify-start">
+              <img
+                src={branimg}
+                alt="Brand logo"
+                className="h-full max-h-[100px] w-auto object-contain" // <- grow tall but with max cap
+              />
             </div>
+
+            <div className="flex-1 text-center md:text-left flex flex-col justify-center">
+              <h1 className="text-2xl md:text-3xl font-semibold">
+                {brandtitle} Coupons And Offers - August 2025
+              </h1>
+              <div className="mt-1 flex flex-wrap justify-center md:justify-start items-center gap-2 text-sm">
+                <span className="font-medium">{total} Coupons & Offers</span>
+                <span className="flex items-center gap-1">
+                  <CheckCircle2 className="h-4 w-4 text-green-400" /> Verified
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <nav className="mx-auto max-w-7xl px-4 pb-4">
+            <ul className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {tabs.map(({ key, label, count, badge }) => {
+                const isActive = activeTab === key;
+                return (
+                  <li key={key}>
+                    <button
+                      className={
+                        "relative w-full rounded border px-4 py-2 text-sm font-medium transition " +
+                        (isActive
+                          ? "bg-white text-blue-600 shadow"
+                          : "bg-transparent text-white hover:bg-white/10")
+                      }
+                      onClick={() => setActiveTab(key)}>
+                      {label} ({total})
+                      {badge && (
+                        <span className="ml-1 rounded bg-green-600 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                          {badge}
+                        </span>
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        </header>
+
+        {/* Body */}
+        <main className="mx-auto max-w-7xl px-4 py-2 grid grid-cols-1 md:grid-cols-4 gap-6">
+          {/* Sidebar */}
+          <aside className="space-y-8 md:col-span-1">
+            {/* About Card */}
+            <section className="hidden sm:block rounded-lg border bg-white p-6 ">
+              <h2 className="text-lg font-semibold mb-3">
+                Your Hub for Every Deal
+              </h2>
+              <p className="text-sm leading-relaxed">
+                Step to Sale connects you with amazing savings on everything
+                from daily necessities to dream purchases. Explore our carefully
+                chosen collection of up-to-date coupons, special offers, and
+                amazing product discounts!
+              </p>
+            </section>
+
+            {/* Popular Store Card */}
+            <section className="hidden sm:block rounded-lg border bg-white p-6">
+              <h2 className="text-lg font-semibold mb-3">POPULAR STORE</h2>
+              <div className="grid grid-cols-3 gap-4">
+                {str.map((src, idx) => (
+                  <img
+                    key={idx}
+                    src={src.img}
+                    alt="brand"
+                    className="h-12 w-full object-contain border rounded"
+                  />
+                ))}
+              </div>
+            </section>
+          </aside>
+
+          {/* Coupon List */}
+          <section className="space-y-6 md:col-span-3">
+            {coupons.map((coupon) => (
+              <article
+                key={coupon.id}
+                /* row everywhere, no height bloat on mobile */
+                className="flex flex-row overflow-hidden rounded-lg border bg-white shadow-sm">
+                {/* Discount badge – narrower + smaller on mobile */}
+                <div className="flex items-center justify-center bg-blue-50 w-24 sm:w-32 p-3 sm:p-6 text-center">
+                  <div>
+                    <p className="text-xl sm:text-3xl font-bold text-blue-600 leading-none">
+                      {coupon.offer}
+                    </p>
+                    <p className="text-xs sm:text-sm font-medium text-blue-600 mt-1">
+                      OFF
+                    </p>
+                    <p className="mt-2 text-[10px] sm:text-xs uppercase tracking-wide text-gray-500">
+                      Hot Coupon
+                    </p>
+                  </div>
+                </div>
+
+                {/* Details – tighter padding, line‑clamped */}
+                <div className="flex-1 p-4 sm:p-6 space-y-2 sm:space-y-4">
+                  <h3 className="text-sm sm:text-lg font-semibold line-clamp-2">
+                    {coupon.description}
+                  </h3>
+
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-[11px] sm:text-xs">
+                    <span className="flex items-center gap-1 text-green-600">
+                      <CheckCircle2 className="h-4 w-4" /> Verified
+                    </span>
+                    <span className="text-gray-500">
+                      {(() => {
+                        const t = coupon.title || "";
+                        return (
+                          t.slice(0, 3) + "*".repeat(Math.max(0, t.length - 3))
+                        );
+                      })()}
+                    </span>
+                  </div>
+                </div>
+
+                {/* CTA – slimmer button on mobile */}
+                {/* CTA – conditional button */}
+                <div className="flex items-center p-4 sm:p-6">
+                  {coupon.title?.trim().toLowerCase() == "offer" ? (
+                    /* Green “Grab Offer” button */
+                    <button
+                      className="inline-flex items-center rounded bg-green-600 px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-white hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
+                      onClick={() => handleSelectCoupon(coupon.title)}>
+                      GET&nbsp;OFFER
+                    </button>
+                  ) : (
+                    /* Default blue “Get Coupon” button */
+                    <button
+                      className="relative inline-flex items-center rounded bg-blue-600 px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                      onClick={() => handleSelectCoupon(coupon.title)}>
+                      GET&nbsp;COUPON
+                      <span className="absolute inset-y-0 right-0 w-8 sm:w-12 bg-pattern-dots bg-cover" />
+                    </button>
+                  )}
+                </div>
+              </article>
+            ))}
+
+            {filteredCoupons.length === 0 && (
+              <p className="text-center text-gray-500">No items in this tab.</p>
+            )}
           </section>
-        </aside>
-
-        {/* Coupon List */}
-        <section className="space-y-6 md:col-span-3">
-  {coupons.map((coupon) => (
-    <article
-      key={coupon.id}
-      /* row everywhere, no height bloat on mobile */
-      className="flex flex-row overflow-hidden rounded-lg border bg-white shadow-sm"
-    >
-      {/* Discount badge – narrower + smaller on mobile */}
-      <div className="flex items-center justify-center bg-blue-50 w-24 sm:w-32 p-3 sm:p-6 text-center">
-        <div>
-          <p className="text-xl sm:text-3xl font-bold text-blue-600 leading-none">
-            {coupon.offer}
-          </p>
-          <p className="text-xs sm:text-sm font-medium text-blue-600 mt-1">
-            OFF
-          </p>
-          <p className="mt-2 text-[10px] sm:text-xs uppercase tracking-wide text-gray-500">
-            Hot Coupon
-          </p>
-        </div>
+        </main>
       </div>
-
-      {/* Details – tighter padding, line‑clamped */}
-      <div className="flex-1 p-4 sm:p-6 space-y-2 sm:space-y-4">
-        <h3 className="text-sm sm:text-lg font-semibold line-clamp-2">
-          {coupon.description}
-        </h3>
-
-        <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-[11px] sm:text-xs">
-          <span className="flex items-center gap-1 text-green-600">
-            <CheckCircle2 className="h-4 w-4" /> Verified
-          </span>
-          <span className="text-gray-500">
-            {(() => {
-              const t = coupon.title || "";
-              return t.slice(0, 3) + "*".repeat(Math.max(0, t.length - 3));
-            })()}
-          </span>
-        </div>
-      </div>
-
-      {/* CTA – slimmer button on mobile */}
-          {/* CTA – conditional button */}
-<div className="flex items-center p-4 sm:p-6">
-  {coupon.title?.trim().toLowerCase() == "offer" ? (
-    /* Green “Grab Offer” button */
-    <button
-      className="inline-flex items-center rounded bg-green-600 px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-white hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
-      onClick={() => handleSelectCoupon(coupon.title)}
-    >
-      GET&nbsp;OFFER
-    </button>
-  ) : (
-    /* Default blue “Get Coupon” button */
-    <button
-      className="relative inline-flex items-center rounded bg-blue-600 px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-      onClick={() => handleSelectCoupon(coupon.title)}
-    >
-      GET&nbsp;COUPON
-      <span className="absolute inset-y-0 right-0 w-8 sm:w-12 bg-pattern-dots bg-cover" />
-    </button>
-  )}
-</div>
-    </article>
-  ))}
-
-  {filteredCoupons.length === 0 && (
-    <p className="text-center text-gray-500">No items in this tab.</p>
-  )}
-</section>
-
-
-      </main>
-    </div>
-    <Subscribe />
-     <Footer />
+      <Subscribe />
+      <Footer />
     </>
   );
 }
@@ -302,15 +287,11 @@ console.log("coupons",coupons)
 //   },
 // },
 
-
-
-
 // import  { useEffect, useState, useContext } from "react";
 // import { getOffer , fetchTopStores} from "../utils/api";
 // import { useParams, useNavigate } from "react-router-dom";
 // import { AuthContext } from "../context/AuthContext";
 // import Swal from 'sweetalert2';
-
 
 // import Header from "../components/Header";
 // import Subscribe from "../components/Subscribe";
@@ -330,8 +311,6 @@ console.log("coupons",coupons)
 //   const [stores, setStores] = useState([]);
 //   const [error, setError] = useState(null);
 
-
-
 // useEffect(() => {
 //         const fetchCoupon = async () => {
 //             const data = await getOffer(slug);
@@ -350,16 +329,13 @@ console.log("coupons",coupons)
 //           }
 //           setLoading(false);
 //       };
-  
+
 //       getStores();
 
 //         fetchCoupon();
 //     }, []);
 // console.log("coupons",coupons)
 //     // if (loading) return <h2>Loading Coupons...</h2>;
-
-
-
 
 // const details = [
 //   {
@@ -374,7 +350,7 @@ console.log("coupons",coupons)
 //     categoryName:"health",
 
 //     description: "Unlock amazing discounts on beauty and wellness essentials. Look good, feel great—without the hefty price tag!",
-  
+
 //   },
 //   {
 //     id: 3,
@@ -403,16 +379,13 @@ console.log("coupons",coupons)
 // const [selectedBrand, setSelectedBrand] = useState("All");
 // const [selectedType, setSelectedType] = useState("ALL");
 
-
 // const [selectedCategories, setSelectedCategories] = useState([]);
 // const [displayedCou, setDisplayedCoupons] = useState([]);
-
-
 
 // const handleCategoryChange = (e) => {
 //   const { value, checked } = e.target;
 
-//   setSelectedCategories((prev) => 
+//   setSelectedCategories((prev) =>
 //     checked ? [...prev, value] : prev.filter((category) => category !== value)
 //   );
 // };
@@ -461,9 +434,6 @@ console.log("coupons",coupons)
 //     setFilteredCoupons([]); // Hide suggestions
 //   };
 
-  
-
-
 //   return (
 //     <>
 //       <Header />
@@ -486,7 +456,6 @@ console.log("coupons",coupons)
 //               ))}
 
 //         </div>
-
 
 //         <div className="container mx-auto px-4 py-6">
 //           <div className="flex flex-col lg:flex-row  items-start mb-4">
@@ -588,7 +557,6 @@ console.log("coupons",coupons)
 //                 </button>
 //               </div>
 
-
 //               {/* Filter Content */}
 //               <div className="relative mb-4">
 //                 <svg
@@ -633,9 +601,9 @@ console.log("coupons",coupons)
 //   {categories.map((category) => (
 //     <div key={category.name} className="flex items-center justify-between text-sm">
 //       <label className="flex items-center gap-2">
-//         <input 
-//           type="checkbox" 
-//           className="form-checkbox text-[#4F93AD]" 
+//         <input
+//           type="checkbox"
+//           className="form-checkbox text-[#4F93AD]"
 //           value={category.name}
 //           checked={selectedCategories.includes(category.name)}
 
@@ -697,9 +665,9 @@ console.log("coupons",coupons)
 //     <div key={brand.name} className="flex items-center justify-between text-sm">
 //       {/* Checkbox for selecting brand filter */}
 //       <label className="flex items-center gap-2">
-//         <input 
-//           type="checkbox" 
-//           className="form-checkbox text-[#4F93AD]" 
+//         <input
+//           type="checkbox"
+//           className="form-checkbox text-[#4F93AD]"
 //           value={brand.name}
 //           checked={selectedCategories.includes(brand.name)}
 
@@ -724,7 +692,7 @@ console.log("coupons",coupons)
 //                   {/* Tabs Container */}
 //                   <div className="flex gap-4 overflow-x-auto md:overflow-x-visible">
 //                   <button
-                        
+
 //                         className={`text-sm font-medium px-4 py-2 rounded hover:bg-gray-200 `}
 
 //                         onClick={(e) => setSelectedType(e.target.value)}
@@ -737,7 +705,7 @@ console.log("coupons",coupons)
 //                         key={tab.name}
 //                         className={`text-sm font-medium px-4 py-2 rounded hover:bg-gray-200 ${
 //                           tab.active ? "text-blue-600" : "text-gray-500"
-                          
+
 //                         }`}
 //                         value={tab.name}
 
@@ -783,7 +751,6 @@ console.log("coupons",coupons)
 //   );
 // }
 
-
 // const decodeHtmlEntities = (html) => {
 //   const txt = document.createElement("textarea");
 //   txt.innerHTML = html;
@@ -803,13 +770,13 @@ console.log("coupons",coupons)
 //      // Handle click on suggestion
 //     //  const handleSelectCoupon = (slug) => {
 //     //   navigate(`/CouponsDetails/${slug}`);
-  
+
 //     // };
 
 //     const handleSelectCoupon = (slug) => {
 //       navigate(`/CouponCode/${slug}`);
 //     };
-  
+
 //     const {userId,token} = useContext(AuthContext);
 //     const [couponId, setCouponid] = useState('6383');
 //     const apiUrl = import.meta.env.VITE_API_URL;
@@ -819,36 +786,36 @@ console.log("coupons",coupons)
 
 //     // const handleSelectCoupon = async (id) => {
 //     //   setIsLoading(true); // Show loading indicator
-    
+
 //     //   const PUBLIC_COUPON_IDS = [
 //     //     "6373", "6372", "6367", "6369", "6342", "6343", "6344", "6345",
 //     //     "6346", "6347", "6348", "6349", "6350", "6351", "6352", "6353",
 //     //     "6354", "6355", "6356", "6357", "6358", "6359", "6360", "6361",
 //     //     "6362", "6363", "6364", "6365", "6366", "6368", "6383"
 //     //   ];
-    
+
 //     //   const STATIC_USER_ID = "9";
 //     //   const isPublicCoupon = PUBLIC_COUPON_IDS.includes(String(id));
 //     //   const isGuest = !token;
 //     //   const allowAnonymous = isPublicCoupon;
 //     //   const finalUserId = isPublicCoupon ? STATIC_USER_ID : userId;
 //     //   const clickId = isPublicCoupon && isGuest ? generateClickId() : undefined;
-    
+
 //     //   try {
 //     //     const params = new URLSearchParams({
 //     //       user_id: finalUserId,
 //     //       coupon_id: id,
 //     //     });
-    
+
 //     //     if (clickId) params.append("click_id", clickId);
-    
+
 //     //     const response = await fetch(`${apiUrl}/api/get-click?${params.toString()}`, {
 //     //       method: "GET",
 //     //       redirect: "follow",
 //     //     });
-    
+
 //     //     const data = await response.json();
-    
+
 //     //     if (data.success && data.trackingUrl) {
 //     //       // Wait for 4 seconds before redirect
 //     //       setTimeout(() => {
@@ -872,15 +839,14 @@ console.log("coupons",coupons)
 //     //     });
 //     //   }
 //     // };
-    
-    
+
 //     const shareToWhatsApp = () => {
 //       const url = encodeURIComponent(window.location.href);
 //       const text = encodeURIComponent("Check out this link: ");
 //       const whatsappUrl = `https://wa.me/?text=${text}${url}`;
 //       window.open(whatsappUrl, "_blank");
 //     };
-    
+
 //   return (
 //     <div className="bg-white p-4 rounded-lg shadow-sm">
 //       <div className="flex flex-col gap-4">
@@ -892,7 +858,6 @@ console.log("coupons",coupons)
 //           alt="Amazon"
 //           className="object-contain h-16 w-auto "
 //         />
-
 
 //         {/* Title and Description */}
 //         <div>
@@ -958,5 +923,3 @@ console.log("coupons",coupons)
 // //   { name: "Coupons", count: 147, active: false },
 // //   { name: "Deals", count: 243, active: false },
 // // ];
-
-

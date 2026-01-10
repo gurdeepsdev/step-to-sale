@@ -1,50 +1,148 @@
-import React from 'react';
+import React from "react";
 import Header from "../components/Header";
-import  { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import { getAllCoupons } from "../utils/api";
 import { useParams, useNavigate } from "react-router-dom";
 
-
+import PageHeader from "../components/PageHeader.jsx";
 
 const PopularOffers = () => {
-    const [coupons, setCoupons] = useState([]);
-    const navigate = useNavigate();
+  const [coupons, setCoupons] = useState([]);
+  const [banners, setBanners] = useState([]);
+  console.log("banners", coupons);
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchCoupons = async () => {
+      const data = await getAllCoupons();
+      console.log("data", data);
+      //if (Array.isArray(data) && data.length > 0) {
+      setCoupons(data.data);
+      //}
+      setLoading(false);
+    };
 
-    useEffect(() => {
-           const fetchCoupons = async () => {
-               const data = await getAllCoupons();
-               console.log("data",data)
-               //if (Array.isArray(data) && data.length > 0) {
-                 setCoupons(data.data);
-               //}
-               setLoading(false);
-           };
-   
-           fetchCoupons();
-       }, []);
+    fetchCoupons();
+  }, []);
 
   const handleSelectCoupon = (slug) => {
     navigate(`/CouponsDetails/${slug}`);
-
   };
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
-  
+
   // Calculate pagination values
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentCoupons = coupons.slice(indexOfFirstItem, indexOfLastItem);
-  
+
   const totalPages = Math.ceil(coupons.length / itemsPerPage);
-  
-  
+  useEffect(() => {
+    const fetchCoupons = async () => {
+      const data = await getAllCoupons();
+      if (data.success) {
+        const allBanners = data.data
+          .filter((coupon) => coupon.banner_url)
+          .map((coupon) => ({
+            banner_url: coupon.banner_url,
+            title: coupon.title,
+          }));
+        setBanners(allBanners);
+      }
+      setLoading(false);
+    };
+
+    fetchCoupons();
+  }, []);
+  const decodeHtmlEntities = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.documentElement.textContent.trim();
+  };
+
+  const stripHtmlTags = (html) => {
+    return decodeHtmlEntities(html)
+      .replace(/<[^>]+>/g, "") // Remove HTML tags
+      .replace(/\u00A0|&nbsp;/g, " ") // Convert &nbsp; or Unicode NBSP to a normal space
+      .trim();
+  };
+  const formatPrice = (amount, currency) => {
+    if (!amount) return "";
+
+    // If already has a currency symbol, return as-is
+    if (typeof amount === "string" && /[$₹]/.test(amount)) {
+      return amount;
+    }
+
+    const symbol = currency === "INR" ? "₹" : "$";
+    return `${symbol}${amount}`;
+  };
+
   return (
     <>
-    <Header/>
- 
-    <div className="py-10 px-4 sm:px-8 lg:px-16 bg-white">
+      <Header />
+
+      {/* Heading */}
+      <PageHeader
+        breadcrumb="Home / Deals"
+        title="Deals of the Day"
+        description="Grab the best deals available today and save more on every purchase."
+      />
+      <div className="w-full py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {coupons.map((deal) => (
+              <div className="border rounded-3xl p-4 flex flex-col hover:shadow-lg transition">
+                {/* Image */}
+                <div className="h-40 lg:h-48 rounded-2xl mb-4 overflow-hidden bg-gray-100 flex items-center justify-center">
+                  <img
+                    src={deal.banner_url}
+                    alt={deal.title}
+                    className="h-full w-full object-contain"
+                  />
+                </div>
+
+                {/* Title */}
+                <p className="text-lg mb-1 text-center font-bold">
+                  {deal.title}
+                </p>
+
+                {/* Description */}
+                <p className="text-sm text-gray-600 mb-4 text-center">
+                  {stripHtmlTags(deal.description)}
+                </p>
+                {/* Price */}
+                <div className="mb-4 text-center">
+                  {deal.discount ? (
+                    <>
+                      <span className="line-through text-gray-400 mr-2">
+                        {formatPrice(deal.payout, deal.currency)}
+                      </span>
+
+                      <span className="text-xl font-bold mr-2">
+                        {formatPrice(deal.discount_payout, deal.currency)}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-xl font-bold">
+                      {formatPrice(deal.payout, deal.currency)}
+                    </span>
+                  )}
+                </div>
+
+                {/* Button */}
+                <button
+                  onClick={() => window.open(deal.tracking_link, "_blank")}
+                  className="mt-auto py-3 rounded-full border border-[#DA1919] text-black hover:bg-[#DA1919] hover:text-white transition">
+                  Grab Deals
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="py-10 px-4 sm:px-8 lg:px-16 bg-white">
   <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2">
     Top Stores
   </h2>
@@ -95,12 +193,9 @@ const PopularOffers = () => {
       </button>
     ))}
   </div>
-</div>
-
-
+</div> */}
     </>
   );
 };
 
 export default PopularOffers;
-

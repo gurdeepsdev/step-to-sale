@@ -1,129 +1,119 @@
-import  { useState,useContext } from "react";
+import { useState, useContext } from "react";
 import Header from "../components/Header";
 import Worksub from "../components/Worksub";
 import Footer from "../components/Footer";
 import useEmblaCarousel from "embla-carousel-react";
 import { AuthContext } from "../context/AuthContext";
-import Swal from 'sweetalert2'
-
-
-
+import Swal from "sweetalert2";
 
 const OfferCard = () => {
-        const { token } = useContext(AuthContext);
-  
-    const [isOpen, setIsOpen] = useState(false);
-
-  // State to track image loading
-  const [imagesLoaded, setImagesLoaded] = useState({
-    refer: false,
-    works2: false,
-    works: false,
-    share: false,
-  });
-
-  // Function to update image load status
-  const handleImageLoad = (imageKey) => {
-    setImagesLoaded((prev) => ({ ...prev, [imageKey]: true }));
-  };
-      const handleReferClick = () => {
-      
-        if (token) {
-          setIsOpen(true); // Open modal if logged in
-        } else {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Oops...',
-                text: 'Please login first!',
-              });
-        }
-      };
-  const [emblaRef] = useEmblaCarousel({
-    loop: true, // Enable infinite loop for mobile slider
-    align: "start", // Align to the start of each step
-    dragFree: true, // Allow drag-free mode
-  });
+  const steps = [
+    {
+      title: "SEARCH",
+      description: "From thousands of stores for your favorite brand.",
+      icon: "/img/Search.webp",
+      border: "/img/Searchborder.webp",
+      color: "text-red-600",
+    },
+    {
+      title: "SELECT",
+      description: "From dozens of coupons and deals that suits you best.",
+      icon: "/img/Select.webp",
+      border: "/img/Selectborder.webp",
+      color: "text-green-600",
+    },
+    {
+      title: "CLICK",
+      description: "On the coupon/deal that you need.",
+      icon: "/img/Click.webp",
+      border: "/img/Clickborder.webp",
+      color: "text-blue-600",
+    },
+    {
+      title: "APPLY",
+      description: "Use the coupon or deal and save money.",
+      icon: "/img/Apply.webp",
+      border: "/img/Applyborder.webp",
+      color: "text-orange-600",
+    },
+  ];
 
   return (
     <>
-    <Header/>
-    <div className=" mt-6 md:mt-10 lg:mt-10 w-full max-w-[1440px] mx-auto overflow-hidden"></div>
-    <div className="relative w-full">
-      {/* Background Image */}
-      {!imagesLoaded.refer && (
-    <div className="flex justify-center items-center h-64">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
-    </div>
-  )}
-      <img src="/img/Refer.webp" alt="Refer and Earn" 
+      <Header />
+      <section className="pb-10 bg-white overflow-hidden mb-10">
+        {/* Heading */}
+        <div className="text-left  lg:mb-24 px-4 bg-black  text-white py-20">
+          <div className="max-w-7xl mx-auto">
+            <p className="text-sm text-gray-300 mb-3">Home / How it Works</p>
+            <h2 className="text-4xl text-white font-bold">How it Works</h2>
+            <p className="mt-3">
+              Lorem ipsum dolor sit amet consectetur. Sed sed eu sit
+              consectetur.
+            </p>
+          </div>
+        </div>
 
-       className={`w-full h-auto ${imagesLoaded.refer ? "block" : "hidden"}`}
-       onLoad={() => handleImageLoad("refer")}/>
+        {/* Steps */}
+        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-20 py-10">
+          {steps.map((step, i) => {
+            const isTop = i % 2 !== 0;
 
-      {/* Overlay & Text Section */}
-      <div className="absolute inset-0 flex flex-col items-start justify-center pl-8 md:pl-16 lg:pl-24 text-white">
-        <h2 className="text-lg md:text-3xl lg:text-4xl font-bold ">Refer And Earn</h2>
-        
-        {/* Button */}
-        <button className="mt-4 bg-[#E74833] hover:bg-white text-white hover:text-black font-semibold px-4 py-1 md:px-4 lg:px-6 md:py-2 lg:py-2 rounded-full  md:text-base  text-xs lg:text-lg transition duration-300"
-                onClick={handleReferClick}
->
-          Share Now
-        </button>
-      </div>
-    </div>
+            return (
+              <div
+                key={i}
+                className={`relative flex justify-center ${
+                  isTop
+                    ? "lg:-translate-y-20 lg:pt-0 pt-10"
+                    : "lg:translate-y-20 translate-y-20"
+                }`}>
+                {/* BORDER WRAPPER */}
+                <div className="relative w-[240px] h-[240px]">
+                  {/* Border Image */}
+                  <img
+                    src={step.border}
+                    alt={step.title}
+                    className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+                  />
 
-<div className="px-6 py-4 lg:px-16 lg:py-10 md:py-10 bg-white text-center">
-      
+                  {/* INNER CONTENT */}
+                  <div
+                    className={`absolute inset-[20%] ${
+                      isTop ? "pb-[100px]" : "pt-[100px]"
+                    } flex flex-col items-center justify-center text-center`}>
+                    <h3
+                      className={`${step.color} font-semibold tracking-widest`}
+                      style={{ fontSize: "clamp(1rem, 2.2vw, 1.25rem)" }}>
+                      {step.title}
+                    </h3>
 
-      {/* How it works Section */}
-      <div>
-        <h2 className="text-xl font-semibold lg:text-4xl md:text-4xl text-black-800 mb-4 md:mb-8 lg:mb-8">
-        Refer and Earn        </h2>
-<p className="mb-4 md:mb-8 lg:mb-8 text-[10px] md:text-lg lg:text-lg"> Earn rewards effortlessly by referring your friends to Step to Sale. Follow these simple steps to start earning today!
-</p>
-<div className="flex justify-center items-center">
-{!imagesLoaded.works2 && (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
-            </div>
-          )}
+                    <p
+                      className="text-gray-600 mt-2 leading-snug"
+                      style={{ fontSize: "clamp(0.8rem, 2vw, 0.95rem)" }}>
+                      {step.description}
+                    </p>
+                  </div>
+                </div>
 
-<img src="/img/works2.webp"
-            alt="Works"
-
-       className={`${imagesLoaded.works2 ? "block" : "hidden"}`}
-       onLoad={() => handleImageLoad("works2")}></img>
-</div>
-   
-
-      </div>
-    </div>
-
-    <div className="px-6 ">
-    <h2 className="text-xl font-semibold lg:text-4xl md:text-4xl text-black-800 mb-4 md:mb-8 lg:mb-8  text-center">
-    How it Works!      </h2>
-    <div className="flex justify-center items-center">
-        <img src="/img/works.webp"></img>
-    </div>
-    </div>
-<div className="flex flex-col items-center text-center">
-    <h2 className="text-xl md:text-3xl lg:text-3xl font-bold text-gray-900 mt-2 md:mt-8 lg:mt-8">Share and Earn</h2>
-    {!imagesLoaded.works && (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
-            </div>
-          )}
-    <img src="/img/share.webp"  alt="Share" 
-       className={`${imagesLoaded.works ? "block" : "hidden"} mt-2 w-[1003px] mb-2 md:mb-8 lg:mb-8`}
-       onLoad={() => handleImageLoad("works")}/>
-</div>
-
-
-    <div className=" mt-6 md:mt-10 lg:mt-10 w-full max-w-[1440px] mx-auto overflow-hidden"></div>
-    <div/>
-<Worksub isOpen={isOpen} setIsOpen={setIsOpen} />
-<Footer/>
+                {/* ICON */}
+                <div
+                  className={`absolute ${
+                    isTop
+                      ? "lg:bottom-[-150px] bottom-[-75px]"
+                      : "lg:top-[-150px] top-[-75px]"
+                  } lg:w-44 lg:h-44 w-28 h-28 flex items-center justify-center`}>
+                  <img
+                    src={step.icon}
+                    alt={step.title}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+      <Footer />
     </>
   );
 };

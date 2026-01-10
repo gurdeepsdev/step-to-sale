@@ -194,29 +194,160 @@ useEffect(() => {
 
 const generateClickId = () => crypto.randomUUID();
 
+// const handleReferClick = async () => {
+//   console.log("handleReferClick called after 4 seconds!");
+
+//   // ---------------------------------
+// const PUBLIC_COUPON_IDS = ["6373","6372","6376","6367","6369","6342", "6343","6344","6345","6346","6347","6348","6349","6350","6351","6352","6353","6354","6355","6356","6357","6358","6359",
+// "6458","6459","6460","6455","6461","6462" ,"6451","6452","6453","6454","6449","6448", "6360","6361","6362","6363","6364","6365","6366","6368","6378","6383","6384","6395","6396","6410","6420","6421","6417","6422","6423","6424","6434","6433","6432","6439","6440","6441","6442"]
+// const STATIC_USER_ID = "9"; // guest user
+//   const isPublicCoupon = PUBLIC_COUPON_IDS.includes(String(couponId));
+//   const isGuest = !token;
+//   const allowAnonymous = isPublicCoupon;
+
+//   if (isGuest && !allowAnonymous) {
+//     Swal.fire({
+//       icon: "warning",
+//       title: "Oops... Please login",
+//       text: "Login first to access this offer!",
+//     });
+//     return;
+//   }
+
+//   const finalUserId = isPublicCoupon ? STATIC_USER_ID : userId;
+//   const clickId = isPublicCoupon && isGuest ? generateClickId() : undefined;
+//   // Always open new tab immediately to avoid popup blockers
+//   const newTab = window.open("about:blank", "_blank");
+
+//   try {
+//     const params = new URLSearchParams({
+//       user_id: finalUserId,
+//       coupon_id: couponId,
+//     });
+//     if (clickId) params.append("click_id", clickId);
+
+//     const response = await fetch(`${apiUrl}/api/get-click?${params.toString()}`, {
+//       method: "GET",
+//       redirect: "follow",
+//     });
+
+//     const data = await response.json();
+
+//     if (data.success && data.trackingUrl) {
+//       // Use this trick to safely change location after tab is opened
+//       newTab.location.href = data.trackingUrl;
+//     } else {
+//       newTab.close();
+//       Swal.fire({
+//         icon: "error",
+//         title: "Click failed",
+//         text: data.message || "Could not generate tracking link.",
+//       });
+//     }
+//   } catch (err) {
+//     console.error("Error during auto click redirect:", err);
+//     newTab.close();
+//     Swal.fire({
+//       icon: "error",
+//       title: "Oops...",
+//       text: "Something went wrong!",
+//     });
+//   }
+// };
+// const handleReferClick = async () => {
+//   console.log("handleReferClick called after 4 seconds!");
+
+//   const PUBLIC_COUPON_IDS = [
+//     "6541",
+//     "6373","6372","6376","6367","6369","6342","6343","6344","6345","6346","6347","6348",
+//     "6349","6350","6351","6352","6353","6354","6355","6356","6357","6358","6359","6458",
+//     "6459","6460","6455","6461","6462","6451","6452","6453","6454","6449","6448","6360",
+//     "6361","6362","6363","6364","6365","6366","6368","6378","6383","6384","6395","6396",
+//     "6410","6420","6421","6417","6422","6423","6424","6434","6433","6432","6439","6440",
+//     "6441","6442"
+//   ];
+
+//   const STATIC_USER_ID = "9"; // guest user
+//   const isPublicCoupon = PUBLIC_COUPON_IDS.includes(String(couponId));
+//   const isGuest = !token;
+//   const allowAnonymous = isPublicCoupon;
+
+//   if (isGuest && !allowAnonymous) {
+//     Swal.fire({
+//       icon: "warning",
+//       title: "Oops... Please login",
+//       text: "Login first to access this offer!",
+//     });
+//     return;
+//   }
+
+//   const finalUserId = isPublicCoupon ? STATIC_USER_ID : userId;
+//   const clickId = isPublicCoupon && isGuest ? generateClickId() : undefined;
+
+//   // Open tab immediately
+//   const newTab = window.open("about:blank", "_blank");
+
+//   try {
+//     const params = new URLSearchParams({
+//       user_id: finalUserId,
+//       coupon_id: couponId,
+//     });
+//     if (clickId) params.append("click_id", clickId);
+
+//     const response = await fetch(`${apiUrl}/api/get-click?${params.toString()}`, {
+//       method: "GET",
+//       redirect: "follow",
+//     });
+
+//     const data = await response.json();
+
+//     if (data.success && data.trackingUrl) {
+//       // Add the public_url parameter without encoding
+//       let redirectUrl = data.trackingUrl;
+//       const publicUrl = "https://steptosale.com/";
+    
+//       // If URL already has parameters, add with &
+//       if (redirectUrl.includes("?")) {
+//         redirectUrl += `&publisher_url=${publicUrl}`;
+//       } else {
+//         redirectUrl += `?publisher_url=${publicUrl}`;
+//       }
+    
+//       // Redirect the already opened tab
+//       newTab.location.href = redirectUrl;
+//     }
+    
+//     } 
+//     // else {
+//     //   newTab.close();
+//     //   Swal.fire({
+//     //     icon: "error",
+//     //     title: "Click failed",
+//     //     text: data.message || "Could not generate tracking link.",
+//     //   });
+//     // }
+//    catch (err) {
+//     console.error("Error during auto click redirect:", err);
+//     newTab.close();
+//     Swal.fire({
+//       icon: "error",
+//       title: "Oops...",
+//       text: "Something went wrong!",
+//     });
+//   }
+// };
+const STATIC_USER_ID = "9"; // guest user
+
 const handleReferClick = async () => {
   console.log("handleReferClick called after 4 seconds!");
 
-  // ---------------------------------
-const PUBLIC_COUPON_IDS = ["6373","6372","6376","6367","6369","6342", "6343","6344","6345","6346","6347","6348","6349","6350","6351","6352","6353","6354","6355","6356","6357","6358","6359",
-"6458","6459","6460","6455","6461","6462" ,"6451","6452","6453","6454","6449","6448", "6360","6361","6362","6363","6364","6365","6366","6368","6378","6383","6384","6395","6396","6410","6420","6421","6417","6422","6423","6424","6434","6433","6432","6439","6440","6441","6442"]
-const STATIC_USER_ID = "9"; // guest user
-  const isPublicCoupon = PUBLIC_COUPON_IDS.includes(String(couponId));
   const isGuest = !token;
-  const allowAnonymous = isPublicCoupon;
 
-  if (isGuest && !allowAnonymous) {
-    Swal.fire({
-      icon: "warning",
-      title: "Oops... Please login",
-      text: "Login first to access this offer!",
-    });
-    return;
-  }
+  // Always allow redirect
+  const finalUserId = isGuest ? STATIC_USER_ID : userId;
+  const clickId = isGuest ? generateClickId() : undefined;
 
-  const finalUserId = isPublicCoupon ? STATIC_USER_ID : userId;
-  const clickId = isPublicCoupon && isGuest ? generateClickId() : undefined;
-  // Always open new tab immediately to avoid popup blockers
+  // Open tab immediately (important for popup blockers)
   const newTab = window.open("about:blank", "_blank");
 
   try {
@@ -224,18 +355,29 @@ const STATIC_USER_ID = "9"; // guest user
       user_id: finalUserId,
       coupon_id: couponId,
     });
+
     if (clickId) params.append("click_id", clickId);
 
-    const response = await fetch(`${apiUrl}/api/get-click?${params.toString()}`, {
-      method: "GET",
-      redirect: "follow",
-    });
+    const response = await fetch(
+      `${apiUrl}/api/get-click?${params.toString()}`,
+      {
+        method: "GET",
+        redirect: "follow",
+      }
+    );
 
     const data = await response.json();
 
     if (data.success && data.trackingUrl) {
-      // Use this trick to safely change location after tab is opened
-      newTab.location.href = data.trackingUrl;
+      let redirectUrl = data.trackingUrl;
+      const publicUrl = "https://steptosale.com/";
+
+      // Append publisher_url correctly
+      redirectUrl += redirectUrl.includes("?")
+        ? `&publisher_url=${publicUrl}`
+        : `?publisher_url=${publicUrl}`;
+
+      newTab.location.href = redirectUrl;
     } else {
       newTab.close();
       Swal.fire({
@@ -254,6 +396,7 @@ const STATIC_USER_ID = "9"; // guest user
     });
   }
 };
+
 
   
 if (loading) {

@@ -47,12 +47,12 @@ const CouponCard = () => {
   const navigate = useNavigate();
   const { userId, token } = useContext(AuthContext);
   const apiUrl = import.meta.env.VITE_API_URL;
-  const couponCode = "SAILYCO5";
   // const storeURL = "https://saily.com";
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(couponCode);
+    navigator.clipboard.writeText(slug);
     setCopied(true);
+    console.log()
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -150,6 +150,7 @@ console.log("data",data.url)
   
     const timer = setTimeout(() => {
       window.open(coupon.url, '_blank');
+      console.log("Redirecting to:", coupon.url);
     }, 2000); // 4 seconds
   
     return () => clearTimeout(timer);
