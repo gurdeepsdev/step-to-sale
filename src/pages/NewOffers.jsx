@@ -69,7 +69,7 @@ const OfferCard = ({
 
         {/* Cashback Badge */}
         <span className="bg-red-600 text-white text-sm font-medium px-5 py-2 rounded-lg">
-          {offer}{currency} Cashback
+          Get Coupon
         </span>
       </div>
     </Link>

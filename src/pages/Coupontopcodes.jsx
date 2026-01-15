@@ -79,7 +79,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import PageHeader from "../components/PageHeader.jsx";
 import Footer from "../components/Footer.jsx";
 import { Library } from "lucide-react";
-import { Link } from "react-router-dom";  
+import { Link } from "react-router-dom";
 const PopularOffers = () => {
   const [coupons, setCoupons] = useState([]);
   const navigate = useNavigate();
@@ -118,7 +118,7 @@ const PopularOffers = () => {
       <div className="py-10 px-4 sm:px-8 lg:px-16 bg-white">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {currentCoupons.map((offer, idx) => (
-            <Link to={`${offer.tracking_link}`} key={idx}>
+            <Link to={`/OffersDetails/${offer.title}`} key={idx}>
               <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition p-5 flex flex-col items-center text-center cursor-pointer">
                 {/* Logo */}
                 <div className="w-20 h-20 bg-white rounded-xl shadow flex items-center justify-center mb-4">
@@ -140,11 +140,7 @@ const PopularOffers = () => {
 
                 {/* Cashback / Payout */}
                 <span className="bg-red-600 text-white text-sm font-medium px-5 py-2 rounded-lg">
-                  {offer.payout_model?.toLowerCase() === "percentage"
-                    ? `${offer.payout || "0.00"}% Cashback`
-                    : `${offer.currency || "Rs."} ${
-                        offer.payout || "0.00"
-                      } Cashback`}
+                  Get Coupon
                 </span>
               </div>
             </Link>

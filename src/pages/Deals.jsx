@@ -96,9 +96,9 @@ const PopularOffers = () => {
                 {/* Image */}
                 <div className="h-40 lg:h-48 rounded-2xl mb-4 overflow-hidden bg-gray-100 flex items-center justify-center">
                   <img
-                    src={deal.banner_url}
+                    src={deal.banner_url2}
                     alt={deal.title}
-                    className="h-full w-full object-contain"
+                    className="h-full w-full object-cover"
                   />
                 </div>
 

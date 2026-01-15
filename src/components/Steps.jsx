@@ -61,7 +61,7 @@ const HowItWorks = () => {
     if (typeof amount === "string" && /[$₹]/.test(amount)) return amount;
     return `${currency === "INR" ? "₹" : "$"}${amount}`;
   };
-
+  console.log("visibleDeals", visibleDeals);
   /* ======================
      UI
   ====================== */
@@ -129,7 +129,7 @@ const HowItWorks = () => {
                         {/* Image */}
                         <div className="h-40 sm:h-48 rounded-2xl mb-4 overflow-hidden">
                           <img
-                            src={deal.banner_url}
+                            src={deal.banner_url2}
                             alt={deal.title}
                             className="h-full w-full object-cover"
                           />

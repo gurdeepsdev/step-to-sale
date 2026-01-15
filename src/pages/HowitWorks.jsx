@@ -48,8 +48,7 @@ const OfferCard = () => {
             <p className="text-sm text-gray-300 mb-3">Home / How it Works</p>
             <h2 className="text-4xl text-white font-bold">How it Works</h2>
             <p className="mt-3">
-              Lorem ipsum dolor sit amet consectetur. Sed sed eu sit
-              consectetur.
+              Apply the code at checkout and enjoy instant savings
             </p>
           </div>
         </div>

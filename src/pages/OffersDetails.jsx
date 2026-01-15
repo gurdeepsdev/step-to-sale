@@ -22,6 +22,7 @@ const OfferDetails = () => {
   const [activeTab, setActiveTab] = useState("All");
   const [coupons, setCoupons] = useState([]);
   const [branimg, setBranimg] = useState();
+  const [category, setCategory] = useState("");
   const [brandtitle, setBtitle] = useState();
   const [str, setStors] = useState([]);
   const [total, setTotal] = useState();
@@ -37,6 +38,7 @@ const OfferDetails = () => {
       setCoupons(normalized);
       setBranimg(normalized[0]?.img);
       setTotal(normalized.length);
+      setCategory(normalized[0]?.category);
       setBtitle(normalized[0]?.title);
     };
 
@@ -71,7 +73,7 @@ const OfferDetails = () => {
       <div className="bg-black text-white">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <p className="text-sm text-gray-400">
-            Home / Electronics / {brandtitle}
+            Home / {category} / {brandtitle}
           </p>
 
           <h1 className="text-2xl font-semibold mt-2">
@@ -227,7 +229,10 @@ const OfferCard = ({ offer }) => {
         </div>
         {/* BUTTON */}
         {offer.coupon_code ? (
-          <Link to={offer.url} target="_blank" rel="noopener noreferrer">
+          <Link
+            to={`/CouponCode/${encodeURIComponent(offer.title)}`}
+            target="_blank"
+            rel="noopener noreferrer">
             <div className="relative h-[44px] w-[190px] overflow-hidden rounded-md">
               {/* BACK: Coupon Code */}
 
