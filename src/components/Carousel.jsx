@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+ 
 import { getAllCoupons } from "../utils/api";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -31,7 +31,7 @@ const Carousel = () => {
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
+ 
   useEffect(() => {
     const fetchCoupons = async () => {
       const data = await getAllCoupons();
@@ -48,40 +48,40 @@ const Carousel = () => {
       }
       setLoading(false);
     };
-
+ 
     fetchCoupons();
   }, []);
   console.log("banners", banners);
-  const desktopSettings = {
-    dots: true,
-    infinite: true,
+  const getDesktopSettings = (count) => ({
+    dots: count > 1,
+    infinite: count > 3,
     speed: 1500,
-    slidesToShow: 3,
+    slidesToShow: Math.min(3, count),
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: count > 1,
     autoplaySpeed: 3000,
-    arrows: true,
+    arrows: count > 1,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
-  };
-
-  const mobileSettings = {
-    dots: true,
-    infinite: true,
+  });
+ 
+  const getMobileSettings = (count) => ({
+    dots: count > 1,
+    infinite: count > 1,
     speed: 1500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: count > 1,
     autoplaySpeed: 3000,
-    arrows: true,
+    arrows: count > 1,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
-  };
-
+  });
+ 
   const handleSelectCoupon = (slug) => {
     navigate(`/CouponsDetails/${slug}`);
   };
-
+ 
   return (
     <div className="mt-6 md:mt-10 lg:mt-10 w-full overflow-hidden">
       {/* Skeleton or Spinner */}
@@ -97,27 +97,27 @@ const Carousel = () => {
       <>
         {/* Desktop Slider */}
         <div className="hidden md:block">
-          <Slider {...desktopSettings}>
+          <Slider {...getDesktopSettings(banners.length)}>
             {banners.map((banner, index) => (
               <Link to={`${banner.tracking_link}`} key={index}>
-              <div
-                key={index}
-                className="px-0.5 cursor-pointer"
-                style={{ width: "100%", display: "inline-block" }}>
-                <img
-                  src={banner.banner_url}
-                  alt={`Banner ${index + 1}`}
-                  className="w-full h-full object-contain shadow-md rounded-md"
-                />
-              </div>
+                <div
+                  key={index}
+                  className="px-0.5 cursor-pointer"
+                  style={{ width: "100%", display: "inline-block" }}>
+                  <img
+                    src={banner.banner_url}
+                    alt={`Banner ${index + 1}`}
+                    className="w-full h-full object-contain shadow-md rounded-md"
+                  />
+                </div>
               </Link>
             ))}
           </Slider>
         </div>
-
+ 
         {/* Mobile Slider */}
         <div className="block md:hidden">
-          <Slider {...mobileSettings}>
+          <Slider {...getMobileSettings(banners.length)}>
             {banners.map((banner, index) => (
               <div
                 key={index}
@@ -138,11 +138,11 @@ const Carousel = () => {
     </div>
   );
 };
-
+ 
 export default Carousel;
-
+ 
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-
+ 
 const PrevArrow = ({ onClick }) => {
   return (
     <button
@@ -154,7 +154,7 @@ const PrevArrow = ({ onClick }) => {
     </button>
   );
 };
-
+ 
 const NextArrow = ({ onClick }) => {
   return (
     <button
@@ -166,3 +166,4 @@ const NextArrow = ({ onClick }) => {
     </button>
   );
 };
+ 
