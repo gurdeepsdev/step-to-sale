@@ -147,7 +147,11 @@ const HowItWorks = () => {
 
                         {/* Price */}
                         <div className="text-center mb-4">
-                          {deal.discount ? (
+                          {deal.currency === "%" ? (
+                            <span className="text-xl font-bold">
+                              {parseFloat(deal.payout)}% OFF
+                            </span>
+                          ) : deal.discount ? (
                             <>
                               <span className="line-through text-gray-400 mr-2">
                                 {formatPrice(deal.payout, deal.currency)}
@@ -155,7 +159,7 @@ const HowItWorks = () => {
                               <span className="text-xl font-bold">
                                 {formatPrice(
                                   deal.discount_payout,
-                                  deal.currency
+                                  deal.currency,
                                 )}
                               </span>
                             </>

@@ -112,23 +112,29 @@ const PopularOffers = () => {
                   {stripHtmlTags(deal.description)}
                 </p>
                 {/* Price */}
-                <div className="mb-4 text-center">
-                  {deal.discount ? (
-                    <>
-                      <span className="line-through text-gray-400 mr-2">
-                        {formatPrice(deal.payout, deal.currency)}
-                      </span>
-
-                      <span className="text-xl font-bold mr-2">
-                        {formatPrice(deal.discount_payout, deal.currency)}
-                      </span>
-                    </>
-                  ) : (
-                    <span className="text-xl font-bold">
-                      {formatPrice(deal.payout, deal.currency)}
-                    </span>
-                  )}
-                </div>
+                <div className="text-center mb-4">
+                          {deal.currency === "%" ? (
+                            <span className="text-xl font-bold">
+                              {parseFloat(deal.payout)}% OFF
+                            </span>
+                          ) : deal.discount ? (
+                            <>
+                              <span className="line-through text-gray-400 mr-2">
+                                {formatPrice(deal.payout, deal.currency)}
+                              </span>
+                              <span className="text-xl font-bold">
+                                {formatPrice(
+                                  deal.discount_payout,
+                                  deal.currency,
+                                )}
+                              </span>
+                            </>
+                          ) : (
+                            <span className="text-xl font-bold">
+                              {formatPrice(deal.payout, deal.currency)}
+                            </span>
+                          )}
+                        </div>
 
                 {/* Button */}
                 <button
