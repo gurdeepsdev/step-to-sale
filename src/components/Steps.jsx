@@ -5,7 +5,7 @@ import { getAllCoupons } from "../utils/api";
 const HowItWorks = () => {
   const [deals, setDeals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  console.log(deals);
   const visibleDeals = deals.slice(0, 12);
 
   /* ======================
@@ -58,9 +58,16 @@ const HowItWorks = () => {
 
   const formatPrice = (amount, currency) => {
     if (!amount) return "";
+
+    if (currency === "%") {
+      return `${amount}% OFF`;
+    }
+
     if (typeof amount === "string" && /[$₹]/.test(amount)) return amount;
+
     return `${currency === "INR" ? "₹" : "$"}${amount}`;
   };
+
   console.log("visibleDeals", visibleDeals);
   /* ======================
      UI

@@ -25,7 +25,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // ✅ Fetch all coupons
@@ -68,7 +68,17 @@ export const getAllCategories = async () => {
     return { success: false, message: "Failed to fetch categories" };
   }
 };
-
+export const getStoresByCategory = async (category) => {
+  try {
+    console.log(category);
+    const res = await api.get(`/api/stores/${category}`);
+    console.log(res);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching stores by category:", error);
+    return null;
+  }
+};
 // ✅ Fetch a single coupon by slug
 export const getCouponBySlug = async (slug) => {
   try {
@@ -140,6 +150,7 @@ export const getOffersByCategory = async (category) => {
   try {
     console.log("API URL:", `/api/offers/${category}`);
     const response = await api.get(`/api/offers/${category}`);
+    console.log(response);
     return response.data;
   } catch (error) {
     console.error(`Error fetching offers for ${category}:`, error);

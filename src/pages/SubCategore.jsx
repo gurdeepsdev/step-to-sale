@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader.jsx";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { getOffersByCategory,getAllbrands } from "../utils/api";
+import { getOffersByCategory, getAllbrands,getStoresByCategory } from "../utils/api";
 import { Link } from "react-router-dom";
 export default function CategoryOffers() {
   const { slug } = useParams();
@@ -11,15 +11,15 @@ export default function CategoryOffers() {
   console.log("Offers", Offers);
   useEffect(() => {
     const fetchCoupons = async () => {
-      const data = await getAllbrands();
-      console.log("data", data);
-      if (Array.isArray(data) && data.length > 0) {
-        setOffers(data);
+      const data = await getStoresByCategory(slug);
+      console.log("data", data.data);
+      if (Array.isArray(data?.data) && data?.data.length > 0) {
+        setOffers(data.data);
       }
     };
 
     fetchCoupons();
-  }, []);
+  }, [slug]);
   const capitalizeSlug = (slug) =>
     slug
       .split("-")
@@ -41,7 +41,7 @@ export default function CategoryOffers() {
       <section className="max-w-7xl mx-auto px-4 py-10">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
           {Offers.map((item) => (
-            <OfferCard1 key={item.id} {...item} />
+            <OfferCard key={item.id} {...item} />
           ))}
         </div>
       </section>
@@ -50,33 +50,12 @@ export default function CategoryOffers() {
   );
 }
 
-const OfferCard = ({ img, title, description, offer, url }) => {
-  return (
-    <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition p-5 flex flex-col items-center text-center">
-      {/* Logo */}
-      <div className="w-20 h-20 bg-white rounded-xl shadow flex items-center justify-center mb-4">
-        <img src={img} alt={title} className="w-14 h-14 object-contain" />
-      </div>
-
-      {/* Title */}
-      <p className="text-sm text-gray-800 font-bold mb-4">{title}</p>
-      {/* Description */}
-      <p className="text-sm text-gray-600 mb-4 text-center">{description}</p>
-      {/* Cashback */}
-      <button
-        onClick={() => window.open(url)}
-        className="bg-red-600 text-white text-sm font-medium px-5 py-2 rounded-lg">
-        {offer} Cashback
-      </button>
-    </div>
-  );
-};
-const OfferCard1 = ({
+const OfferCard = ({
   coupon_code,
   title,
   img,
   offer,
-  total_count,
+  total_offers,
   currency,
   coupon_count,
   description,
@@ -95,12 +74,11 @@ const OfferCard1 = ({
         </div>
 
         {/* Title */}
-        <p className="text-sm text-gray-800 mb-4">{total_count} Offers</p>
+        <p className="text-sm text-gray-800 mb-4">{total_offers} Offers</p>
 
         {/* Cashback Badge */}
         <span className="bg-red-600 text-white text-sm font-medium px-5 py-2 rounded-lg">
-          {offer}
-          {currency} Cashback
+          Get Coupon
         </span>
       </div>
     </Link>

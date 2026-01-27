@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
- 
+
 import { getAllCoupons } from "../utils/api";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -31,7 +31,7 @@ const Carousel = () => {
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
- 
+
   useEffect(() => {
     const fetchCoupons = async () => {
       const data = await getAllCoupons();
@@ -48,7 +48,7 @@ const Carousel = () => {
       }
       setLoading(false);
     };
- 
+
     fetchCoupons();
   }, []);
   console.log("banners", banners);
@@ -64,7 +64,7 @@ const Carousel = () => {
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
   });
- 
+
   const getMobileSettings = (count) => ({
     dots: count > 1,
     infinite: count > 1,
@@ -77,11 +77,11 @@ const Carousel = () => {
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
   });
- 
+
   const handleSelectCoupon = (slug) => {
     navigate(`/CouponsDetails/${slug}`);
   };
- 
+
   return (
     <div className="mt-6 md:mt-10 lg:mt-10 w-full overflow-hidden">
       {/* Skeleton or Spinner */}
@@ -114,7 +114,7 @@ const Carousel = () => {
             ))}
           </Slider>
         </div>
- 
+
         {/* Mobile Slider */}
         <div className="block md:hidden">
           <Slider {...getMobileSettings(banners.length)}>
@@ -138,11 +138,11 @@ const Carousel = () => {
     </div>
   );
 };
- 
+
 export default Carousel;
- 
+
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
- 
+
 const PrevArrow = ({ onClick }) => {
   return (
     <button
@@ -154,7 +154,7 @@ const PrevArrow = ({ onClick }) => {
     </button>
   );
 };
- 
+
 const NextArrow = ({ onClick }) => {
   return (
     <button
@@ -166,4 +166,3 @@ const NextArrow = ({ onClick }) => {
     </button>
   );
 };
- 

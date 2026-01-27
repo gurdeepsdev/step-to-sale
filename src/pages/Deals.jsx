@@ -89,12 +89,12 @@ const PopularOffers = () => {
         description="Grab the best deals available today and save more on every purchase."
       />
       <div className="w-full py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {coupons.map((deal) => (
               <div className="border rounded-3xl p-4 flex flex-col hover:shadow-lg transition">
                 {/* Image */}
-                <div className="h-40 lg:h-48 rounded-2xl mb-4 overflow-hidden bg-gray-100 flex items-center justify-center">
+                <div className="h-40 sm:h-48 rounded-2xl mb-4 overflow-hidden">
                   <img
                     src={deal.banner_url2}
                     alt={deal.title}
@@ -113,28 +113,25 @@ const PopularOffers = () => {
                 </p>
                 {/* Price */}
                 <div className="text-center mb-4">
-                          {deal.currency === "%" ? (
-                            <span className="text-xl font-bold">
-                              {parseFloat(deal.payout)}% OFF
-                            </span>
-                          ) : deal.discount ? (
-                            <>
-                              <span className="line-through text-gray-400 mr-2">
-                                {formatPrice(deal.payout, deal.currency)}
-                              </span>
-                              <span className="text-xl font-bold">
-                                {formatPrice(
-                                  deal.discount_payout,
-                                  deal.currency,
-                                )}
-                              </span>
-                            </>
-                          ) : (
-                            <span className="text-xl font-bold">
-                              {formatPrice(deal.payout, deal.currency)}
-                            </span>
-                          )}
-                        </div>
+                  {deal.currency === "%" ? (
+                    <span className="text-xl font-bold">
+                      {parseFloat(deal.payout)}% OFF
+                    </span>
+                  ) : deal.discount ? (
+                    <>
+                      <span className="line-through text-gray-400 mr-2">
+                        {formatPrice(deal.payout, deal.currency)}
+                      </span>
+                      <span className="text-xl font-bold">
+                        {formatPrice(deal.discount_payout, deal.currency)}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-xl font-bold">
+                      {formatPrice(deal.payout, deal.currency)}
+                    </span>
+                  )}
+                </div>
 
                 {/* Button */}
                 <button
