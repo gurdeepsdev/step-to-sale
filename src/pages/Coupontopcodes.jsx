@@ -74,7 +74,7 @@
 import React from "react";
 import Header from "../components/Header";
 import { useEffect, useState, useContext } from "react";
-import { getAllCoupons } from "../utils/api";
+import { getAllCoupons,getAllbrands } from "../utils/api";
 import { useParams, useNavigate } from "react-router-dom";
 import PageHeader from "../components/PageHeader.jsx";
 import Footer from "../components/Footer.jsx";
@@ -83,15 +83,14 @@ import { Link } from "react-router-dom";
 const PopularOffers = () => {
   const [coupons, setCoupons] = useState([]);
   const navigate = useNavigate();
-
+  console.log(coupons);
   useEffect(() => {
     const fetchCoupons = async () => {
-      const data = await getAllCoupons();
+      const data = await getAllbrands();
       console.log("data", data);
       //if (Array.isArray(data) && data.length > 0) {
-      setCoupons(data.data);
+      setCoupons(data);
       //}
-      setLoading(false);
     };
 
     fetchCoupons();
@@ -122,9 +121,9 @@ const PopularOffers = () => {
               <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition p-5 flex flex-col items-center text-center cursor-pointer">
                 {/* Logo */}
                 <div className="w-20 h-20 bg-white rounded-xl shadow flex items-center justify-center mb-4">
-                  {offer.logo_url && offer.logo_url !== "null" ? (
+                  {offer.img && offer.img !== "null" ? (
                     <img
-                      src={offer.logo_url}
+                      src={offer.img}
                       alt={offer.title}
                       className="w-14 h-14 object-contain"
                     />

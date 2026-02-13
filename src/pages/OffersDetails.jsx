@@ -16,6 +16,11 @@ const tabs = [
   //   { key: "offer", label: "Offer", count: 5 },
   { key: "product", label: "Product", count: 0, badge: "New" },
 ];
+const currentMonthYear = new Date().toLocaleString("default", {
+  month: "long",
+  year: "numeric",
+});
+
 const OfferDetails = () => {
   const { slug } = useParams();
   console.log("slug", slug);
@@ -65,7 +70,11 @@ const OfferDetails = () => {
   const handleSelectCoupon = (slug) => {
     navigate(`/CouponCode/${encodeURIComponent(slug)}`);
   };
-
+  const sortedOffers = [...filteredOffers].sort((a, b) => {
+    if (a.type === "Coupon" && b.type !== "Coupon") return -1;
+    if (a.type !== "Coupon" && b.type === "Coupon") return 1;
+    return 0;
+  });
   return (
     <section className="bg-gray-100">
       <Header></Header>
@@ -77,7 +86,7 @@ const OfferDetails = () => {
           </p>
 
           <h1 className="text-2xl font-semibold mt-2">
-            Coupons And Offers - January 2026
+            Coupons And Offers - {currentMonthYear}
           </h1>
           <p className="text-gray-400 text-sm mb-4">Coupon & Deals</p>
 
@@ -104,9 +113,9 @@ const OfferDetails = () => {
       </div>
 
       {/* CONTENT */}
-      <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* SIDEBAR */}
-        <aside className="space-y-6">
+      <div className="max-w-7xl mx-auto px-4 py-10 flex lg:flex-row flex-col-reverse gap-8">
+        {/* SIDEBAR - 30% */}
+        <aside className="space-y-6 lg:w-[30%] w-full">
           {/* LOGO */}
           <div className="bg-white p-6 rounded shadow">
             <img
@@ -127,13 +136,14 @@ const OfferDetails = () => {
           </div>
         </aside>
 
-        {/* OFFERS LIST */}
-        <div className="lg:col-span-3 space-y-6">
-          {filteredOffers.map((offer) => (
+        {/* OFFERS LIST - 70% */}
+        <div className="space-y-6 lg:w-[70%] w-full">
+          {sortedOffers.map((offer) => (
             <OfferCard key={offer.id} offer={offer} />
           ))}
         </div>
       </div>
+
       <Footer></Footer>
     </section>
   );
@@ -141,62 +151,6 @@ const OfferDetails = () => {
 
 export default OfferDetails;
 
-/* =======================
-   OFFER CARD
-======================= */
-// const OfferCard = ({ offer }) => {
-//   const shareToWhatsApp = () => {
-//     const url = encodeURIComponent(window.location.href);
-//     const text = encodeURIComponent("Check out this link: ");
-//     window.open(`https://wa.me/?text=${text}${url}`, "_blank");
-//   };
-
-//   return (
-//     <div className="bg-white rounded shadow p-6">
-//       <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-//         {/* DISCOUNT */}
-//         <div className="bg-gray-200 text-black font-semibold text-xl w-24 h-24 flex items-center justify-center rounded">
-//           {offer.offer}
-//         </div>
-
-//         {/* CONTENT */}
-//         <div className="flex-1">
-//           <p className="text-gray-800 font-medium">
-//             {offer.description || "No description available"}
-//           </p>
-//         </div>
-
-//         {/* BUTTON */}
-//         {offer.coupon_code ? (
-//           /* COUPON */
-//           <div className="relative h-[44px] w-[190px] overflow-hidden rounded-md">
-//             <button className="absolute inset-0 bg-white text-black text-sm font-bold pr-4 flex items-center justify-end border-2 border-dashed border-gray-400">
-//               {offer.coupon_code}
-//             </button>
-
-//             <div className="absolute inset-y-0 left-0 bg-red-600 text-white pl-6 pr-10 flex items-center text-sm font-semibold">
-//               Coupon
-//             </div>
-//           </div>
-//         ) : (
-//           /* DEAL */
-//           <button className="bg-red-600 h-[44px] w-[190px] rounded-md text-white text-sm font-semibold hover:bg-red-700 transition">
-//             Deal
-//           </button>
-//         )}
-//       </div>
-
-//       {/* FOOTER */}
-//       <div className="flex items-center gap-6 mt-4 pt-4 border-t text-sm text-gray-600">
-//         <span
-//           className="flex items-center gap-1 cursor-pointer"
-//           onClick={shareToWhatsApp}>
-//           <FiShare2 size={16} /> Share
-//         </span>
-//       </div>
-//     </div>
-//   );
-// };
 /* =======================
    OFFER CARD
 ======================= */
@@ -210,7 +164,7 @@ const OfferCard = ({ offer }) => {
   };
   return (
     <div className="bg-white rounded shadow p-6">
-      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+      <div className="flex flex-col sm:flex-row items-center gap-4">
         {/* DISCOUNT */}
         <div className="bg-[#9696968C] text-black font-semibold text-xl w-24 h-24 flex items-center justify-center rounded text-center">
           {Number(offer.offer) === 0 ? (
@@ -277,12 +231,14 @@ const OfferCard = ({ offer }) => {
       </div>
 
       {/* FOOTER */}
-      <div className="flex items-center gap-6 mt-4 pt-4 border-t text-sm text-gray-600">
+      {/* FOOTER */}
+      <div className="flex flex-col sm:flex-row items-center sm:justify-start justify-center gap-3 sm:gap-6 mt-4 pt-4 border-t text-sm text-gray-600 text-center sm:text-left">
         {offer.verified && (
           <span className="flex items-center gap-1">
             <FiCheckCircle size={16} /> Verified
           </span>
         )}
+
         <span
           className="flex items-center gap-1 cursor-pointer"
           onClick={shareToWhatsApp}>

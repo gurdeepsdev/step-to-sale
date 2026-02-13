@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { getAllCoupons } from "../utils/api";
-
+const AUTO_SLIDE_DELAY = 2000;
 const HowItWorks = () => {
   const [deals, setDeals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -37,7 +37,7 @@ const HowItWorks = () => {
 
     const interval = setInterval(() => {
       emblaApi.scrollNext();
-    }, 5000);
+    }, AUTO_SLIDE_DELAY);
 
     return () => clearInterval(interval);
   }, [emblaApi]);
@@ -59,16 +59,23 @@ const HowItWorks = () => {
   const formatPrice = (amount, currency) => {
     if (!amount) return "";
 
-    if (currency === "%") {
-      return `${amount}% OFF`;
+    // If currency is already a symbol (₹, $, €, etc.)
+    if (currency && currency.length <= 2) {
+      return `${currency}${amount}`;
     }
 
-    if (typeof amount === "string" && /[$₹]/.test(amount)) return amount;
+    // If currency is code (INR, USD, etc.)
+    const currencyMap = {
+      INR: "₹",
+      USD: "$",
+      EUR: "€",
+      GBP: "£",
+    };
 
-    return `${currency === "INR" ? "₹" : "$"}${amount}`;
+    const symbol = currencyMap[currency] || "";
+    return `${symbol}${amount}`;
   };
 
-  console.log("visibleDeals", visibleDeals);
   /* ======================
      UI
   ====================== */
@@ -134,11 +141,11 @@ const HowItWorks = () => {
                     ">
                       <div className="border rounded-3xl p-4 h-full flex flex-col bg-white">
                         {/* Image */}
-                        <div className="h-40 sm:h-48 rounded-2xl mb-4 overflow-hidden">
+                        <div className="h-48 w-full rounded-2xl mb-4 overflow-hidden">
                           <img
                             src={deal.banner_url2}
                             alt={deal.title}
-                            className="h-full w-full object-cover"
+                            className="w-full h-full object-cover"
                           />
                         </div>
 

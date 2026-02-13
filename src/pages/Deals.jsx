@@ -69,12 +69,20 @@ const PopularOffers = () => {
   const formatPrice = (amount, currency) => {
     if (!amount) return "";
 
-    // If already has a currency symbol, return as-is
-    if (typeof amount === "string" && /[$₹]/.test(amount)) {
-      return amount;
+    // If currency is already a symbol (₹, $, €, etc.)
+    if (currency && currency.length <= 2) {
+      return `${currency}${amount}`;
     }
 
-    const symbol = currency === "INR" ? "₹" : "$";
+    // If currency is code (INR, USD, etc.)
+    const currencyMap = {
+      INR: "₹",
+      USD: "$",
+      EUR: "€",
+      GBP: "£",
+    };
+
+    const symbol = currencyMap[currency] || "";
     return `${symbol}${amount}`;
   };
 

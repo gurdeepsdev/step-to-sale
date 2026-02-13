@@ -120,91 +120,213 @@
 
 // export default PopularStores;
 
-import { useEffect, useState, useCallback } from "react";
+// import { useEffect, useState, useCallback } from "react";
+// import useEmblaCarousel from "embla-carousel-react";
+// import { getAllbrands } from "../utils/api";
+// import { Link } from "react-router-dom";
+// import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+
+// const PopularStores = () => {
+//   const [stores, setStores] = useState([]);
+//   const [loading, setLoading] = useState(true);
+
+//   const [emblaRef, emblaApi] = useEmblaCarousel({
+//     align: "start",
+//     dragFree: true,
+//     slidesToScroll: 1,
+//   });
+
+//   useEffect(() => {
+//     const fetchStores = async () => {
+//       const data = await getAllbrands();
+//       if (Array.isArray(data)) setStores(data);
+//       setLoading(false);
+//     };
+//     fetchStores();
+//   }, []);
+
+//   const scrollPrev = useCallback(() => {
+//     if (emblaApi) emblaApi.scrollPrev();
+//   }, [emblaApi]);
+
+//   const scrollNext = useCallback(() => {
+//     if (emblaApi) emblaApi.scrollNext();
+//   }, [emblaApi]);
+
+//   if (loading) return null;
+//   console.log("stores", stores);
+//   return (
+//     <div className="bg-white py-14 px-4 md:px-12 relative">
+//       {/* HEADER */}
+//       <h2 className="text-center text-3xl md:text-4xl font-bold mb-12">
+//         Popular Stores
+//       </h2>
+
+//       {/* LEFT BUTTON */}
+//       <button
+//         onClick={scrollPrev}
+//         className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2
+//                      w-9 h-9 sm:w-10 sm:h-10
+//                      rounded-full border bg-white z-10 shadow">
+//         ←
+//       </button>
+
+//       {/* RIGHT BUTTON */}
+//       <button
+//         onClick={scrollNext}
+//         className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2
+//                      w-9 h-9 sm:w-10 sm:h-10
+//                      rounded-full border bg-white z-10 shadow">
+//         →
+//       </button>
+
+//       {/* CAROUSEL */}
+//       <div ref={emblaRef} className="overflow-hidden">
+//         <div className="flex gap-6">
+//           {stores.map((store) => (
+//             <Link
+//               to={`/OffersDetails/${store.title}`}
+//               key={store.id}
+//               className="min-w-[220px]">
+//               <div className="rounded-2xl border border-red-400 bg-red-50 p-5 flex flex-col items-center gap-4">
+//                 {/* LOGO BOX */}
+//                 <div className="bg-red-600 rounded-xl w-full h-28 flex items-center justify-center">
+//                   <img
+//                     src={store.img}
+//                     alt={store.title}
+//                     className="h-14 object-contain"
+//                   />
+//                 </div>
+
+//                 {/* OFFER PILL */}
+//                 <div className="bg-white border rounded-md px-6 py-2 text-sm font-medium shadow-sm">
+//                   {store.total_count ?? 0} Offers
+//                 </div>
+//               </div>
+//             </Link>
+//           ))}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default PopularStores;
+import { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { getAllbrands } from "../utils/api";
 import { Link } from "react-router-dom";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+
+const AUTO_SLIDE_DELAY = 1500;
 
 const PopularStores = () => {
   const [stores, setStores] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
+  /* ======================
+     EMBLA CONFIG
+  ====================== */
   const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
     align: "start",
-    dragFree: true,
-    slidesToScroll: 1,
+    skipSnaps: false,
   });
 
+  /* ======================
+     FETCH DATA
+  ====================== */
   useEffect(() => {
     const fetchStores = async () => {
       const data = await getAllbrands();
       if (Array.isArray(data)) setStores(data);
-      setLoading(false);
+      setIsLoading(false);
     };
     fetchStores();
   }, []);
 
-  const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev();
+  /* ======================
+     AUTO SLIDE (SLOW)
+  ====================== */
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    const interval = setInterval(() => {
+      emblaApi.scrollNext();
+    }, AUTO_SLIDE_DELAY);
+
+    return () => clearInterval(interval);
   }, [emblaApi]);
 
-  const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext();
-  }, [emblaApi]);
-
-  if (loading) return null;
+  if (isLoading) {
+    return (
+      <div className="px-6 lg:px-16 py-14">
+        <div className="min-h-[300px] animate-pulse bg-gray-100 rounded-xl" />
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-white py-14 px-4 md:px-12 relative">
+    <div className="bg-white py-14 px-6 lg:px-16 relative">
       {/* HEADER */}
-      <h2 className="text-center text-3xl md:text-4xl font-bold mb-12">
-        Popular Stores
-      </h2>
+      <h2 className="text-center text-3xl font-bold mb-12">Popular Stores</h2>
 
-      {/* LEFT BUTTON */}
-      <button
-        onClick={scrollPrev}
-        className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2
-                     w-9 h-9 sm:w-10 sm:h-10
-                     rounded-full border bg-white z-10 shadow">
-        ←
-      </button>
+      {/* SLIDER WRAPPER */}
+      <div className="relative">
+        {/* LEFT */}
+        <button
+          onClick={() => emblaApi?.scrollPrev()}
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10
+                     w-10 h-10 rounded-full bg-white shadow
+                     flex items-center justify-center hover:bg-gray-100">
+          ←
+        </button>
 
-      {/* RIGHT BUTTON */}
-      <button
-        onClick={scrollNext}
-        className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2
-                     w-9 h-9 sm:w-10 sm:h-10
-                     rounded-full border bg-white z-10 shadow">
-        →
-      </button>
+        {/* RIGHT */}
+        <button
+          onClick={() => emblaApi?.scrollNext()}
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-10
+                     w-10 h-10 rounded-full bg-white shadow
+                     flex items-center justify-center hover:bg-gray-100">
+          →
+        </button>
 
-      {/* CAROUSEL */}
-      <div ref={emblaRef} className="overflow-hidden">
-        <div className="flex gap-6">
-          {stores.map((store) => (
-            <Link
-              to={`/OffersDetails/${store.title}`}
-              key={store.id}
-              className="min-w-[220px]">
-              <div className="rounded-2xl border border-red-400 bg-red-50 p-5 flex flex-col items-center gap-4">
-                {/* LOGO BOX */}
-                <div className="bg-red-600 rounded-xl w-full h-28 flex items-center justify-center">
-                  <img
-                    src={store.img}
-                    alt={store.title}
-                    className="h-14 object-contain"
-                  />
-                </div>
+        {/* SLIDER */}
+        <div
+          ref={emblaRef}
+          className="overflow-hidden"
+          onMouseEnter={() => emblaApi?.stop()}>
+          <div className="flex">
+            {stores.map((store) => (
+              <div
+                key={store.id}
+                className="
+                  flex-shrink-0
+                  px-2
+                  sm:w-1/2
+                  md:w-1/3
+                  lg:w-1/4
+                  xl:w-1/6   /* 👈 6 cards on desktop */
+                ">
+                <Link to={`/OffersDetails/${store.title}`}>
+                  <div className="rounded-3xl border border-red-400 bg-red-50 p-5 h-full flex flex-col items-center gap-4">
+                    {/* LOGO */}
+                    <div className="bg-red-600 rounded-2xl w-full h-28 flex items-center justify-center">
+                      <img
+                        src={store.img}
+                        alt={store.title}
+                        className="h-14 object-contain"
+                      />
+                    </div>
 
-                {/* OFFER PILL */}
-                <div className="bg-white border rounded-md px-6 py-2 text-sm font-medium shadow-sm">
-                  Upto {store.total_count ?? 0}%
-                </div>
+                    {/* OFFER COUNT */}
+                    <div className="bg-white border rounded-md px-6 py-2 text-sm font-medium shadow-sm">
+                      {store.total_count ?? 0} Offers
+                    </div>
+                  </div>
+                </Link>
               </div>
-            </Link>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>
