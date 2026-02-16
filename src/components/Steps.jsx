@@ -6,7 +6,9 @@ const HowItWorks = () => {
   const [deals, setDeals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   console.log(deals);
-  const visibleDeals = deals.slice(0, 12);
+  const visibleDeals = deals
+    .filter((deal) => deal.banner_url2) // only keep deals with banner_url2
+    .slice(0, 12);
 
   /* ======================
      EMBLA CONFIG

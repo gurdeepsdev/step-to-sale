@@ -85,6 +85,9 @@ const PopularOffers = () => {
     const symbol = currencyMap[currency] || "";
     return `${symbol}${amount}`;
   };
+  const filteredCoupons = coupons.filter(
+    (coupon) => coupon.banner_url2 && coupon.banner_url2 !== "null",
+  );
 
   return (
     <>
@@ -99,7 +102,7 @@ const PopularOffers = () => {
       <div className="w-full py-12 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {coupons.map((deal) => (
+            {filteredCoupons.map((deal) => (
               <div className="border rounded-3xl p-4 flex flex-col hover:shadow-lg transition">
                 {/* Image */}
                 <div className="h-40 sm:h-48 rounded-2xl mb-4 overflow-hidden">
